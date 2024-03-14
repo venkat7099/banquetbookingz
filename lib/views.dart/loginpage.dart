@@ -1,0 +1,197 @@
+import 'package:banquetbookingz/providers/authprovider.dart';
+import 'package:banquetbookingz/providers/loader.dart';
+import 'package:banquetbookingz/providers/selectionmodal.dart';
+import 'package:banquetbookingz/views.dart/mainpage.dart';
+import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
+import 'package:banquetbookingz/widgets/customtextfield.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final _formKey = GlobalKey<FormState>();
+    return Scaffold(
+      body: Center(
+        child: Container(
+          padding: EdgeInsets.all(15),
+          height: screenHeight,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "BanquetBookingz",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Welcome to BanquetBookingz admin panel",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text("Please sign-in-to your account",
+                          style: TextStyle(fontSize: 14))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Consumer(builder: (context, ref, child) {
+                          final controller =
+                              ref.watch(selectionModelProvider.notifier);
+                          return CustomTextFormField(
+                            width: screenWidth * 0.8,
+                            hintText: "Email/Username",
+                            keyBoardType: TextInputType.emailAddress,
+                            suffixIcon: Icons.person_outline,
+                            onChanged: (newvalue) {
+                              controller.updateEnteredemail(newvalue);
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Field is required';
+                              }
+                              String pattern =
+                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                              RegExp regex = RegExp(pattern);
+                              if (!regex.hasMatch(value)) {
+                                return 'Enter a valid email address';
+                              }
+                              return null;
+                            },
+                          );
+                        }),
+                        SizedBox(height: 16),
+                        Consumer(builder: (context, ref, child) {
+                          final controller =
+                              ref.watch(selectionModelProvider.notifier);
+                          return CustomTextFormField(
+                            width: screenWidth * 0.8,
+                            hintText: "Password",
+                            keyBoardType: TextInputType.text,
+                            suffixIcon: Icons.lock_outline,
+                            onChanged: (newValue) {
+                              controller.updateEnteredpassword(newValue);
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Field is required';
+                              }
+                            },
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    width: screenWidth * 0.8,
+                    child: Row(
+                      children: [
+                        Consumer(builder: (context, ref, build) {
+                          var select =
+                              ref.read(selectionModelProvider.notifier);
+                          var val = ref.watch(selectionModelProvider).checkBox;
+                          return Expanded(
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Checkbox(
+                                value: val,
+                                focusColor: Color(0XFFb0b0b0),
+                                side: BorderSide(color: Color(0XFFb0b0b0)),
+                                onChanged: (newValue) {
+                                  select.toggleCheckBox(newValue);
+                                },
+                              ),
+                              title: GestureDetector(
+                                // onTap: () {
+                                //   select.toggleCheckBox(!val);
+                                // },
+                                child: Text(
+                                  'Remember me',
+                                  style: TextStyle(
+                                      color: val
+                                          ? Color(0xFF330099)
+                                          : Color(0xFFb0b0b0),
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                        TextButton(
+                          onPressed: () {
+                            // TODO: Implement forgot password functionality
+                          },
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(color: Color(0xFF330099)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Consumer(builder: (context, ref, child) {
+                    final login = ref.watch(authProvider.notifier);
+                    final val = ref.watch(selectionModelProvider);
+                    final isLoading = ref.watch(loadingProvider);
+
+                    return CustomElevatedButton(
+                      text: "Login",
+                      borderRadius: 10,
+                      width: 300,
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              final statuscode = await login.adminLogin(
+                                  val.email.text, val.password.text, ref);
+
+                              print('login:$statuscode');
+
+                              if (statuscode == 201) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainPage()));
+                              }
+                            },
+                      input: val.email.text.isNotEmpty &&
+                              val.password.text.isNotEmpty
+                          ? true
+                          : false,
+                      isLoading: isLoading,
+                      backGroundColor: Color(0xFF330099),
+                      foreGroundColor: Colors.white,
+                    );
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

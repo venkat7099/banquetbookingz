@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               return const MainPage();
             } else {
               // If the user is not logged in, go to the login page
-              return const LoginPage();
+              return LoginPage();
             }
           } else {
             // Show a loading spinner while checking authentication status

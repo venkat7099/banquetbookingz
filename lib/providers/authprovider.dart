@@ -34,10 +34,11 @@ class AuthNotifier extends StateNotifier<authState> {
     return String.fromCharCodes(letters);
   }
 
-  Future<int> adminLogin(
+  Future<LoginResult> adminLogin(
       String username, String password, WidgetRef ref) async {
     final loadingState = ref.watch(loadingProvider.notifier);
     int responseCode = 0;
+    String? errorMessage;
     try {
       loadingState.state = true;
       var response = await http.post(Uri.parse(Api.login),
@@ -50,7 +51,7 @@ class AuthNotifier extends StateNotifier<authState> {
       var statuscode = response.statusCode;
       print('$statuscode');
       responseCode = statuscode;
-      print(userDetails);
+      print('server response:$userDetails');
       switch (response.statusCode) {
         case 201:
           state = authState.fromJson(userDetails);
@@ -72,14 +73,40 @@ class AuthNotifier extends StateNotifier<authState> {
           await prefs.setString('userData', userData);
           await prefs.setBool('isLoggedIn', true);
           break;
+        default:
+          if (statuscode != 201) {
+            loadingState.state = false;
+          }
+          // Optionally set a message to show to the user why the login failed
+          break;
+      }
+      if (statuscode == 201) {
+        // Handle successful login...
+      } else {
+        // Any other status code means something went wrong
+        // Extract error message from response
+        // Assuming 'messages' is a List of messages and we take the first one.
+        errorMessage =
+            userDetails['messages']?.first ?? 'An unknown error occurred.';
+        // Alternatively, if 'message' is a single String with the error message:
+        // errorMessage = responseJson['message'];
       }
     } catch (e) {
       loadingState.state = false;
+      errorMessage = e.toString();
+      print("cathe:$errorMessage");
     }
-    return responseCode;
+    return LoginResult(responseCode, errorMessage: errorMessage);
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, authState>((ref) {
   return AuthNotifier();
 });
+
+class LoginResult {
+  final int statusCode;
+  final String? errorMessage;
+
+  LoginResult(this.statusCode, {this.errorMessage});
+}

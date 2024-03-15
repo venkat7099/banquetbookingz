@@ -11,27 +11,27 @@ class CustomElevatedButton extends StatelessWidget {
   final Color? borderColor; // Parameter for border color
   final double? borderWidth; // Parameter for border width
   final bool? isLoading;
-  final bool? input;
-  const CustomElevatedButton(
-      {super.key,
-      this.borderColor, // It's nullable so it may not be passed
-      this.borderWidth = 1, // Default width is 1 if not passed
-      required this.text,
-      required this.borderRadius,
-      this.onPressed,
-      this.width,
-      this.color,
-      this.foreGroundColor,
-      this.backGroundColor,
-      this.isLoading,
-      this.input});
+
+  const CustomElevatedButton({
+    super.key,
+    this.borderColor, // It's nullable so it may not be passed
+    this.borderWidth = 1, // Default width is 1 if not passed
+    required this.text,
+    required this.borderRadius,
+    this.onPressed,
+    this.width,
+    this.color,
+    this.foreGroundColor,
+    this.backGroundColor,
+    this.isLoading,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
       child: ElevatedButton(
-        onPressed: isLoading == true || input == false ? null : onPressed,
+        onPressed: isLoading == true ? null : onPressed,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(backGroundColor!),
           foregroundColor: foreGroundColor == null

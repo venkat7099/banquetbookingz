@@ -1,4 +1,5 @@
 import 'package:banquetbookingz/models/selection.dart';
+import 'package:banquetbookingz/views.dart/adduser.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,29 +18,52 @@ class SelectionModelNotifier extends StateNotifier<SelectionModel> {
       state = state.copyWith(checkBox: checkBoxValue);
     }
   }
+void toggleAddUser(bool?value) {
+    
+      state = state.copyWith(addUser: value);
+    
+  }
+  void Index(int?value) {
+    
+      state = state.copyWith(index: value);
+    
+  }
+void subDetails(bool?value) {
+    
+      state = state.copyWith(subDetails: value);
+    
+  }
 
+void toggleAddSubscriber(bool?value) {
+    
+      state = state.copyWith(addSubscriber: value);
+    
+  }
+
+void setGender(String gender) {
+    state = state.copyWith(gender: gender);
+  }
   void updateEnteredemail(String newText) {
-    // Assuming your SelectionModel correctly handles the TextEditingController,
-    // you might need to recreate the TextEditingController with the new text
-    // or find another way to ensure the TextEditingController updates do not conflict.
+   
     state.email.text =
-        newText; // Directly updating the TextEditingController's text.
+        newText; 
 
-    // IMPORTANT: This direct manipulation won't trigger a state update.
-    // Consider creating a new instance of SelectionModel if needed to trigger a rebuild.
+    
     state = state
         .copyWith(); // This is a hacky way to force a rebuild. Consider better state management for TextEditingController.
   }
 
-  void updateEnteredpassword(String newText) {
-    // Assuming your SelectionModel correctly handles the TextEditingController,
-    // you might need to recreate the TextEditingController with the new text
-    // or find another way to ensure the TextEditingController updates do not conflict.
-    state.password.text =
-        newText; // Directly updating the TextEditingController's text.
-
-    // IMPORTANT: This direct manipulation won't trigger a state update.
-    // Consider creating a new instance of SelectionModel if needed to trigger a rebuild.
+  void updateEnteredName(String newText) {
+       state.name.text =
+        newText; 
+        
+    state = state
+        .copyWith(); // This is a hacky way to force a rebuild. Consider better state management for TextEditingController.
+  }
+   void updateEnteredPassword(String newText) {
+       state.password.text =
+        newText; 
+        
     state = state
         .copyWith(); // This is a hacky way to force a rebuild. Consider better state management for TextEditingController.
   }

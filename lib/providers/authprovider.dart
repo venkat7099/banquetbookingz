@@ -9,6 +9,7 @@ import 'package:banquetbookingz/utils/banquetbookzapi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
@@ -98,6 +99,52 @@ class AuthNotifier extends StateNotifier<authState> {
     }
     return LoginResult(responseCode, errorMessage: errorMessage);
   }
+
+Future<LoginResult> addUser(XFile imageFile, String firstName, String emailId,String gender,String?password,WidgetRef ref) async {
+    var uri = Uri.parse(Api.addUser);
+    final loadingState = ref.watch(loadingProvider.notifier);
+    String generateLetters = generateRandomLetters(10);
+    int responseCode = 0;
+    String? errorMessage;
+
+   final data={};
+  data["firstName"]=firstName;
+  data["emailId"]=emailId;
+  data["gender"]=gender;
+  data["userRole"]="m";
+  data["profilepic"]="profile_$generateLetters";
+  data["password"]=password;
+  // Add the encoded JSON string to your request fields.
+  try{
+    loadingState.state=true;
+var request = http.MultipartRequest('POST', uri);
+  // Add the image file to your request.
+  request.files.add(await http.MultipartFile.fromPath('imagefile[]', imageFile.path));
+
+    
+      Map<String, String> obj = {"attributes": json.encode(data).toString()};
+    request.fields.addAll(obj);
+    final send = await request.send();
+    final res = await http.Response.fromStream(send);
+    var userDetails=json.decode(res.body);
+    var statuscode = res.statusCode;
+    responseCode=statuscode;
+    print("statuscode:$statuscode");
+    print("responsebody:${res.body}");
+    if (statuscode == 201) {
+      loadingState.state=false;
+    }
+     errorMessage =
+            userDetails['messages']?.first ?? 'An unknown error occurred.';
+    } catch (e) {
+      // state = AsyncValue.error('Error occurred: $e');
+      var errorMessage = e.toString();
+      print("cathe:$errorMessage");
+         loadingState.state=false;
+    }
+    return LoginResult(responseCode, errorMessage: errorMessage);
+  }
+  
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, authState>((ref) {

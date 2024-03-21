@@ -1,4 +1,5 @@
 import 'package:banquetbookingz/providers/authprovider.dart';
+import 'package:banquetbookingz/providers/connectivityprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
 import 'package:banquetbookingz/views.dart/mainpage.dart';
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _enterEmail = TextEditingController();
   final TextEditingController _enteredPassword = TextEditingController();
+ 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -25,190 +27,195 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: Center(
-        child: Container(
-          padding: EdgeInsets.all(15),
-          height: screenHeight,
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "BanquetBookingz",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Welcome to BanquetBookingz admin panel",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text("Please sign-in-to your account",
-                          style: TextStyle(fontSize: 14))
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
+        child: Consumer(builder: (context, ref, child){
+          final isOnline = ref.watch(connectivityProvider);
+          return isOnline? Container(
+            padding: EdgeInsets.all(15),
+            height: screenHeight,
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "BanquetBookingz",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        CustomTextFormField(
-                          applyDecoration: true,
-                          width: screenWidth * 0.8,
-                          hintText: "Email/Username",
-                          keyBoardType: TextInputType.emailAddress,
-                          suffixIcon: Icons.person_outline,
-                          textController: _enterEmail,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Field is required';
-                            }
-                            String pattern =
-                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                            RegExp regex = RegExp(pattern);
-                            if (!regex.hasMatch(value)) {
-                              return 'Enter a valid email address';
-                            }
-                            return null;
-                          },
+                      children: [
+                        Text("Welcome to BanquetBookingz admin panel",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16)),
+                        SizedBox(
+                          height: 10,
                         ),
-                        SizedBox(height: 16),
-                        CustomTextFormField(
-                          applyDecoration: true,
-                          width: screenWidth * 0.8,
-                          hintText: "Password",
-                          keyBoardType: TextInputType.text,
-                          suffixIcon: Icons.lock_outline,
-                          textController: _enteredPassword,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Field is required';
-                            }
-                            // Add more conditions here if you need to check for numbers, special characters, etc.
-                            return null; // Return null if the entered password is valid
-                          },
-                        ),
+                        Text("Please sign-in-to your account",
+                            style: TextStyle(fontSize: 14))
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    width: screenWidth * 0.8,
-                    child: Row(
-                      children: [
-                        Consumer(builder: (context, ref, build) {
-                          var select =
-                              ref.read(selectionModelProvider.notifier);
-                          var val = ref.watch(selectionModelProvider).checkBox;
-                          return Expanded(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.zero,
-                              leading: Checkbox(
-                                value: val,
-                                focusColor: Color(0XFFb0b0b0),
-                                side: BorderSide(color: Color(0XFFb0b0b0)),
-                                onChanged: (newValue) {
-                                  select.toggleCheckBox(newValue);
-                                },
-                              ),
-                              title: GestureDetector(
-                                // onTap: () {
-                                //   select.toggleCheckBox(!val);
-                                // },
-                                child: Text(
-                                  'Remember me',
-                                  style: TextStyle(
-                                      color: val
-                                          ? Color(0xFF330099)
-                                          : Color(0xFFb0b0b0),
-                                      fontSize: 12),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          CustomTextFormField(
+                            applyDecoration: true,
+                            width: screenWidth * 0.8,
+                            hintText: "Email/Username",
+                            keyBoardType: TextInputType.emailAddress,
+                            suffixIcon: Icons.person_outline,
+                            textController: _enterEmail,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Field is required';
+                              }
+                              String pattern =
+                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                              RegExp regex = RegExp(pattern);
+                              if (!regex.hasMatch(value)) {
+                                return 'Enter a valid email address';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(height: 16),
+                          Consumer(builder: (context, ref, child){
+                            final controller=ref.watch(selectionModelProvider.notifier);
+                            return CustomTextFormField(
+                              applyDecoration: true,
+                              width: screenWidth * 0.8,
+                              hintText: "Password",
+                              keyBoardType: TextInputType.text,
+                              suffixIcon: Icons.lock_outline,
+                              onChanged: (newValue){
+                                controller.updateEnteredPassword(newValue);
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Field is required';
+                                }
+                                // Add more conditions here if you need to check for numbers, special characters, etc.
+                                return null; // Return null if the entered password is valid
+                              },
+                            );}
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      width: screenWidth * 0.8,
+                      child: Row(
+                        children: [
+                          Consumer(builder: (context, ref, build) {
+                            var select =
+                                ref.read(selectionModelProvider.notifier);
+                            var val = ref.watch(selectionModelProvider).checkBox;
+                            return Expanded(
+                              child: ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: Checkbox(
+                                  value: val,
+                                  focusColor: Color(0XFFb0b0b0),
+                                  side: BorderSide(color: Color(0XFFb0b0b0)),
+                                  onChanged: (newValue) {
+                                    select.toggleCheckBox(newValue);
+                                  },
+                                ),
+                                title: GestureDetector(
+                                  // onTap: () {
+                                  //   select.toggleCheckBox(!val);
+                                  // },
+                                  child: Text(
+                                    'Remember me',
+                                    style: TextStyle(
+                                        color: val
+                                            ? Color(0xFF330099)
+                                            : Color(0xFFb0b0b0),
+                                        fontSize: 12),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
-                        TextButton(
-                          onPressed: () {
-                            // TODO: Implement forgot password functionality
-                          },
-                          child: Text(
-                            "Forgot Password?",
-                            style: TextStyle(color: Color(0xFF330099)),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Consumer(builder: (context, ref, child) {
-                    final login = ref.watch(authProvider.notifier);
-                    final val = ref.watch(selectionModelProvider);
-                    final isLoading = ref.watch(loadingProvider);
-
-                    return CustomElevatedButton(
-                      text: "Login",
-                      borderRadius: 10,
-                      width: 300,
-                      onPressed: isLoading
-                          ? null
-                          : () async {
-                              if (_formKey.currentState!.validate()) {
-                                // If the form is valid, proceed with the login process
-                                final LoginResult result =
-                                    await login.adminLogin(_enterEmail.text,
-                                        _enteredPassword.text, ref);
-                                if (result.statusCode == 201) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MainPage()));
-                                } else if (result.statusCode == 400) {
-                                  // If an error occurred, show a dialog box with the error message.
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: Text('Login Error'),
-                                        content: Text(result.errorMessage ??
-                                            'An unknown error occurred.'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text('OK'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Close the dialog box
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              }
+                            );
+                          }),
+                          TextButton(
+                            onPressed: () {
+                              // TODO: Implement forgot password functionality
                             },
-                      isLoading: isLoading,
-                      backGroundColor: Color(0xFF330099),
-                      foreGroundColor: Colors.white,
-                    );
-                  }),
-                ],
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(color: Color(0xFF6418C3)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Consumer(builder: (context, ref, child) {
+                      final login = ref.watch(authProvider.notifier);
+                      final val = ref.watch(selectionModelProvider);
+                      final isLoading = ref.watch(loadingProvider);
+          
+                      return CustomElevatedButton(
+                        text: "Login",
+                        borderRadius: 10,
+                        width: 300,
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                                if (_formKey.currentState!.validate()) {
+                                  // If the form is valid, proceed with the login process
+                                  final LoginResult result =
+                                      await login.adminLogin(_enterEmail.text,
+                                          _enteredPassword.text, ref);
+                                  if (result.statusCode == 201) {
+                                    Navigator.pushNamed(context,"dashboard");
+                                  } else if (result.statusCode == 400) {
+                                    // If an error occurred, show a dialog box with the error message.
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Login Error'),
+                                          content: Text(result.errorMessage ??
+                                              'An unknown error occurred.'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: Text('OK'),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // Close the dialog box
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                }
+                              },
+                        isLoading: isLoading,
+                        backGroundColor: Color(0xFF6418C3),
+                        foreGroundColor: Colors.white,
+                      );
+                    }),
+                  ],
+                ),
               ),
             ),
-          ),
+          ):Text("No Internet connection");}
         ),
       ),
     );

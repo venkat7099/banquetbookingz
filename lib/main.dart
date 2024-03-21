@@ -1,5 +1,12 @@
+import 'package:banquetbookingz/views.dart/adduser.dart';
+import 'package:banquetbookingz/views.dart/alltransactions.dart';
+import 'package:banquetbookingz/views.dart/dashboard.dart';
+import 'package:banquetbookingz/views.dart/edituser.dart';
+import 'package:banquetbookingz/views.dart/example.dart';
 import 'package:banquetbookingz/views.dart/loginpage.dart';
 import 'package:banquetbookingz/views.dart/mainpage.dart';
+import 'package:banquetbookingz/views.dart/uploadphoto.dart';
+import 'package:banquetbookingz/views.dart/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +52,7 @@ class MyApp extends StatelessWidget {
               return const MainPage();
             } else {
               // If the user is not logged in, go to the login page
-              return LoginPage();
+              return DashboardWidget();
             }
           } else {
             // Show a loading spinner while checking authentication status
@@ -53,6 +60,18 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      routes:{
+        
+        // "mainpage":(context) => const MainPage(),
+        "uploadphoto":(context) =>  UploadPhoto(),
+        "adduser":(context) =>  AddUser(),
+        "dashboard":(context) =>  DashboardWidget(),
+        "users":(context) =>  Users(),
+        "edituser":(context) =>  EditUser(),
+        "alltransactions":(context) =>  AllTransactions(),
+        
+      } ,
+      
     );
   }
 

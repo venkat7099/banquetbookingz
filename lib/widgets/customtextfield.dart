@@ -60,7 +60,7 @@ class CustomTextFormField extends StatelessWidget {
                 ? InputDecoration(
                     prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
                     filled: filled, // Don't forget to set this to true
-                    fillColor: filledColor, // Use the shade of grey you prefer
+                    fillColor: Color(0xFFF3F3F3), // Use the shade of grey you prefer
 
                     prefixText: prefix,
                     prefixStyle: const TextStyle(color: Color(0XFF330099)),
@@ -75,20 +75,20 @@ class CustomTextFormField extends StatelessWidget {
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color(0XFF330099),
+                        color: Color(0XFF6418c3),
                         width: 2.0,
                       ),
                     ),
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Color.fromARGB(255, 224, 223, 223),
+                        color: Color(0xFF8C8C8C),
                         width: 2.0,
                       ),
                     ),
                     focusColor: Colors.white,
                   )
                 : InputDecoration(labelText: labelText),
-            style: const TextStyle(color: Color(0XFF330099)),
+            style: const TextStyle(color: Color(0XFF6418C3)),
             validator: validator,
           ),
         ),

@@ -24,6 +24,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        
+        primaryColor: Color(0xFF6418C3), // Email / Username icon color
+        // hintColor: Color(0xFF000), // Used for the 'Delete Plan' button
+        // backgroundColor: Color(0xFFE0E0E0), // Background color of input fields
+        
+        // Define the default font family.
+        fontFamily: 'Montserrat',
+
+        // Define the default TextTheme. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        
+
+        // Define the default button theme
+        buttonTheme: ButtonThemeData(
+          buttonColor: Color(0xFF6418c3), // Login button color
+          textTheme: ButtonTextTheme.primary,
+        ),
+
+        // Other customizations like input decoration, etc.
+       
+      
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see
@@ -39,7 +60,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff6418c3)),
         useMaterial3: true,
       ),
       home: FutureBuilder(

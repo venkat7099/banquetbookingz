@@ -29,6 +29,18 @@ print(res);
   }catch(e){};
 }
 
+Future<void> getSubscribers() async{
+  try{
+final response = await http.get(Uri.parse(Api.subscriptions));
+var res=json.decode(response.body);
+var userData=getUser.fromJson(res);
+state=userData;
+print(userData.data);
+print(res);
+ 
+  }catch(e){};
+}
+
 Future<void> getProfilePic(String userId) async{
   var data={};
   data["id"]=userId;

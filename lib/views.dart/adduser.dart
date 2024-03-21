@@ -158,7 +158,7 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
                                                 final controller=ref.watch(selectionModelProvider.notifier);
                                                 return CustomTextFormField(width: ScreenWidth*0.8,
                                                 keyBoardType: TextInputType.text,
-                                                textController: nameController,
+                                                
                                                 onChanged: (newVlue){
                                                   controller.updateEnteredName(newVlue);
                                                 },
@@ -179,7 +179,7 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
                                                 final controller=ref.watch(selectionModelProvider.notifier);
                                                 return CustomTextFormField(width: ScreenWidth*0.8,
                                                 keyBoardType: TextInputType.emailAddress,
-                                                textController: emailController,
+                                                
                                                 onChanged: (newValue){
                                                   controller.updateEnteredemail(newValue);
                                                 },

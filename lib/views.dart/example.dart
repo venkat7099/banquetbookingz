@@ -1,6 +1,7 @@
 import 'package:banquetbookingz/models/getuser.dart';
 import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
 import 'package:banquetbookingz/providers/getuserprovider.dart';
+import 'package:banquetbookingz/providers/selectionmodal.dart';
 import 'package:banquetbookingz/views.dart/dashboard.dart';
 import 'package:banquetbookingz/views.dart/dashboardpage.dart';
 import 'package:banquetbookingz/views.dart/loginpage.dart';
@@ -35,10 +36,11 @@ class DashboardWidget extends StatelessWidget {
         
         body: Consumer(builder: (context, ref, child) {
            final _selectedIndex = ref.watch(pageIndexProvider);
+           final dashboard=ref.watch(selectionModelProvider).dashboard;
           //  final get=ref.watch(getUserProvider.notifier);
-          return _selectedIndex==0? SingleChildScrollView(
+          return _selectedIndex==0 && dashboard==true? SingleChildScrollView(
             child: Column(children: [const StackWidget(hintText: 'Search with user or vendor name', text: "Banquet Bookz",
-            icon: Icons.search,),
+            ),
             Container(padding: const EdgeInsets.all( 40),color: Color(0xFFf5f5f5),
               child: Column(
                                   children: [
@@ -53,11 +55,16 @@ class DashboardWidget extends StatelessWidget {
                                           ),
                                           child: Column(
                                             children: [
-                                              Icon(
-                                                Icons.person,
-                                                size: 50,
-                                                color: Color(0XFF6418C3),
-                                              ),
+                                              Container(
+  decoration: BoxDecoration(
+    color: Color(0xffdfecf2), // Container's background color
+    shape: BoxShape.circle, // Making the container circular
+  ),
+  child: Icon(
+    Icons.person, // The person icon
+    color: Color(0xff5dcfff), // Icon color
+    size: 30.0, // Icon size
+  ),padding: EdgeInsets.all(10),),
                                               Text(
                                                 "12",
                                                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -86,9 +93,9 @@ class DashboardWidget extends StatelessWidget {
   child: Icon(
     Icons.person, // The person icon
     color: Color(0xffe328af), // Icon color
-    size: 50.0, // Icon size
+    size: 30.0, // Icon size
   ),
-  padding: EdgeInsets.all(20), // Padding to create space around the icon inside the container
+  padding: EdgeInsets.all(10), // Padding to create space around the icon inside the container
 ),
 
                                               Text(
@@ -475,6 +482,7 @@ class DashboardWidget extends StatelessWidget {
                       ],
                       onTap: (index) {
           // This is where you update the index
+          
           ref.read(pageIndexProvider.notifier).setPage(index);
         },
                       currentIndex: _selectedIndex,

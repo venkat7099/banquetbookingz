@@ -100,6 +100,73 @@ class AuthNotifier extends StateNotifier<authState> {
     return LoginResult(responseCode, errorMessage: errorMessage);
   }
 
+
+  Future<LoginResult> addSubscrier(
+      String subname, String annualprice,String quaterlyprice,String monthlyprice, WidgetRef ref) async {
+    final loadingState = ref.watch(loadingProvider.notifier);
+    int responseCode = 0;
+    String? errorMessage;
+    try {
+      loadingState.state = true;
+      var response = await http.post(Uri.parse(Api.subscriptions),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({'name': subname,'annualpricing': annualprice,
+          'quaterlypricing': quaterlyprice,'monthlypricing': monthlyprice,}));
+
+      var userDetails = json.decode(response.body);
+      var statuscode = response.statusCode;
+      print('$statuscode');
+      responseCode = statuscode;
+      print('server response:$userDetails');
+      switch (response.statusCode) {
+        case 201:
+          state = authState.fromJson(userDetails);
+          loadingState.state = false;
+
+          //print('this is from Auth response is:$accessToken');
+
+          // // final prefs = await SharedPreferences.getInstance();
+          // // final userData = json.encode({
+          // //   'refreshToken': userDetails['data']['refresh_token'],
+          // //   'accessToken': userDetails['data']['access_token'],
+          // //   'firstName': userDetails['data'][''],
+          // //   'userRole': userDetails['data']['userRole'],
+          // //   'password': userDetails['data']['password']
+          // });
+
+          //autologout();
+
+          // await prefs.setString('userData', userData);
+          // await prefs.setBool('isLoggedIn', true);
+          break;
+        default:
+          if (statuscode != 201) {
+            loadingState.state = false;
+          }
+          // Optionally set a message to show to the user why the login failed
+          break;
+      }
+      if (statuscode == 201) {
+        // Handle successful login...
+      } else {
+        // Any other status code means something went wrong
+        // Extract error message from response
+        // Assuming 'messages' is a List of messages and we take the first one.
+        errorMessage =
+            userDetails['messages']?.first ?? 'An unknown error occurred.';
+        // Alternatively, if 'message' is a single String with the error message:
+        // errorMessage = responseJson['message'];
+      }
+    } catch (e) {
+      loadingState.state = false;
+      errorMessage = e.toString();
+      print("cathe:$errorMessage");
+    }
+    return LoginResult(responseCode, errorMessage: errorMessage);
+  }
+
 Future<LoginResult> addUser(XFile imageFile, String firstName, String emailId,String gender,String?password,WidgetRef ref) async {
     var uri = Uri.parse(Api.addUser);
     final loadingState = ref.watch(loadingProvider.notifier);

@@ -72,7 +72,7 @@ class SubscriptionsWidget extends StatelessWidget {
                                                   SizedBox(height: 8,),
                                                   SizedBox(width: double.infinity,
                                                     child: ElevatedButton(onPressed: (){}, child:Text("Subscribed to Pro"),
-                                                    style: ElevatedButton.styleFrom(foregroundColor: Color(0xffeee1ff),
+                                                    style: ElevatedButton.styleFrom(foregroundColor: Color(0xffffffff),
                                                    shape: RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.circular(10.0), 
                                                     

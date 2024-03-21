@@ -69,7 +69,7 @@ class CustomTextFormField extends StatelessWidget {
                         : null, // Check for null
                     labelText: labelText,
                     hintText: hintText,
-                    hintStyle: const TextStyle(color: Color(0xFFCCCCCC)),
+                    hintStyle: const TextStyle(color: Color(0xFFb4b4b4)),
                     labelStyle: const TextStyle(
                       color: Color(0xFFCCCCCC),
                     ),

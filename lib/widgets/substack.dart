@@ -33,7 +33,10 @@ class SubStack extends StatelessWidget {
                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                           Text(text??"",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                                      Text("Edit",style: TextStyle(fontSize: 18,color: Color(0xff6418c3)),),
+                                                      InkWell(onTap: (){
+                                                        Navigator.of(context).pushNamed("editsubscriber");
+                                                      },
+                                                        child: Text("Edit",style: TextStyle(fontSize: 18,color: Color(0xff6418c3)),)),
                                         ],),
                                         SizedBox(height: 20,),
                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,

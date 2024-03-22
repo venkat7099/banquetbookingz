@@ -1,6 +1,8 @@
+import 'package:banquetbookingz/views.dart/addsubscriber.dart';
 import 'package:banquetbookingz/views.dart/adduser.dart';
 import 'package:banquetbookingz/views.dart/alltransactions.dart';
 import 'package:banquetbookingz/views.dart/dashboard.dart';
+import 'package:banquetbookingz/views.dart/editsubscriber.dart';
 import 'package:banquetbookingz/views.dart/edituser.dart';
 import 'package:banquetbookingz/views.dart/example.dart';
 import 'package:banquetbookingz/views.dart/loginpage.dart';
@@ -90,6 +92,8 @@ class MyApp extends StatelessWidget {
         "users":(context) =>  Users(),
         "edituser":(context) =>  EditUser(),
         "alltransactions":(context) =>  AllTransactions(),
+        "editsubscriber":(context) =>  EditSubscriber(),
+        "addsubscriber":(context) =>  AddSubscriber(),
         
       } ,
       

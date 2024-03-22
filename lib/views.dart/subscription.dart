@@ -68,9 +68,9 @@ class _SubscriptionState extends ConsumerState<Subscription> {
       final selection=ref.watch(selectionModelProvider.notifier);
       final user=ref.watch(selectionModelProvider);
       return SingleChildScrollView(
-        child: user.addUser==false && user.subDetails==false && user.editUser==false? Column(children: [
+        child:   Column(children: [
           StackWidget(hintText: "Search Subscriptions", text: "Subscription",onTap: (){
-            ref.watch(selectionModelProvider.notifier).toggleAddSubscriber(true);
+            Navigator.of(context).pushNamed("addsubscriber");
           },arrow: Icons.arrow_back,tabarrow: (){
             ref.read(pageIndexProvider.notifier).setPage(1);
           },),
@@ -83,7 +83,11 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                 
                 
                 return usersData.data==null?Container(height: screenHeight,width: screenWidth,color:Color(0xfff5f5f5),
-                child: Center(child: Text("No data available",style: TextStyle(color: Color(0xffb4b4b4),fontSize: 17),)),): 
+                child: Center(child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed("editsubsriber");
+                  },
+                  child: Text("No data available",style: TextStyle(color: Color(0xffb4b4b4),fontSize: 17),))),): 
                  Container(padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
@@ -123,7 +127,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                  );}
               ),],),
           )
-        ],): AddSubscriber()
+        ],)
                );}
     ),
     //

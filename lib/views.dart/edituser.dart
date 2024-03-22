@@ -103,7 +103,7 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
                     children: [
                     InkWell(child: Icon(Icons.arrow_back),onTap: (){
                       
-                      AddUser.toggleEditUser(false);
+                      Navigator.of(context).pop();
                     },),
                     Text("Add User",style: TextStyle(color: Color(0XFF6418C3),fontSize: 18),)
                   ],),

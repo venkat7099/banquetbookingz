@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 class getUser {
   int? statusCode;
   bool? success;
@@ -49,26 +51,29 @@ class Data {
   String? gender;
   String? userrole;
   Null? userstatus;
+  XFile? _xfile;
 
-  Data(
-      {this.id,
-      this.profilepic,
-      this.firstName,
-      this.lastName,
-      this.height,
-      this.weight,
-      this.dob,
-      this.location,
-      this.address,
-      this.address2,
-      this.city,
-      this.zip,
-      this.emailId,
-      this.password,
-      this.mobileNo,
-      this.gender,
-      this.userrole,
-      this.userstatus});
+  Data({
+    this.id,
+    this.profilepic,
+    this.firstName,
+    this.lastName,
+    this.height,
+    this.weight,
+    this.dob,
+    this.location,
+    this.address,
+    this.address2,
+    this.city,
+    this.zip,
+    this.emailId,
+    this.password,
+    this.mobileNo,
+    this.gender,
+    this.userrole,
+    this.userstatus,
+    XFile? xfile,
+  }) : _xfile = xfile;
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

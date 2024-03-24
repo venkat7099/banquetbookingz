@@ -6,6 +6,7 @@ import 'package:banquetbookingz/views.dart/dashboard.dart';
 import 'package:banquetbookingz/views.dart/dashboardpage.dart';
 import 'package:banquetbookingz/views.dart/loginpage.dart';
 import 'package:banquetbookingz/views.dart/mainpage.dart';
+import 'package:banquetbookingz/views.dart/settings.dart';
 import 'package:banquetbookingz/views.dart/subscription.dart';
 import 'package:banquetbookingz/views.dart/subscriptionchart.dart';
 import 'package:banquetbookingz/views.dart/users.dart';
@@ -29,7 +30,8 @@ class DashboardWidget extends StatelessWidget {
      List<Widget> _pages = [
       const DashboardWidget(),
       const Users(),
-      Subscription()
+      Subscription(),
+      Settings()
     ];
 
     return Scaffold(
@@ -475,10 +477,10 @@ class DashboardWidget extends StatelessWidget {
               icon: Icon(Icons.subscriptions),
               label: 'Subs',
                         ),
-              //           BottomNavigationBarItem(
-              // icon: Icon(Icons.settings),
-              // label: 'Settings',
-              //           ),
+                        BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+                        ),
                       ],
                       onTap: (index) {
           // This is where you update the index

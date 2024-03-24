@@ -126,7 +126,7 @@ class UploadPhoto extends StatelessWidget {
                                           backGroundColor: Color(0xFF8043b256),
                                           onPressed: () {
                                             Navigator.of(context)
-                                                .pushNamed("/");
+                                                .pop();
                                           },
                                         )
                                       ],
@@ -170,7 +170,7 @@ class UploadPhoto extends StatelessWidget {
                               ? null
                               : () {
                                   //print(value.isloading);
-                                  Navigator.of(context).pushNamed("/");
+                                  Navigator.of(context).pop();
 
                                   //print(value.isloading);
                                 },

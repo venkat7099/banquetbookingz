@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 class StackWidget extends StatelessWidget {
-  final String hintText;
+  final String ? hintText;
   final IconData? arrow;
   final String text;
   final VoidCallback? onTap;
   final VoidCallback? tabarrow;
-  const StackWidget({super.key,required this.hintText,this.arrow,   required this.text,this.onTap,
+  const StackWidget({super.key, this.hintText,this.arrow,   required this.text,this.onTap,
   this.tabarrow});
 
   @override
@@ -47,21 +47,15 @@ class StackWidget extends StatelessWidget {
                    Positioned(top: 50,
                   
                                   left: 20,
-                                  child: Row(
-                                    
-                                    children: [
-                                      Consumer(builder: (context, ref, child) {
-                                       
-                                        return IconButton(onPressed: tabarrow, icon: Icon(arrow,color: Colors.white,));}
-                                      ),
+                                  child: 
+                                      
                                       Text(
                                         text,
                                         style: TextStyle(color: Colors.white, fontSize: 25),
                                       ),
-                                    ],
-                                  )),
+                                   ),
                               // The search icon
-                              Positioned(top: 50,
+                            _selectedIndex!=3?  Positioned(top: 50,
                               
                                 right: 20,
                                 child: InkWell(onTap: onTap,
@@ -81,7 +75,7 @@ class StackWidget extends StatelessWidget {
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
-                                          Icons.verified_user,
+                                          Icons.local_police_sharp,
                                           color: Colors.white,
                                           size: 20.0,
                                         ),
@@ -90,12 +84,12 @@ class StackWidget extends StatelessWidget {
                                   ),
                                 )
       
-                              ),
+                              ):Container(),
                              
                   
                 ],
               ), ),
-              Positioned(bottom: 0,
+            _selectedIndex!=3 ?  Positioned(bottom: 0,
               left: 10,
               right: 10,
                 child:Padding(
@@ -116,7 +110,7 @@ class StackWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              ), )
+              ), ):Container()
               ],);}
     );
   }

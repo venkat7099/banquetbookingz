@@ -5,6 +5,7 @@ import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
 import 'package:banquetbookingz/providers/getsubscribers.dart';
 
 import 'package:banquetbookingz/providers/selectionmodal.dart';
+import 'package:banquetbookingz/providers/subcsribersprovider.dart';
 import 'package:banquetbookingz/views.dart/addsubscriber.dart';
 
 import 'package:banquetbookingz/widgets/stackwidget.dart';
@@ -27,7 +28,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
   void initState() {
     super.initState();
     // Call getUsers() when the widget is inserted into the widget tree
-    ref.read(getSubProvider.notifier).getSubscribers();
+    ref.read(subscribersProvider.notifier).getSubscribers();
     // ref.read(getUserProvider.notifier).getProfilePic();
     // Future.microtask(() {
     //   // Get the ID passed via arguments
@@ -60,7 +61,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     
-    final usersData=ref.watch(getSubProvider);
+    final usersData=ref.watch(subscribersProvider);
     
     
     return Scaffold(body:  Consumer(builder: (context, ref, child) {
@@ -71,9 +72,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
         child:   Column(children: [
           StackWidget(hintText: "Search Subscriptions", text: "Subscription",onTap: (){
             Navigator.of(context).pushNamed("addsubscriber");
-          },arrow: Icons.arrow_back,tabarrow: (){
-            ref.read(pageIndexProvider.notifier).setPage(1);
-          },),
+          },arrow: Icons.arrow_back,),
           Container(width: screenWidth,
           
           padding: EdgeInsets.all(30),color: Color(0xFFf5f5f5),
@@ -111,7 +110,12 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                               onTap: (){
                                                 ref.watch(selectionModelProvider.notifier).subDetails(true);
                                               },
-                                              child: SubStack(text: usersData.data![index].name,)
+                                              child: SubStack(text: usersData.data![index].name,width: screenWidth*0.795,editBtn: "Edit",
+                                              onTap: (){
+                                                int? userId = usersData.data![index].id;
+                                                         selection.subscriberIndex(userId);
+                                                         Navigator.of(context).pushNamed("editsubscriber");
+                                              },)
                                             ),
                                             Divider(thickness: 1,)
                                           ],

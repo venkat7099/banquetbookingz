@@ -2,6 +2,7 @@ import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/filtersprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
+import 'package:banquetbookingz/providers/subcsribersprovider.dart';
 import 'package:banquetbookingz/widgets/button.dart';
 import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
 import 'package:banquetbookingz/widgets/customtextfield.dart';
@@ -120,7 +121,7 @@ class AddSubscriber extends StatelessWidget {
                                   
                                     // If the form is valid, proceed with the login process
                                     
-                                    final LoginResult result= await ref.read(authProvider.notifier).addSubscrier(selection.subName.text,
+                                    final SubscriberResult result= await ref.read(subscribersProvider.notifier).addSubscrier(selection.subName.text,
                                     selection.annualP.text,selection.quaterlyP.text,selection.monthlyP.text, ref);
                                     if(result.statusCode==201){
                                       showDialog(

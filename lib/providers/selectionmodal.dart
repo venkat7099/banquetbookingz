@@ -35,11 +35,19 @@ void toggleAddUser(bool? value) {
     
 //   }
 
-  void Index(int?value) {
+  void userIndex(int?value) {
     
-      state = state.copyWith(index: value);
+      state = state.copyWith(userIndex: value);
     
   }
+
+   void subscriberIndex(int?value) {
+    
+      state = state.copyWith(subscriberIndex: value);
+    
+  }
+
+
 void subDetails(bool?value) {
     
       state = state.copyWith(subDetails: value);

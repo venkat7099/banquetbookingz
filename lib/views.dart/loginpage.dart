@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Consumer(builder: (context, ref, child){
           final isOnline = ref.watch(connectivityProvider);
           return isOnline? Container(
+            alignment: Alignment.center,
             padding: EdgeInsets.all(15),
             height: screenHeight,
             child: SingleChildScrollView(
@@ -66,25 +67,27 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          CustomTextFormField(
-                            applyDecoration: true,
-                            width: screenWidth * 0.8,
-                            hintText: "Email/Username",
-                            keyBoardType: TextInputType.emailAddress,
-                            suffixIcon: Icons.person_outline,
-                            textController: _enterEmail,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Field is required';
-                              }
-                              String pattern =
-                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                              RegExp regex = RegExp(pattern);
-                              if (!regex.hasMatch(value)) {
-                                return 'Enter a valid email address';
-                              }
-                              return null;
-                            },
+                          Consumer(builder: (context, ref, child) {
+                            return CustomTextFormField(
+                              applyDecoration: true,
+                              width: screenWidth * 0.8,
+                              hintText: "Email/Username",
+                              keyBoardType: TextInputType.emailAddress,
+                              suffixIcon: Icons.person_outline,
+                              textController: _enterEmail,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Field is required';
+                                }
+                                String pattern =
+                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                RegExp regex = RegExp(pattern);
+                                if (!regex.hasMatch(value)) {
+                                  return 'Enter a valid email address';
+                                }
+                                return null;
+                              },
+                            );}
                           ),
                           SizedBox(height: 16),
                           Consumer(builder: (context, ref, child){
@@ -95,9 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Password",
                               keyBoardType: TextInputType.text,
                               suffixIcon: Icons.lock_outline,
-                              onChanged: (newValue){
-                                controller.updateEnteredPassword(newValue);
-                              },
+                              textController: _enteredPassword,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Field is required';
@@ -117,37 +118,37 @@ class _LoginPageState extends State<LoginPage> {
                       width: screenWidth * 0.8,
                       child: Row(
                         children: [
-                          Consumer(builder: (context, ref, build) {
-                            var select =
-                                ref.read(selectionModelProvider.notifier);
-                            var val = ref.watch(selectionModelProvider).checkBox;
-                            return Expanded(
-                              child: ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                leading: Checkbox(
-                                  value: val,
-                                  focusColor: Color(0XFFb0b0b0),
-                                  side: BorderSide(color: Color(0XFFb0b0b0)),
-                                  onChanged: (newValue) {
-                                    select.toggleCheckBox(newValue);
-                                  },
-                                ),
-                                title: GestureDetector(
-                                  // onTap: () {
-                                  //   select.toggleCheckBox(!val);
-                                  // },
-                                  child: Text(
-                                    'Remember me',
-                                    style: TextStyle(
-                                        color: val
-                                            ? Color(0xFF330099)
-                                            : Color(0xFFb0b0b0),
-                                        fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
+                          // Consumer(builder: (context, ref, build) {
+                          //   var select =
+                          //       ref.read(selectionModelProvider.notifier);
+                          //   var val = ref.watch(selectionModelProvider).checkBox;
+                          //   return Expanded(
+                          //     child: ListTile(
+                          //       contentPadding: EdgeInsets.zero,
+                          //       leading: Checkbox(
+                          //         value: val,
+                          //         focusColor: Color(0XFFb0b0b0),
+                          //         side: BorderSide(color: Color(0XFFb0b0b0)),
+                          //         onChanged: (newValue) {
+                          //           select.toggleCheckBox(newValue);
+                          //         },
+                          //       ),
+                          //       title: GestureDetector(
+                          //         // onTap: () {
+                          //         //   select.toggleCheckBox(!val);
+                          //         // },
+                          //         child: Text(
+                          //           'Remember me',
+                          //           style: TextStyle(
+                          //               color: val
+                          //                   ? Color(0xFF330099)
+                          //                   : Color(0xFFb0b0b0),
+                          //               fontSize: 12),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   );
+                          // }),
                           TextButton(
                             onPressed: () {
                               // TODO: Implement forgot password functionality
@@ -180,9 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                                   final LoginResult result =
                                       await login.adminLogin(_enterEmail.text,
                                           _enteredPassword.text, ref);
-                                  if (result.statusCode == 201) {
-                                    Navigator.pushNamed(context,"dashboard");
-                                  } else if (result.statusCode == 400) {
+                                   if (result.statusCode == 400) {
                                     // If an error occurred, show a dialog box with the error message.
                                     showDialog(
                                       context: context,

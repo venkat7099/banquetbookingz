@@ -23,6 +23,21 @@ class authState {
     }
     return data;
   }
+
+authState copyWith({
+ int? statusCode,
+  bool? success,
+  List<String>? messages,
+  Data? data,
+}){
+ return authState(
+  statusCode: statusCode??this.statusCode,
+  success: success??this.success,
+  messages: messages??this.messages,
+  data: data
+ );
+}
+
 }
 
 class Data {
@@ -112,4 +127,50 @@ class Data {
     data['userRole'] = this.userRole;
     return data;
   }
+
+Data copyWith({
+    String? accessToken,
+  String? refreshToken,
+  int? id,
+  Null? profilePic,
+  Null? firstName,
+  Null? lastName,
+  Null? height,
+  Null? weight,
+  Null? dob,
+  Null? location,
+  Null? address,
+  String? emailId,
+  String? password,
+  Null? mobileNo,
+  String? gender,
+  Null? address2,
+  Null? city,
+  Null? zip,
+  String? userRole,
+
+  }) {
+    return Data(
+      accessToken: accessToken??this.accessToken,
+      refreshToken: accessToken??this.refreshToken,
+      id: id??this.id,
+      profilePic: profilePic??profilePic,
+      firstName: firstName??this.firstName,
+      lastName: lastName??this.lastName,
+      height: height??this.height,
+      weight: weight??weight,
+      dob: dob??this.dob,
+      location: location??this.location,
+      address: address??this.address,
+      emailId: emailId??this.emailId,
+      password: password??this.password,
+      mobileNo: mobileNo??this.mobileNo,
+      gender: gender??this.gender,
+      address2: address2??this.address2,
+      city: city??this.city,
+      zip: zip??this.zip,
+      userRole: userRole??this.userRole
+    );
+  }
+
 }

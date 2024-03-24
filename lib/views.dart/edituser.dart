@@ -6,6 +6,7 @@ import 'package:banquetbookingz/providers/getuserprovider.dart';
 import 'package:banquetbookingz/providers/imageprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
+import 'package:banquetbookingz/providers/usersprovider.dart';
 import 'package:banquetbookingz/views.dart/example.dart';
 import 'package:banquetbookingz/views.dart/loginpage.dart';
 import 'package:banquetbookingz/views.dart/users.dart';
@@ -35,10 +36,10 @@ class _EditUserState extends ConsumerState<EditUser> {
      
       final id = ModalRoute.of(context)?.settings.arguments as int?;
       print(id);
-      final ids=ref.read(selectionModelProvider).index;
+      final ids=ref.read(selectionModelProvider).userIndex;
       print(ids);
       // Get user details from your state notifier
-      final user = ref.read(getUserProvider.notifier).getUserById(ids!);
+      final user = ref.read(usersProvider.notifier).getUserById(ids!);
 
       if (user != null) {
         // Update the controllers with the user's data
@@ -292,8 +293,8 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
                                     if (_formKey.currentState!.validate()&&pickedImage!=null) {
                                       // If the form is valid, proceed with the login process
                                       
-                                      final LoginResult result= await ref.read(authProvider.notifier).addUser(pickedImage,selection.name.text,
-                                      selection.email.text,selection.gender,selection.password.text, ref);
+                                      final UserResult result= await ref.read(usersProvider.notifier).addUser(pickedImage,selection.name.text,
+                                      selection.email.text,selection.gender, ref);
                                       if(result.statusCode==201){
                                         showDialog(
           context: context,

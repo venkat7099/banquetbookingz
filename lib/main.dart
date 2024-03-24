@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/views.dart/addsubscriber.dart';
 import 'package:banquetbookingz/views.dart/adduser.dart';
 import 'package:banquetbookingz/views.dart/alltransactions.dart';
@@ -65,31 +68,36 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xff6418c3)),
         useMaterial3: true,
       ),
-      home: FutureBuilder(
-        future: isAuthenticated(),
-        builder: (context, snapshot) {
-          // Check the authentication status
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == true) {
-              // If the user is logged in, go to the main page
-              return const MainPage();
+      home: Consumer(builder: (context, ref, child) {
+        final authState=ref.watch(authProvider);
+        return FutureBuilder(
+          future:ref.watch(authProvider.notifier).isAuthenticated(),
+          builder: (context, snapshot) {
+            print('${snapshot.data}');
+            // Check the authentication status
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data == true) {
+                // If the user is logged in, go to the main page
+                return  DashboardWidget();
+              } else {
+                // If the user is not logged in, go to the login page
+                return LoginPage();
+              }
             } else {
-              // If the user is not logged in, go to the login page
-              return DashboardWidget();
+              // Show a loading spinner while checking authentication status
+              return const CircularProgressIndicator();
             }
-          } else {
-            // Show a loading spinner while checking authentication status
-            return const CircularProgressIndicator();
-          }
-        },
+          },
+        );}
       ),
       routes:{
         
         // "mainpage":(context) => const MainPage(),
         "uploadphoto":(context) =>  UploadPhoto(),
-        "adduser":(context) =>  AddUser(),
+        
         "dashboard":(context) =>  DashboardWidget(),
         "users":(context) =>  Users(),
+        "adduser":(context) =>  AddUser(),
         "edituser":(context) =>  EditUser(),
         "alltransactions":(context) =>  AllTransactions(),
         "editsubscriber":(context) =>  EditSubscriber(),
@@ -100,11 +108,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future<bool> isAuthenticated() async {
-    final prefs = await SharedPreferences.getInstance();
-    // Check if 'isLoggedIn' key exists and if so, return its value
-    return prefs.getBool('isLoggedIn') ?? false;
-  }
+  
 }
 
 class MyHomePage extends StatefulWidget {

@@ -7,6 +7,7 @@ import 'package:banquetbookingz/providers/getuserprovider.dart';
 import 'package:banquetbookingz/providers/imageprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
+import 'package:banquetbookingz/providers/usersprovider.dart';
 import 'package:banquetbookingz/views.dart/addsubscriber.dart';
 import 'package:banquetbookingz/views.dart/adduser.dart';
 import 'package:banquetbookingz/views.dart/edituser.dart';
@@ -35,17 +36,17 @@ class _UsersState extends ConsumerState<Users> {
   void initState() {
     super.initState();
     // Call getUsers() when the widget is inserted into the widget tree
-    ref.read(getUserProvider.notifier).getUsers();
+    ref.read(usersProvider.notifier).getUsers();
     // ref.read(getUserProvider.notifier).getProfilePic();
     Future.microtask(() {
       // Get the ID passed via arguments
      
       final id = ModalRoute.of(context)?.settings.arguments as int?;
       print(id);
-      final ids=ref.read(selectionModelProvider).index;
+      final ids=ref.read(selectionModelProvider).userIndex;
       print(ids);
       // Get user details from your state notifier
-      final user = ref.read(getUserProvider.notifier).getUserById(ids!);
+      final user = ref.read(usersProvider.notifier).getUserById(ids!);
 
       if (user != null) {
         // Update the controllers with the user's data
@@ -91,9 +92,8 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
     List<bool> isSelected = [true, false, false, false];
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final emailController = ref.watch(selectionModelProvider.select((model) => model.email));
-  final nameController = ref.watch(selectionModelProvider.select((model) => model.name));
-    final usersData=ref.watch(getUserProvider);
+    
+    final usersData=ref.watch(usersProvider);
     
     List<Widget> _pages = [
       DashboardWidget(),
@@ -107,10 +107,8 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
       return SingleChildScrollView(
         child:  Column(children: [
           StackWidget(hintText: "Search users", text: "Users",onTap: (){
-            Navigator.of(context).pushNamed("edituser");
-          },arrow: Icons.arrow_back,tabarrow: (){
-            ref.read(pageIndexProvider.notifier).setPage(0);
-          },),
+            Navigator.of(context).pushNamed("adduser");
+          },arrow: Icons.arrow_back,),
           Container(width: screenWidth,
           
           padding: EdgeInsets.all(30),color: Color(0xFFf5f5f5),
@@ -177,7 +175,7 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
                                                      icon: Icon(Icons.edit,color: Colors.purple,),
                                                      onPressed: () {
                                                                int? userId = usersData.data![index].id;
-                                                         selection.Index(userId);
+                                                         selection.userIndex(userId);
                                                          Navigator.of(context).pushNamed("edituser");
                                                 //  Navigator.of(context).pushNamed("edituser",arguments: userId);  
                                                 //  ref.watch(getUserProvider.notifier).getProfilePic(userId.toString());        // Add action for edit icon press

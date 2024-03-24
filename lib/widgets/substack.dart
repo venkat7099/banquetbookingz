@@ -3,7 +3,10 @@ import 'package:flutter/widgets.dart';
 
 class SubStack extends StatelessWidget {
   final String? text;
-  const SubStack({super.key, this.text});
+  final String? editBtn;
+  final double? width;
+  final VoidCallback? onTap;
+  const SubStack({super.key, this.text,this.width,this.editBtn,this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class SubStack extends StatelessWidget {
                                   ),
                                   Positioned(top: 0,
                                     child:Container(
-                                      width: screenWidth*0.795,
+                                      width: width,
                                     padding: EdgeInsets.all(10),
                                     margin: EdgeInsets.only(bottom: 10),
                                     decoration: BoxDecoration(
@@ -33,10 +36,8 @@ class SubStack extends StatelessWidget {
                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                           Text(text??"",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                                                      InkWell(onTap: (){
-                                                        Navigator.of(context).pushNamed("editsubscriber");
-                                                      },
-                                                        child: Text("Edit",style: TextStyle(fontSize: 18,color: Color(0xff6418c3)),)),
+                                                      InkWell(onTap: onTap,
+                                                        child: Text(editBtn??"",style: TextStyle(fontSize: 18,color: Color(0xff6418c3)),)),
                                         ],),
                                         SizedBox(height: 20,),
                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,

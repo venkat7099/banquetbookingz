@@ -51,30 +51,6 @@ class Data {
   String? gender;
   String? userrole;
   Null? userstatus;
-<<<<<<< HEAD
-   XFile? _xfile;
-
-  Data(
-      {this.id,
-      this.profilepic,
-      this.firstName,
-      this.lastName,
-      this.height,
-      this.weight,
-      this.dob,
-      this.location,
-      this.address,
-      this.address2,
-      this.city,
-      this.zip,
-      this.emailId,
-      this.password,
-      this.mobileNo,
-      this.gender,
-      this.userrole,
-       XFile? xfile, 
-      this.userstatus}) : _xfile = xfile;
-=======
   XFile? _xfile;
 
   Data({
@@ -98,7 +74,6 @@ class Data {
     this.userstatus,
     XFile? xfile,
   }) : _xfile = xfile;
->>>>>>> e8854410eb94b515a47d4d9632d694033f80988b
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

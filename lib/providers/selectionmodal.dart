@@ -84,6 +84,14 @@ void setSub(String gender) {
     state = state
         .copyWith(); // This is a hacky way to force a rebuild. Consider better state management for TextEditingController.
   }
+  void updateEnteredMobile(String newText) {
+       state.mobile.text =
+        newText; 
+        
+    state = state
+        .copyWith(); // This is a hacky way to force a rebuild. Consider better state management for TextEditingController.
+  }
+
    void updateEnteredPassword(String newText) {
        state.password.text =
         newText; 

@@ -15,13 +15,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
 
-class AuthNotifier extends StateNotifier<authState> {
-  AuthNotifier() : super(authState());
+class AuthNotifier extends StateNotifier<AdminAuth> {
+  AuthNotifier() : super(AdminAuth());
 Future<bool> isAuthenticated() async {
     final prefs = await SharedPreferences.getInstance();
       if (prefs.containsKey('userData')) {
-    final userData = prefs.getString('userData');
-    print('userData exists: $userData');
+   final extractData =
+    json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
+if(state.token==null){
+  state = state.copyWith(
+  token: extractData['token'],
+  username: extractData['username'],
+  email: extractData['email'],
+  mobileno: extractData['mobileno'],
+  usertype: extractData['usertype'],
+);
+}
+
+  
     return true;
 }else{  print('trylogin is false');
       return false;}
@@ -58,7 +69,7 @@ Future<bool> isAuthenticated() async {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: json.encode({'email': username, 'password': password}));
+          body: json.encode({'username': username, 'password': password}));
 
       var userDetails = json.decode(response.body);
       var statuscode = response.statusCode;
@@ -98,28 +109,25 @@ Future<bool> isAuthenticated() async {
       //     // Optionally set a message to show to the user why the login failed
       //     break;
       // }
-      if (statuscode == 201) {
+      if (statuscode == 200) {
         
           loadingState.state = false;
-        state = authState.fromJson(userDetails);
+        state = AdminAuth.fromJson(userDetails);
           //print('this is from Auth response is:$accessToken');
 
          final prefs = await SharedPreferences.getInstance();
 print("SharedPreferences fetched successfully");
            
-           state=state.copyWith(data: state.data?.copyWith(accessToken: userDetails['data']['access_token'], refreshToken: userDetails['data']['refresh_token'],
-             id: userDetails['data']['id'],profilePic: userDetails['data']['profilePic'],userRole:userDetails['data']['userRole'],
-             emailId:userDetails['data']['emailId'],password: userDetails['data']['password']),);
+           state=state.copyWith(token:userDetails['token'],username:userDetails['username'],email: userDetails['email'],mobileno: userDetails['mobileno'],usertype: userDetails['usertype'] );
 
           final userData = json.encode({
-            'id':userDetails['data']['id'],
-            'profilepic':userDetails['data']['profilePic'],
-            'refreshToken': userDetails['data']['refresh_token'],
-            'accessToken': userDetails['data']['access_token'],
+            'token':userDetails['token'],
+            'username':userDetails['username'],
+            'email': userDetails['email'],
+            'mobileno':userDetails['mobileno'],
             
-            'userRole': userDetails['data']['userRole'],
-            'password': userDetails['data']['password'],
-            'emailId':userDetails['data']['emailId']
+            'usertype': userDetails['usertype'],
+         
           });
 
           //autologout();
@@ -132,12 +140,7 @@ print("SharedPreferences fetched successfully");
       // Assuming `state` and `authState` are part of your state management. 
       // Update them as necessary.
       
-      }else if (statuscode != 201) {
-            loadingState.state = false;
-             errorMessage =
-            userDetails['messages']?.first ?? 'An unknown error occurred.';
-
-          } 
+      }
       
     } catch (e) {
       loadingState.state = false;
@@ -152,69 +155,13 @@ Future<void> logoutUser() async {
     await prefs.setBool('isLoggedIn', false);
   }
 
-Future<String> restoreAccessToken() async {
-    final url =
-        Uri.parse(Api.refreshToken);
-    final prefs = await SharedPreferences.getInstance();
-    try {
-      var response = await http.patch(
-        url,
-       
-        body: json.encode({"refresh_token": state.data!.refreshToken!,"id":state.data!.id}),
-      );
 
-      var userDetails = json.decode(response.body);
-      print('restore token response $userDetails');
-      switch (response.statusCode) {
-        case 401:
-          // Handle 401 Unauthorized
-          // await logout();
-          // await tryAutoLogin();
-
-          break;
-        case 200:
-          final newAccessToken = userDetails['data']['access_token'];
-          
-          final newRefreshToken = userDetails['data']['refresh_token'];
-         
-
-          // Update state
-          state = state.copyWith(
-             data: state.data?.copyWith(accessToken: newAccessToken, refreshToken: newRefreshToken),
-            
-          );
-
-          final userData = json.encode({
-            
-            'refreshToken': newRefreshToken,
-           
-            'accessToken': newAccessToken,
-            
-          });
-
-          prefs.setString('userData', userData);
-
-        // loading(false); // Update loading state
-      }
-    } on FormatException catch (formatException) {
-      print('Format Exception: ${formatException.message}');
-      print('Invalid response format.');
-    } on HttpException catch (httpException) {
-      print('HTTP Exception: ${httpException.message}');
-    } catch (e) {
-      print('General Exception: ${e.toString()}');
-      if (e is Error) {
-        print('Stack Trace: ${e.stackTrace}');
-      }
-    }
-    return state.data!.accessToken!;
-  }
   
 
   
 }
 
-final authProvider = StateNotifierProvider<AuthNotifier, authState>((ref) {
+final authProvider = StateNotifierProvider<AuthNotifier, AdminAuth>((ref) {
   return AuthNotifier();
 });
 

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:banquetbookingz/models/authstate.dart' as auth;
 import 'package:banquetbookingz/models/getuser.dart';
+import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/getsubscribers.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/utils/banquetbookzapi.dart';
@@ -55,50 +56,67 @@ class UserNotifier extends StateNotifier<getUser> {
 
   
 
-Future<UserResult> addUser(XFile imageFile, String firstName, String emailId,String gender,WidgetRef ref) async {
-    var uri = Uri.parse(Api.addUser);
-    final loadingState = ref.watch(loadingProvider.notifier);
-    String generateLetters = generateRandomLetters(10);
-    int responseCode = 0;
-    String? errorMessage;
+Future<UserResult> addUser(
+  XFile imageFile, 
+  String firstName, 
+  String emailId, 
+  String gender, 
+  String mobileNo, 
+   
+  String password, // Add password parameter
+  WidgetRef ref
+) async {
+  var uri = Uri.parse(Api.addUser);
+  final loadingState = ref.watch(loadingProvider.notifier);
 
-   final data={};
-  data["firstName"]=firstName;
-  data["emailId"]=emailId;
-  data["gender"]=gender;
-  data["userRole"]="m";
-  data["profilepic"]="profile_$generateLetters";
-  
-  // Add the encoded JSON string to your request fields.
-  try{
-    loadingState.state=true;
-var request = http.MultipartRequest('POST', uri);
-  // Add the image file to your request.
-  request.files.add(await http.MultipartFile.fromPath('imagefile[]', imageFile.path));
-
+  int responseCode = 0;
+  String? errorMessage;
+print("$emailId,$password,$mobileNo,$gender");
+  try {
+    loadingState.state = true;
+    var request = http.MultipartRequest('POST', uri);
     
-      Map<String, String> obj = {"attributes": json.encode(data).toString()};
-    request.fields.addAll(obj);
+    // Add the image file to your request.
+    request.files.add(await http.MultipartFile.fromPath('profile_pic', imageFile.path));
+
+    // Add the other form fields to your request.
+    request.fields['username'] = firstName;
+    request.fields['email'] = emailId;
+    request.fields['gender'] = gender;
+    request.fields['mobileno'] = mobileNo;
+    
+    
+    request.fields['password'] = password; // Add password to the request
+request.headers['Authorization']='Token ${ref.read(authProvider).token}';
     final send = await request.send();
     final res = await http.Response.fromStream(send);
-    var userDetails=json.decode(res.body);
-    var statuscode = res.statusCode;
-    responseCode=statuscode;
-    print("statuscode:$statuscode");
-    print("responsebody:${res.body}");
-    if (statuscode == 201) {
-      loadingState.state=false;
+    var userDetails = json.decode(res.body);
+    var statusCode = res.statusCode;
+    responseCode = statusCode;
+    print("statuscode: $statusCode");
+    print("responsebody: ${res.body}");
+    switch (responseCode) {
+      case 400:
+        if(userDetails['email']!=null){
+errorMessage='Email already exists';
+        }else if(userDetails['username']!=null){
+errorMessage='username already exists';
+        }
+        break;
+      default:
     }
-     errorMessage =
-            userDetails['messages']?.first ?? 'An unknown error occurred.';
-    } catch (e) {
-      // state = AsyncValue.error('Error occurred: $e');
-      var errorMessage = e.toString();
-      print("cathe:$errorMessage");
-         loadingState.state=false;
-    }
-    return UserResult(responseCode, errorMessage: errorMessage);
+    
+   
+  } catch (e) {
+    loadingState.state = false;
+    errorMessage = e.toString();
+    print("catch: $errorMessage");
+  } finally {
+    loadingState.state = false;
   }
+
+  return UserResult(responseCode, errorMessage: errorMessage);
+}
 
   Future<void> getUsers() async{
   try{

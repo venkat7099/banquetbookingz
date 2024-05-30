@@ -24,8 +24,11 @@ class SelectionModel {
   final TextEditingController annualP;
   final TextEditingController quaterlyP;
   final TextEditingController monthlyP;
+  final TextEditingController mobile;
+  
   SelectionModel(
       {this.isAuth=false,
+     TextEditingController? mobile,
         this.sub="d",
         this.checkBox = false,
       this.gender="m",
@@ -50,6 +53,7 @@ class SelectionModel {
       })
       : email = email ?? TextEditingController(),
       useremail=useremail??TextEditingController(),
+      mobile =mobile??TextEditingController(),
         name = name ??
             TextEditingController(),password = password ??
             TextEditingController(),subName = subName ?? TextEditingController(),annualP = annualP ?? TextEditingController(),
@@ -63,7 +67,7 @@ class SelectionModel {
       TextEditingController? password,
       TextEditingController? subName,
       TextEditingController? annualP ,TextEditingController? quaterlyP,
-      TextEditingController? monthlyP,}) {
+      TextEditingController? monthlyP,TextEditingController? mobile}) {
     return SelectionModel(
       isAuth: isAuth??this.isAuth,
       sub: sub??this.sub,
@@ -85,7 +89,8 @@ class SelectionModel {
         subName: subName??this.subName,
         annualP: annualP??this.annualP,
         quaterlyP: quaterlyP??this.quaterlyP,
-        monthlyP: monthlyP??this.monthlyP
+        monthlyP: monthlyP??this.monthlyP,
+        mobile: mobile??this.mobile
 
         // Preserve the original controller
         );

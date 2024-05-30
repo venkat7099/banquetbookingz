@@ -293,81 +293,81 @@ Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
                                     if (_formKey.currentState!.validate()&&pickedImage!=null) {
                                       // If the form is valid, proceed with the login process
                                       
-                                      final UserResult result= await ref.read(usersProvider.notifier).addUser(pickedImage,selection.name.text,
-                                      selection.email.text,selection.gender, ref);
-                                      if(result.statusCode==201){
-                                        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Container(
-                padding: EdgeInsets.all(20),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.check_circle, size: 50, color: Color(0XFF6418C3)),
-                    SizedBox(height: 15),
-                    Text(
-                      'Suresh Ramesh has been successfully added as a user.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Text(
-                      'Login details have been mailed to the user.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Consumer(builder: (context, ref, child){
-                      final addUser=ref.watch(selectionModelProvider.notifier);
-                      return CustomElevatedButton(text: "OK", borderRadius:20,width: 100,foreGroundColor: Colors.white,
-                      backGroundColor: Color(0XFF6418C3),onPressed: (){
-                        addUser.toggleAddUser(false);
-                        Navigator.of(context).pushNamed("users");
-                      },);}
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-                                      }else if (result.statusCode == 400) {
-                                        // If an error occurred, show a dialog box with the error message.
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: Text('Login Error'),
-                                              content: Text(result.errorMessage ??
-                                                  'An unknown error occurred.'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: Text('OK'),
-                                                  onPressed: () {
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog box
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      }
+        //                               final UserResult result= await ref.read(usersProvider.notifier).addUser(pickedImage,selection.name.text,
+        //                               selection.email.text,selection.gender, ref);
+        //                               if(result.statusCode==201){
+        //                                 showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return Dialog(
+        //       shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(20.0),
+        //       ),
+        //       child: Container(
+        //         padding: EdgeInsets.all(20),
+        //         width: double.infinity,
+        //         decoration: BoxDecoration(
+        //           shape: BoxShape.rectangle,
+        //           borderRadius: BorderRadius.all(Radius.circular(20)),
+        //         ),
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: <Widget>[
+        //             Icon(Icons.check_circle, size: 50, color: Color(0XFF6418C3)),
+        //             SizedBox(height: 15),
+        //             Text(
+        //               'Suresh Ramesh has been successfully added as a user.',
+        //               textAlign: TextAlign.center,
+        //               style: TextStyle(
+        //                 fontSize: 16,
+        //               ),
+        //             ),
+        //             SizedBox(height: 15),
+        //             Text(
+        //               'Login details have been mailed to the user.',
+        //               textAlign: TextAlign.center,
+        //               style: TextStyle(
+        //                 color: Colors.grey,
+        //                 fontSize: 14,
+        //               ),
+        //             ),
+        //             SizedBox(height: 20),
+        //             Consumer(builder: (context, ref, child){
+        //               final addUser=ref.watch(selectionModelProvider.notifier);
+        //               return CustomElevatedButton(text: "OK", borderRadius:20,width: 100,foreGroundColor: Colors.white,
+        //               backGroundColor: Color(0XFF6418C3),onPressed: (){
+        //                 addUser.toggleAddUser(false);
+        //                 Navigator.of(context).pushNamed("users");
+        //               },);}
+        //             )
+        //           ],
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // );
+        //                               }else if (result.statusCode == 400) {
+        //                                 // If an error occurred, show a dialog box with the error message.
+        //                                 showDialog(
+        //                                   context: context,
+        //                                   builder: (context) {
+        //                                     return AlertDialog(
+        //                                       title: Text('Login Error'),
+        //                                       content: Text(result.errorMessage ??
+        //                                           'An unknown error occurred.'),
+        //                                       actions: <Widget>[
+        //                                         TextButton(
+        //                                           child: Text('OK'),
+        //                                           onPressed: () {
+        //                                             Navigator.of(context)
+        //                                                 .pop(); // Close the dialog box
+        //                                           },
+        //                                         ),
+        //                                       ],
+        //                                     );
+        //                                   },
+        //                                 );
+        //                               }
                                     }
                                   },);}
                  )

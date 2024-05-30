@@ -111,26 +111,13 @@ class SubscribersNotifier extends StateNotifier<subscription> {
       WidgetRef ref) async {
     final loadingState = ref.watch(loadingProvider.notifier);
     var subDetails=ref.read(authProvider);
-int id =subDetails.data!.id!;
+int id =20;
     int responseCode = 0;
     String? errorMessage;
     try {
       loadingState.state = true;
-       final client = RetryClient(
-      http.Client(),
-      retries: 4,
-      when: (response) {
-        return response.statusCode == 401 ? true : false;
-      },
-      onRetry: (req, res, retryCount) async {
-        if (retryCount == 0 && res?.statusCode == 401) {
-          var accessToken = await ref.read(authProvider.notifier).restoreAccessToken();
-          // Only this block can run (once) until done
-          req.headers['Authorization'] = accessToken;
-        }
-      },
-    );
-      var response = await client.post(Uri.parse(Api.subscriptions),
+      
+      var response = await http.post(Uri.parse(Api.subscriptions),
           headers: {
             'Content-Type': 'application/json',
           },

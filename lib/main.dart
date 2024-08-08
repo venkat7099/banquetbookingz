@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:banquetbookingz/models/subscriptionmodel.dart';
 import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/views.dart/addsubscriber.dart';
 import 'package:banquetbookingz/views.dart/adduser.dart';
@@ -10,6 +10,7 @@ import 'package:banquetbookingz/views.dart/edituser.dart';
 import 'package:banquetbookingz/views.dart/example.dart';
 import 'package:banquetbookingz/views.dart/loginpage.dart';
 import 'package:banquetbookingz/views.dart/mainpage.dart';
+import 'package:banquetbookingz/views.dart/subscription.dart';
 import 'package:banquetbookingz/views.dart/uploadphoto.dart';
 import 'package:banquetbookingz/views.dart/users.dart';
 import 'package:flutter/material.dart';
@@ -26,20 +27,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print('Main.dart build');
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        
         primaryColor: Color(0xFF6418C3), // Email / Username icon color
         // hintColor: Color(0xFF000), // Used for the 'Delete Plan' button
         // backgroundColor: Color(0xFFE0E0E0), // Background color of input fields
-        
+
         // Define the default font family.
         fontFamily: 'Montserrat',
 
         // Define the default TextTheme. Use this to specify the default
         // text styling for headlines, titles, bodies of text, and more.
-        
 
         // Define the default button theme
         buttonTheme: ButtonThemeData(
@@ -48,8 +48,7 @@ class MyApp extends StatelessWidget {
         ),
 
         // Other customizations like input decoration, etc.
-       
-      
+
         // This is the theme of your application.
         //
         // TRY THIS: Try running your application with "flutter run". You'll see
@@ -69,16 +68,16 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Consumer(builder: (context, ref, child) {
-        final authState=ref.watch(authProvider);
+        final authState = ref.watch(authProvider);
         return FutureBuilder(
-          future:ref.watch(authProvider.notifier).isAuthenticated(),
+          future: ref.watch(authProvider.notifier).isAuthenticated(),
           builder: (context, snapshot) {
             print('${snapshot.data}');
             // Check the authentication status
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data == true) {
                 // If the user is logged in, go to the main page
-                return  DashboardWidget();
+                return DashboardWidget();
               } else {
                 // If the user is not logged in, go to the login page
                 return LoginPage();
@@ -88,28 +87,20 @@ class MyApp extends StatelessWidget {
               return const CircularProgressIndicator();
             }
           },
-        );}
-      ),
-      routes:{
-        
+        );
+      }),
+      routes: {
         // "mainpage":(context) => const MainPage(),
-        "uploadphoto":(context) =>  UploadPhoto(),
-        
-        "dashboard":(context) =>  DashboardWidget(),
-        "users":(context) =>  Users(),
-        "adduser":(context) =>  AddUser(),
-        "edituser":(context) =>  EditUser(),
-        "alltransactions":(context) =>  AllTransactions(),
-        "editsubscriber":(context) =>  EditSubscriber(),
-        "addsubscriber":(context) =>  AddSubscriber(),
-        
-      } ,
-      
+        "uploadphoto": (context) => UploadPhoto(),
+        "dashboard": (context) => DashboardWidget(),
+        "users": (context) => Users(),
+        "adduser": (context) => AddUser(),
+        "edituser": (context) => EditUser(),
+        "alltransactions": (context) => AllTransactions(),
+        "editsubscriber": (context) => EditSubscriber(),
+        "addsubscriber": (context) => AddSubscriber(),
+        "getsubscriptions": (context) => Subscription(),
+      },
     );
   }
-
-  
 }
-
-
-

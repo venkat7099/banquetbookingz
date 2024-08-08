@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
 import 'package:banquetbookingz/providers/getuserprovider.dart';
@@ -65,7 +64,6 @@ class _AddUserState extends ConsumerState<AddUser> {
 
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
-      
         return SingleChildScrollView(
             child: Form(
           key: _formKey,
@@ -212,8 +210,7 @@ class _AddUserState extends ConsumerState<AddUser> {
                         "Email ID",
                         style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
-                      
-                       const SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Consumer(builder: (context, ref, child) {
@@ -248,12 +245,11 @@ class _AddUserState extends ConsumerState<AddUser> {
                         "Password",
                         style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
-                     
-                     Consumer(builder: (context, ref, child) {
+                      Consumer(builder: (context, ref, child) {
                         final controller =
                             ref.watch(selectionModelProvider.notifier);
                         return CustomTextFormField(
-                          secureText:true,
+                          secureText: true,
                           width: ScreenWidth * 0.8,
                           keyBoardType: TextInputType.text,
                           onChanged: (newVlue) {
@@ -337,7 +333,6 @@ class _AddUserState extends ConsumerState<AddUser> {
                         height: 10,
                       ),
                       Consumer(builder: (context, ref, child) {
-                      
                         return CustomTextFormField(
                           width: ScreenWidth * 0.8,
                           readOnly: true,
@@ -356,7 +351,6 @@ class _AddUserState extends ConsumerState<AddUser> {
                         final controller =
                             ref.watch(selectionModelProvider.notifier);
                         return CustomTextFormField(
-                          
                           width: ScreenWidth * 0.8,
                           keyBoardType: TextInputType.number,
                           onChanged: (newVlue) {
@@ -439,8 +433,6 @@ class _AddUserState extends ConsumerState<AddUser> {
                                                 fontSize: 16,
                                               ),
                                             ),
-                                            
-                                            
                                             const SizedBox(height: 20),
                                             Consumer(
                                                 builder: (context, ref, child) {
@@ -455,8 +447,7 @@ class _AddUserState extends ConsumerState<AddUser> {
                                                 backGroundColor:
                                                     const Color(0XFF6418C3),
                                                 onPressed: () {
-                                                   Navigator.of(context)
-                                                .pop();
+                                                  Navigator.of(context).pop();
                                                   ref
                                                       .read(pageIndexProvider
                                                           .notifier)
@@ -483,8 +474,10 @@ class _AddUserState extends ConsumerState<AddUser> {
                                         TextButton(
                                           child: const Text('OK'),
                                           onPressed: () {
+                                            // Navigator.of(context)
+                                            //     .pop();
                                             Navigator.of(context)
-                                                .pop(); // Close the dialog box
+                                                .pushNamed("Dashboard");
                                           },
                                         ),
                                       ],

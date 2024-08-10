@@ -55,7 +55,9 @@ class _SettingsState extends ConsumerState<Settings> {
                 height: 20,
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("edituser");
+                  },
                   child: Text(
                     "EditProfile",
                     style: TextStyle(color: Color(0xff000000), fontSize: 15),
@@ -64,7 +66,9 @@ class _SettingsState extends ConsumerState<Settings> {
                 height: 20,
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed("alltransactions");
+                  },
                   child: Text(
                     "Wallet",
                     style: TextStyle(color: Color(0xff000000), fontSize: 15),

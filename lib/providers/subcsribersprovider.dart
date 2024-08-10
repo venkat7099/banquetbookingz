@@ -413,7 +413,8 @@ class SubscribersNotifier extends StateNotifier<subscription> {
         state = subscription.fromJson(res);
       } else {
         print(
-            'Error fetching subscribers: ${res['messages']?.first ?? 'An unknown error occurred.'}');
+          'Error fetching subscribers: ${res['messages']?.first ?? 'An unknown error occurred.'}',
+        );
       }
     } catch (e) {
       print("Error fetching subscribers: $e");

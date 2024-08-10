@@ -367,17 +367,12 @@
 //     ),
 //   );
 // }
-import 'dart:io';
-import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
-import 'package:banquetbookingz/providers/getsubscribers.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banquetbookingz/providers/subcsribersprovider.dart';
-import 'package:banquetbookingz/views.dart/addsubscriber.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 import 'package:banquetbookingz/widgets/substack.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Subscription extends ConsumerStatefulWidget {
   const Subscription({super.key});
@@ -394,13 +389,13 @@ class _SubscriptionState extends ConsumerState<Subscription> {
     ref.read(subscribersProvider.notifier).getSubscribers();
   }
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final usersData = ref.watch(subscribersProvider);
+
+    // Ensure data is not null before accessing it
+    final subscribers = usersData.data ?? [];
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -418,85 +413,181 @@ class _SubscriptionState extends ConsumerState<Subscription> {
               width: screenWidth,
               padding: const EdgeInsets.all(30),
               color: const Color(0xFFf5f5f5),
-              child: Column(
-                children: [
-                  usersData.data == null
-                      ? Container(
-                          height: screenHeight,
-                          width: screenWidth,
-                          color: const Color(0xfff5f5f5),
-                          child: Center(
-                              child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .pushNamed("editsubscriber");
-                                  },
-                                  child: const Text(
-                                    "No data available",
-                                    style: TextStyle(
-                                        color: Color(0xffb4b4b4), fontSize: 17),
-                                  ))),
-                        )
-                      : Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics:
+                    const NeverScrollableScrollPhysics(), // Prevent scrolling inside GridView
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 3 / 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: subscribers.length,
+                itemBuilder: (context, index) {
+                  final user = subscribers[index];
+                  return InkWell(
+                    onTap: () {
+                      final userId = user.id;
+                      ref
+                          .read(selectionModelProvider.notifier)
+                          .subscriberIndex(userId);
+                      Navigator.of(context).pushNamed("editsubscriber");
+                    },
+                    child: SubStack(
+                      text: user.name ?? "No Name",
+                      width: screenWidth * 0.795,
+                      editBtn: "Edit",
+                      onTap: () {
+                        // Handle edit button click if needed
+                      },
+                      additionalInfo: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Annual Price: ${user.annualPricing ?? 'N/A'}",
                           ),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 3 / 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                            ),
-                            itemCount: usersData.data!.length,
-                            itemBuilder: (context, index) {
-                              final user = usersData.data![index];
-                              return InkWell(
-                                onTap: () {
-                                  int? userId = usersData.data![index].id;
-                                  ref
-                                      .watch(selectionModelProvider.notifier)
-                                      .subscriberIndex(userId);
-                                  Navigator.of(context)
-                                      .pushNamed("editsubscriber");
-                                },
-                                // child: SubStack(
-                                //   text: user.name,
-                                //   width: screenWidth * 0.795,
-                                //   editBtn: "Edit",
-                                //   onTap: () {
-                                //     // Handle edit button click
-                                //   },
-                                // ),
-                              );
-                            },
+                          Text(
+                            "Quarterly Price: ${user.quaterlyPricing ?? 'N/A'}",
                           ),
-                        ),
-                ],
+                          Text(
+                            "Monthly Price: ${user.monthlyPricing ?? 'N/A'}",
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:banquetbookingz/providers/selectionmodal.dart';
+// import 'package:banquetbookingz/widgets/stackwidget.dart';
+// import 'package:banquetbookingz/widgets/substack.dart';
 
-Widget _buildToggleButton(String text, bool isSelected) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8),
-    child: Text(
-      text,
-      style: TextStyle(
-        fontSize: 16,
-        color: isSelected ? Colors.purple : Colors.black,
-        decoration: isSelected ? TextDecoration.underline : TextDecoration.none,
-      ),
-    ),
-  );
-}
+// // Sample Data Class
+// class Data {
+//   final int id;
+//   final String name;
+//   final int annualPricing;
+//   final int quaterlyPricing;
+//   final int monthlyPricing;
+
+//   Data({
+//     required this.id,
+//     required this.name,
+//     required this.annualPricing,
+//     required this.quaterlyPricing,
+//     required this.monthlyPricing,
+//   });
+// }
+
+// class Subscription extends ConsumerStatefulWidget {
+//   const Subscription({super.key});
+
+//   @override
+//   ConsumerState<Subscription> createState() => _SubscriptionState();
+// }
+
+// class _SubscriptionState extends ConsumerState<Subscription> {
+//   // Dummy data for testing purposes
+//   final List<Data> subscribers = [
+//     Data(
+//         id: 1,
+//         name: "Basic Plan",
+//         annualPricing: 1000,
+//         quaterlyPricing: 300,
+//         monthlyPricing: 100),
+//     Data(
+//         id: 2,
+//         name: "Standard Plan",
+//         annualPricing: 2000,
+//         quaterlyPricing: 600,
+//         monthlyPricing: 200),
+//     Data(
+//         id: 3,
+//         name: "Premium Plan",
+//         annualPricing: 3000,
+//         quaterlyPricing: 900,
+//         monthlyPricing: 300),
+//     Data(
+//         id: 4,
+//         name: "Ultimate Plan",
+//         annualPricing: 4000,
+//         quaterlyPricing: 1200,
+//         monthlyPricing: 400),
+//   ];
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final screenWidth = MediaQuery.of(context).size.width;
+
+//     return Scaffold(
+//       body: SingleChildScrollView(
+//         child: Column(
+//           children: [
+//             StackWidget(
+//               hintText: "Search Subscriptions",
+//               text: "Subscription",
+//               onTap: () {
+//                 Navigator.of(context).pushNamed("addsubscriber");
+//               },
+//               arrow: Icons.arrow_back,
+//             ),
+//             Container(
+//               width: screenWidth,
+//               padding: const EdgeInsets.all(30),
+//               color: const Color(0xFFf5f5f5),
+//               child: GridView.builder(
+//                 shrinkWrap: true,
+//                 physics: const NeverScrollableScrollPhysics(),
+//                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                   crossAxisCount: 2,
+//                   childAspectRatio: 3 / 2,
+//                   crossAxisSpacing: 10,
+//                   mainAxisSpacing: 10,
+//                 ),
+//                 itemCount: subscribers.length,
+//                 itemBuilder: (context, index) {
+//                   final user = subscribers[index];
+//                   return InkWell(
+//                     onTap: () {
+//                       final userId = user.id;
+//                       ref
+//                           .read(selectionModelProvider.notifier)
+//                           .subscriberIndex(userId);
+//                       Navigator.of(context).pushNamed("editsubscriber");
+//                     },
+//                     child: SubStack(
+//                       text: user.name,
+//                       width: screenWidth * 0.795,
+//                       editBtn: "Edit",
+//                       onTap: () {
+//                         // Handle edit button click if needed
+//                       },
+//                       additionalInfo: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Text("Annual Price: \$${user.annualPricing}"),
+//                           Text("Quarterly Price: \$${user.quaterlyPricing}"),
+//                           Text("Monthly Price: \$${user.monthlyPricing}"),
+//                         ],
+//                       ),
+//                     ),
+//                   );
+//                 },
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

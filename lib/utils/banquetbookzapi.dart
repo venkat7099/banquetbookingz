@@ -5,4 +5,5 @@ class Api {
   static const String profilePic = '$baseUrl/profilepic/';
   static const String subscriptions = '$baseUrl/subscription-plans/';
   static const String refreshToken = '$baseUrl/register';
+  static const String retriveusers = '$baseUrl/retrieve_users/';
 }

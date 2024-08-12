@@ -400,6 +400,7 @@ class SubscribersNotifier extends StateNotifier<subscription> {
       final response = await http.get(
         Uri.parse(Api.subscriptions),
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': 'Token $accessToken',
         },
       );

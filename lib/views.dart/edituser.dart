@@ -418,21 +418,21 @@ class _EditUserState extends ConsumerState<EditUser> {
       final ids = ref.read(selectionModelProvider).userIndex;
       print(ids);
       // Get user details from your state notifier
-      final user = ref.read(usersProvider.notifier).getUserById(ids!);
+      // final user = ref.read(usersProvider.notifier).getUserById(ids!);
 
-      if (user != null) {
-        // Update the controllers with the user's data
-        ref
-            .read(selectionModelProvider.notifier)
-            .updateEnteredemail(user.emailId ?? '');
-        ref
-            .read(selectionModelProvider.notifier)
-            .updateEnteredName(user.firstName ?? '');
-        //    if (user.profilepic != null) {
-        //   ref.read(imageProvider.notifier).setProfilePic(XFile(user.profilepic!));
-        // }
-        // ... do the same for other fields
-      }
+      // if (user != null) {
+      //   // Update the controllers with the user's data
+      //   ref
+      //       .read(selectionModelProvider.notifier)
+      //       .updateEnteredemail(user.emailId ?? '');
+      //   ref
+      //       .read(selectionModelProvider.notifier)
+      //       .updateEnteredName(user.firstName ?? '');
+      //   //    if (user.profilepic != null) {
+      //   //   ref.read(imageProvider.notifier).setProfilePic(XFile(user.profilepic!));
+      //   // }
+      //   // ... do the same for other fields
+      // }
     });
   }
 

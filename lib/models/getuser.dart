@@ -35,6 +35,8 @@ class getUser {
 class Data {
   int? id;
   String? profilepic;
+  String? username;
+  String? email;
   String? firstName;
   String? lastName;
   String? height;
@@ -78,6 +80,8 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     profilepic = json['profilepic'];
+    username = json['username'];
+    email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     height = json['height'];

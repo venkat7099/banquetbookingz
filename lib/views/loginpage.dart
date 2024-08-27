@@ -225,7 +225,7 @@ import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/connectivityprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
-import 'package:banquetbookingz/views.dart/mainpage.dart';
+import 'package:banquetbookingz/views/mainpage.dart';
 import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
 import 'package:banquetbookingz/widgets/customtextfield.dart';
 import 'package:flutter/material.dart';

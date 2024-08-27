@@ -2,14 +2,14 @@ import 'package:banquetbookingz/models/getuser.dart';
 import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
 import 'package:banquetbookingz/providers/getuserprovider.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
-import 'package:banquetbookingz/views.dart/dashboard.dart';
-import 'package:banquetbookingz/views.dart/dashboardpage.dart';
-import 'package:banquetbookingz/views.dart/loginpage.dart';
-import 'package:banquetbookingz/views.dart/mainpage.dart';
-import 'package:banquetbookingz/views.dart/settings.dart';
-import 'package:banquetbookingz/views.dart/subscription.dart';
-import 'package:banquetbookingz/views.dart/subscriptionchart.dart';
-import 'package:banquetbookingz/views.dart/users.dart';
+import 'package:banquetbookingz/views/dashboard.dart';
+import 'package:banquetbookingz/views/dashboardpage.dart';
+import 'package:banquetbookingz/views/loginpage.dart';
+import 'package:banquetbookingz/views/mainpage.dart';
+import 'package:banquetbookingz/views/settings.dart';
+import 'package:banquetbookingz/views/subscription.dart';
+import 'package:banquetbookingz/views/subscriptionchart.dart';
+import 'package:banquetbookingz/views/users.dart';
 import 'package:banquetbookingz/widgets/custompaint.dart';
 import 'package:banquetbookingz/widgets/recentvenders.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
@@ -714,7 +714,7 @@ class DashboardWidget extends StatelessWidget {
           currentIndex: _selectedIndex,
           selectedItemColor: Color(0xff6418c3),
           unselectedItemColor: Colors.grey,
-          type: BottomNavigationBarType.shifting,
+          type: BottomNavigationBarType.fixed,
         );
       }),
     );

@@ -1,5 +1,5 @@
 class Users {
-  // final int id;
+  final int id;
   final String? profilePic;
   final String? username;
   final String? email;
@@ -7,7 +7,7 @@ class Users {
   final String? gender;
 
   Users({
-    // required this.id,
+    required this.id,
     this.profilePic,
     this.username,
     this.email,
@@ -17,6 +17,7 @@ class Users {
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
+      id: json['id'],
       profilePic: json['profile_pic'],
       username: json['username'],
       email: json['email'],
@@ -25,7 +26,7 @@ class Users {
     );
   }
 
-  get id => null;
+  // get id => null;
 
   Map<String, dynamic> toJson() {
     return {

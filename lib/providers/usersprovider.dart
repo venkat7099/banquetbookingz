@@ -301,10 +301,12 @@ class UserNotifier extends StateNotifier<List<Users>> {
   Future<void> getUsers(WidgetRef ref) async {
     final getaccesstoken = ref.read(authProvider).token;
     try {
-      final response = await http.get(Uri.parse(Api.retriveusers), headers: {
+      final response = await http.get(Uri.parse(Api.retriveusers), 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Token $getaccesstoken',
-      });
+      }
+      );
       var res = json.decode(response.body);
       print('response $res');
       if (response.statusCode == 200) {
@@ -328,18 +330,30 @@ class UserNotifier extends StateNotifier<List<Users>> {
     state = profiles;
   }
 
-  Future<void> getProfilePic(String userId) async {
+  Future<void> getProfilePic(String userId, WidgetRef ref) async {
+    final getaccesstoken = ref.read(authProvider).token;
     try {
-      final response = await http.get(Uri.parse(Api.profilePic), headers: {
+      final response =
+          await http.get(Uri.parse('${Api.profilePic}/$userId'), headers: {
         'Content-Type': 'application/json',
-        // Add other headers if needed
+        'Authorization': 'Token $getaccesstoken',
       });
-      print(response);
-      var res = json.decode(response.body);
 
-      print(res);
-    } catch (e) {}
-    ;
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        // Assuming the API response contains a URL of the profile picture
+        final profilePicUrl = res['profilePicUrl'];
+
+        // Update the user profile picture in the state
+        ref
+            .read(usersProvider.notifier)
+            .updateProfilePic(userId, profilePicUrl);
+      } else {
+        print("Failed to load profile picture");
+      }
+    } catch (e) {
+      print("Error fetching profile picture: $e");
+    }
   }
 
   Users? getUserById(String username) {
@@ -347,6 +361,10 @@ class UserNotifier extends StateNotifier<List<Users>> {
       (user) => user.username == username,
     );
   }
+
+  deleteUser(String userId) {}
+
+  void updateProfilePic(String userId, profilePicUrl) {}
 }
 
 final usersProvider = StateNotifierProvider<UserNotifier, List<Users>>((ref) {

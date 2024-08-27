@@ -1,142 +1,148 @@
-import 'package:banquetbookingz/views.dart/example.dart';
-import 'package:banquetbookingz/views.dart/loginpage.dart';
-import 'package:banquetbookingz/views.dart/mainpage.dart';
+import 'package:banquetbookingz/views/example.dart';
+import 'package:banquetbookingz/views/loginpage.dart';
+import 'package:banquetbookingz/views/mainpage.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 import 'package:flutter/material.dart';
-
 
 class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    return  DefaultTabController(length: 3,
+    return DefaultTabController(
+      length: 3,
       child: Scaffold(
-            // appBar: AppBar(
-            //   bottom: TabBar(
-            //     tabs: [
-            //       Tab(text: 'New'), // First tab
-            //       Tab(text: 'Admin'), // Second tab
-            //       Tab(text: 'Moderator'), // Third tab
-            //       // Add more tabs here for 'All' etc.
-            //     ],
-            //   ),
-            //   title: Text('Tab Example'),
-            // ),
-            body: SingleChildScrollView(
-              child: Column(
-                
+        // appBar: AppBar(
+        //   bottom: TabBar(
+        //     tabs: [
+        //       Tab(text: 'New'), // First tab
+        //       Tab(text: 'Admin'), // Second tab
+        //       Tab(text: 'Moderator'), // Third tab
+        //       // Add more tabs here for 'All' etc.
+        //     ],
+        //   ),
+        //   title: Text('Tab Example'),
+        // ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
                 children: [
-                  Stack(children: [
-                Column(
-                        children: [
-                          Container(
-                            
-                            alignment: Alignment.center,
-                            height: screenHeight*0.4,
-                            width: screenWidth,
-                            color: Color(0xFFf5f5f5),
-                            
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        height: screenHeight * 0.4,
+                        width: screenWidth,
+                        color: Color(0xFFf5f5f5),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: 130,
+                          decoration: BoxDecoration(
+                            color: Colors.purple,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                            ),
                           ),
+                        ),
+                        Positioned(
+                            top: 20,
+                            left: 20,
+                            child: Text(
+                              'text',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 25),
+                            )),
+                        // The search icon
+                        Positioned(
+                            top: 20,
+                            right: 20,
+                            child: Stack(
+                              alignment: Alignment.bottomRight,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.account_circle,
+                                  color: Colors.white,
+                                  size: 50.0,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.purple,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.verified_user,
+                                    color: Colors.white,
+                                    size: 20.0,
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    left: 10,
+                    right: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0), // Add horizontal padding if needed
+                      child: SizedBox(
+                        width: screenWidth * 0.85,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'hintText',
+                            prefixIcon:
+                                Icon(Icons.search, color: Colors.purple),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 16.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: AppBar(
+                      bottom: TabBar(
+                        tabs: [
+                          Tab(text: 'New'), // First tab
+                          Tab(text: 'Admin'), // Second tab
+                          Tab(text: 'Moderator'), // Third tab
+                          // Add more tabs here for 'All' etc.
                         ],
                       ),
-                      Positioned(child:Stack(
-                children: [
-                  Container(
-                    height: 130,
-                    decoration: BoxDecoration(
-              color: Colors.purple,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
+                      title: Text('Tab Example'),
                     ),
-                  ),
-                   Positioned(top: 20,
-                                  left: 20,
-                                  child: Text(
-                                    'text',
-                                    style: TextStyle(color: Colors.white, fontSize: 25),
-                                  )),
-                              // The search icon
-                              Positioned(top: 20,
-                                right: 20,
-                                child: Stack(
-                alignment: Alignment.bottomRight,
-                children: <Widget>[
-                  Icon(
-                    Icons.account_circle,
-                    color: Colors.white,
-                    size: 50.0,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.purple,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.verified_user,
-                      color: Colors.white,
-                      size: 20.0,
-                    ),
-                  ),
-                ],
-              )
-              
-                              ),
-                             
-                  
-                ],
-              ), ),
-              Positioned(bottom: 10,
-              left: 10,
-              right: 10,
-                child:Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0), // Add horizontal padding if needed
-                child: SizedBox(
-                  width: screenWidth * 0.85,
-                  child: TextField(
-                    decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'hintText',
-              prefixIcon: Icon(Icons.search, color: Colors.purple),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.0),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-                    ),
-                  ),
-                ),
-              ), ),
-              Positioned(bottom: 0,
-                child:AppBar(
-                bottom: TabBar(
-                  tabs: [
-                    Tab(text: 'New'), // First tab
-                    Tab(text: 'Admin'), // Second tab
-                    Tab(text: 'Moderator'), // Third tab
-                    // Add more tabs here for 'All' etc.
-                  ],
-                ),
-                title: Text('Tab Example'),
-              ),)
-              ],),
-                  // TabBarView(
-                  //   children: [
-                  //     // Replace with your content pages
-                  //     DashboardWidget(),
-                  //     MainPage(),
-                  //     LoginPage()
-                  //   ],
-                  // ),
+                  )
                 ],
               ),
-            ),
+              // TabBarView(
+              //   children: [
+              //     // Replace with your content pages
+              //     DashboardWidget(),
+              //     MainPage(),
+              //     LoginPage()
+              //   ],
+              // ),
+            ],
           ),
-    )
-     ;
+        ),
+      ),
+    );
   }
 }
 

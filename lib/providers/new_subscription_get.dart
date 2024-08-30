@@ -51,3 +51,15 @@ final subscriptionPlansProvider =
     return [];
   }
 });
+
+class SelectedPlanNotifier extends StateNotifier<List<SubscriptionPlan>?> {
+  SelectedPlanNotifier() : super(null);
+
+  void selectPlan(List<SubscriptionPlan> plans) {
+    state = plans;
+  }
+}
+
+final selectedPlanProvider =
+    StateNotifierProvider<SelectedPlanNotifier, List<SubscriptionPlan>?>(
+        (ref) => SelectedPlanNotifier());

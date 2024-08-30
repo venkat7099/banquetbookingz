@@ -256,7 +256,7 @@ class SubscribersNotifier extends StateNotifier<subscription> {
     String subname,
     String annualprice,
     String quaterlyprice,
-    String monthlyprice,
+    String combinedFrequency,
     WidgetRef ref,
   ) async {
     final loadingState = ref.watch(loadingProvider.notifier);
@@ -283,12 +283,10 @@ class SubscribersNotifier extends StateNotifier<subscription> {
           'Authorization': 'Token $accessToken',
         },
         body: json.encode({
-          'name': subname,
-          'annualpricing': annualprice,
-          'quaterlypricing': quaterlyprice,
-          'monthlypricing': monthlyprice,
+          'pricing': annualprice,
+          'bookings': quaterlyprice,
           'plan': subname,
-          'frequency': monthlyprice,
+          'frequency': combinedFrequency,
         }),
       );
 
@@ -301,7 +299,7 @@ class SubscribersNotifier extends StateNotifier<subscription> {
             'name': subname,
             'annualpricing': annualprice,
             'quaterlypricing': quaterlyprice,
-            'monthlypricing': monthlyprice,
+            'monthlypricing': combinedFrequency,
             // 'plan': subname,
             // 'frequency': annualprice,
           })}');
@@ -362,9 +360,6 @@ class SubscribersNotifier extends StateNotifier<subscription> {
           'annualpricing': annualprice,
           'quaterlypricing': quaterlyprice,
           'monthlypricing': monthlyprice,
-          // 'plan': subname,
-          // 'frequency': subname,
-          // Include user data in request
         }),
       );
 

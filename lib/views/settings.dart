@@ -1,6 +1,6 @@
 import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/usersprovider.dart';
-import 'package:banquetbookingz/views.dart/loginpage.dart';
+import 'package:banquetbookingz/views/loginpage.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

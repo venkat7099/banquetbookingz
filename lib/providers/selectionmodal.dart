@@ -1,5 +1,5 @@
 import 'package:banquetbookingz/models/selection.dart';
-import 'package:banquetbookingz/views.dart/adduser.dart';
+import 'package:banquetbookingz/views/adduser.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,9 +13,13 @@ final selectionModelProvider =
 class SelectionModelNotifier extends StateNotifier<SelectionModel> {
   SelectionModelNotifier() : super(SelectionModel());
 
+  get selectedFrequency => null;
+
   void toggleCheckBox(bool? checkBoxValue) {
     if (checkBoxValue != null) {
-      state = state.copyWith(checkBox: checkBoxValue);
+      state = state.copyWith(
+        checkBox: checkBoxValue,
+      );
     }
   }
 
@@ -111,5 +115,9 @@ class SelectionModelNotifier extends StateNotifier<SelectionModel> {
 
     state = state
         .copyWith(); // This is a hacky way to force a rebuild. Consider better state management for TextEditingController.
+  }
+
+  void updateFrequency(String newValue) {
+    state = state.copyWith(selectedFrequency: newValue);
   }
 }

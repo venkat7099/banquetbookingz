@@ -1,4 +1,4 @@
-import 'package:banquetbookingz/views.dart/loginpage.dart';
+import 'package:banquetbookingz/views/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +18,7 @@ class MainPage extends StatelessWidget {
           children: [
             Text("Click for logout"),
             ElevatedButton(
-              onPressed: ()  {
+              onPressed: () {
                 // await logoutUser();
                 // Navigator.of(context).pushAndRemoveUntil(
                 //   MaterialPageRoute(builder: (context) => LoginPage()),

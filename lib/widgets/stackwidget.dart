@@ -35,7 +35,7 @@ class StackWidget extends StatelessWidget {
               children: [
                 Container(
                   alignment: Alignment.center,
-                  height: screenHeight * 0.25,
+                  height: screenHeight * 0.10,
                   width: screenWidth,
                   color:
                       const Color(0xFFFFFFFF), // Set background color to white
@@ -106,38 +106,6 @@ class StackWidget extends StatelessWidget {
                 ],
               ),
             ),
-            _selectedIndex != 3
-                ? Positioned(
-                    bottom: 0,
-                    left: 10,
-                    right: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: SizedBox(
-                        width: screenWidth * 0.85,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: hintText,
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: Color(0xff6418c3),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20.0,
-                              vertical: 16.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(),
           ],
         );
       },

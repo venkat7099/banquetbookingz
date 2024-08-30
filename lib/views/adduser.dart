@@ -498,20 +498,13 @@
 //   }
 // }
 import 'dart:io';
-import 'package:banquetbookingz/providers/authprovider.dart';
-import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
-import 'package:banquetbookingz/providers/getuserprovider.dart';
 import 'package:banquetbookingz/providers/imageprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
 import 'package:banquetbookingz/providers/usersprovider.dart';
-import 'package:banquetbookingz/views.dart/example.dart';
-import 'package:banquetbookingz/views.dart/loginpage.dart';
-import 'package:banquetbookingz/views.dart/users.dart';
 import 'package:banquetbookingz/widgets/button2.dart';
 import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
 import 'package:banquetbookingz/widgets/customtextfield.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -861,7 +854,6 @@ class _AddUserState extends ConsumerState<AddUser> {
                             if (value == null || value.isEmpty) {
                               return 'Field is required';
                             }
-
                             return null;
                           },
                         );
@@ -928,7 +920,7 @@ class _AddUserState extends ConsumerState<AddUser> {
                                             Text(
                                               '${selection.name.text} has been successfully added as a Manager.',
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontSize: 16,
                                               ),
                                             ),

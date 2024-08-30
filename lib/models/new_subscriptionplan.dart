@@ -1,7 +1,8 @@
 class SubscriptionPlan {
   final int id;
   final String plan;
-  final int frequency;
+  final String
+      frequency; // Changed to String to handle values like 45a, 46q, 58c
   final int bookings;
   final double pricing;
   final DateTime createdAt;
@@ -19,7 +20,7 @@ class SubscriptionPlan {
     return SubscriptionPlan(
       id: json['id'],
       plan: json['plan'],
-      frequency: int.tryParse(json['frequency'].toString()) ?? 0,
+      frequency: json['frequency'], // Keep this as a string directly
       bookings: json['bookings'],
       pricing: json['pricing'].toDouble(),
       createdAt: DateTime.parse(json['created_at']),
@@ -30,7 +31,7 @@ class SubscriptionPlan {
     return {
       'id': id,
       'plan': plan,
-      'frequency': frequency,
+      'frequency': frequency, // Keep this as a string directly
       'bookings': bookings,
       'pricing': pricing,
       'created_at': createdAt.toIso8601String(),

@@ -233,11 +233,12 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
 
   // Function to log out the user
   Future<void> logoutUser() async {
+     print('enter log out');
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('userData');
-    await prefs.remove('accessToken');
-    await prefs.setBool('isLoggedIn', false);
-    state = AdminAuth(); // Clear the state after logout
+   await prefs.clear();
+
+    state = AdminAuth.initial(); // Clear the state after logout
+    print('log out ${state.token}');
   }
 
   // Retrieve the access token from SharedPreferences

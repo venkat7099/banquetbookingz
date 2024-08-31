@@ -79,10 +79,10 @@ class _SettingsState extends ConsumerState<Settings> {
               TextButton(
                   onPressed: () async {
                     await logout.logoutUser();
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                      (Route<dynamic> route) => false,
-                    );
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //   MaterialPageRoute(builder: (context) => LoginPage()),
+                    //   (Route<dynamic> route) => false,
+                    // );
                   },
                   child: Text(
                     "Logout",

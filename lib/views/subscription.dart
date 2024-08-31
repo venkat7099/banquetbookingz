@@ -25,58 +25,44 @@ class Subscription extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                child: subscriptionPlansAsyncValue.when(
-                  data: (subscriptionPlans) {
-                    if (subscriptionPlans.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          "No subscriptions available",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+              child: subscriptionPlansAsyncValue.when(
+                data: (subscriptionPlans) {
+                  if (subscriptionPlans.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "No subscriptions available",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
                         ),
-                      );
-                    }
-
-                    final groupedPlans = <String, List<SubscriptionPlan>>{};
-                    for (var plan in subscriptionPlans) {
-                      if (!groupedPlans.containsKey(plan.plan)) {
-                        groupedPlans[plan.plan] = [];
-                      }
-                      groupedPlans[plan.plan]!.add(plan);
-                    }
-
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        crossAxisSpacing: 8,
-                        mainAxisSpacing: 2,
-                        childAspectRatio: 4.2 / 2,
                       ),
-                      itemCount: groupedPlans.length,
-                      itemBuilder: (context, index) {
-                        final planTitle = groupedPlans.keys.elementAt(index);
-                        final plans = groupedPlans[planTitle]!;
-
-                        return _buildPlanCard(
-                          context,
-                          planTitle,
-                          plans,
-                          ref,
-                        );
-                      },
                     );
-                  },
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                ),
+                  }
+
+                  final groupedPlans = <String, List<SubscriptionPlan>>{};
+                  for (var plan in subscriptionPlans) {
+                    if (!groupedPlans.containsKey(plan.plan)) {
+                      groupedPlans[plan.plan] = [];
+                    }
+                    groupedPlans[plan.plan]!.add(plan);
+                  }
+
+                  return Column(
+                    children: groupedPlans.entries.map((entry) {
+                      final planTitle = entry.key;
+                      final plans = entry.value;
+
+                      return _buildPlanCard(
+                        context,
+                        planTitle,
+                        plans,
+                        ref,
+                      );
+                    }).toList(),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) => Text('Error: $error'),
               ),
             ),
           ],
@@ -107,82 +93,64 @@ class Subscription extends ConsumerWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 4,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Colors.white,
-          ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (context) => EditSubscriptionScreen(
-                              //       plan: plans.first,
-                              //     ),
-                              //   ),
-                              // );
-                            },
-                            child: const Text(
-                              'Edit',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xFF6418C3),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "Subscribed: ${plans.length}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const Text(
-                        "Revenue Generated: ₹89,928",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const Text(
-                        "Last Subscribed: 28th Feb, 2024 at 06:35 PM",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const Text(
-                        // "Status: ${subscriptionStatus[title] ?? 'Not Subscribed'}",
-                        "Status: Subscribed",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Edit',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF6418C3),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Subscribed: ${plans.length}",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Revenue Generated: ₹89,928",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Last Subscribed: 28th Feb, 2024 at 06:35 PM",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Status: Subscribed",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
                 ),
               ),
             ],

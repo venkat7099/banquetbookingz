@@ -146,13 +146,7 @@ class Subscription extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                "Status: Subscribed",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-              ),
+              
             ],
           ),
         ),

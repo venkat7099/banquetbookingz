@@ -1,8 +1,8 @@
-import 'package:banquetbookingz/providers/bottomnavigationbarprovider.dart';
-import 'package:banquetbookingz/providers/selectionmodal.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/authprovider.dart';
+import '../providers/bottomnavigationbarprovider.dart';
+import '../providers/searchtextnotifier.dart';
 
 class StackWidget extends StatelessWidget {
   final String? hintText;
@@ -10,6 +10,7 @@ class StackWidget extends StatelessWidget {
   final String text;
   final VoidCallback? onTap;
   final VoidCallback? tabArrow;
+  final TextEditingController? textEditingController;
 
   const StackWidget({
     super.key,
@@ -18,6 +19,7 @@ class StackWidget extends StatelessWidget {
     required this.text,
     this.onTap,
     this.tabArrow,
+    this.textEditingController,
   });
 
   @override
@@ -29,6 +31,8 @@ class StackWidget extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         final _selectedIndex = ref.watch(pageIndexProvider);
+        final _usertype = ref.watch(authProvider);
+
         return Stack(
           children: [
             Column(
@@ -37,8 +41,7 @@ class StackWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   height: screenHeight * 0.10,
                   width: screenWidth,
-                  color:
-                      const Color(0xFFFFFFFF), // Set background color to white
+                  color: const Color(0xFFFFFFFF), // Set background color to white
                 ),
               ],
             ),
@@ -66,8 +69,7 @@ class StackWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Add Circle Icon based on selected index
-                  _selectedIndex != 3
+                  _selectedIndex != 3 && _usertype.usertype=='a'
                       ? Positioned(
                           top: 50,
                           right: 20,
@@ -103,6 +105,36 @@ class StackWidget extends StatelessWidget {
                           ),
                         )
                       : Container(),
+                  Positioned(
+                    bottom: 0,
+                    left: 10,
+                    right: 10,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: SizedBox(
+                        width: screenWidth * 0.85,
+                        child: TextField(
+                          controller: textEditingController,
+                          onChanged: (value) {
+                            ref.read(searchTextProvider.notifier).setSearchText(value);
+                            print('Search text updated: $value'); // Debug print
+                          },
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: hintText,
+                            prefixIcon: Icon(Icons.search, color: Color(0xff6418c3)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 16.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

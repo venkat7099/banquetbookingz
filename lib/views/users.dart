@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banquetbookingz/providers/usersprovider.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 
+import '../providers/searchtextnotifier.dart';
+
 class Users extends ConsumerStatefulWidget {
   const Users({super.key});
 
@@ -13,22 +15,9 @@ class Users extends ConsumerStatefulWidget {
 }
 
 class _UsersState extends ConsumerState<Users> {
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
+  
 
-  Future<void> _initializeData() async {
-    await ref.read(usersProvider.notifier).getUsers(ref);
-
-    final users = ref.read(usersProvider);
-    for (final user in users) {
-      await ref
-          .read(usersProvider.notifier)
-          .getProfilePic(user.id as String, ref);
-    }
-  }
+   final TextEditingController _searchController = TextEditingController();
 
   Future<void> _deleteUser(String userId) async {
     final success = await ref.read(usersProvider.notifier).deleteUser(userId);
@@ -46,6 +35,7 @@ class _UsersState extends ConsumerState<Users> {
       body: Column(
         children: [
           StackWidget(
+             textEditingController: _searchController,
             hintText: "Search users",
             text: "Users",
             onTap: () {
@@ -73,9 +63,9 @@ class _UsersState extends ConsumerState<Users> {
                     child: TabBarView(
                       children: [
                         _buildUserList(context),
-                        _buildUsers(context),
-                        _buildVendors(context),
-                        _buildManagers(context),
+                       _buildUserList(context,filter: 'u'),
+                        _buildUserList(context,filter: 'v'),
+                        _buildUserList(context,filter: 'm'),
                       ],
                     ),
                   ),
@@ -87,125 +77,132 @@ class _UsersState extends ConsumerState<Users> {
       ),
     );
   }
+Widget _buildUserList(BuildContext context, {String? filter}) {
+  return Consumer(
+    builder: (context, ref, child) {
+      final usersData = ref.watch(usersProvider);
+      final searchText = ref.watch(searchTextProvider);
 
-  Widget _buildUserList(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final usersData = ref.watch(usersProvider);
+      print('Users Data: $usersData'); // Debug print
+      print('Search Text: $searchText'); // Debug print
 
-        if (usersData == null || usersData.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        return ListView(
-          padding: EdgeInsets.zero,
-          children: usersData.map((user) {
-            return Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0.0),
-              ),
-              elevation: 4,
-              margin: const EdgeInsets.only(bottom: 2.0),
-              child: ListTile(
-                leading: user.profilePic != null
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'http://93.127.172.164:8080${user.profilePic!}'),
-                        radius: 30,
-                      )
-                    : const Icon(
-                        Icons.account_circle,
-                        size: 50,
-                        color: Colors.grey,
-                      ),
-                title: Text(
-                  "User: ${user.username ?? "No Name"}",
-                  style: const TextStyle(
-                    color: Color(0xFF6418c3),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Email: ${user.email ?? "No Email"}",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      "Mobile No: ${user.mobileNo ?? "No Mobile"}",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text(
-                      "Gender: ${user.gender ?? "Not Getting Gender"}",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ],
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditUser(
-                              profilepic:
-                                  'http://93.127.172.164:8080${user.profilePic}',
-                              userName: user.username,
-                              email: user.email,
-                              mobileNo: user.mobileNo,
-                              gender: user.gender,
-                              user_id: user.id,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        final userId = user.id;
-                        if (userId != null) {
-                          _deleteUser(userId as String);
-                        } else {
-                          print("User ID is null");
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  // Optionally, navigate to user details screen
-                },
-              ),
-            );
-          }).toList(),
+      if (usersData == null || usersData.isEmpty) {
+        return const Center(
+          child: CircularProgressIndicator(),
         );
-      },
-    );
-  }
+      }
 
-  Widget _buildUsers(BuildContext context) {
-    // Implement your logic for Active Users tab here
-    return Center(child: Text("Users Screen"));
-  }
+      // Filter users based on the user type and search text
+        final filteredUsers = usersData.where((user) {
+        final matchesFilter = filter == null || user.userType == filter;
+        final matchesSearch = searchText.isEmpty ||
+            (user.mobileNo?.contains(searchText) ?? false);
+        return matchesFilter && matchesSearch;
+      }).toList();
 
-  Widget _buildVendors(BuildContext context) {
-    // Implement your logic for Inactive Users tab here
-    return Center(child: Text("Vendors Screen"));
-  }
+      print('Filtered Users: $filteredUsers'); // Debug print
 
-  Widget _buildManagers(BuildContext context) {
-    // Implement your logic for Pending Users tab here
-    return Center(child: Text("Managers Screen"));
-  }
+      if (filteredUsers.isEmpty) {
+        return const Center(
+          child: Text("No users found"),
+        );
+      }
+
+      return ListView(
+        padding: EdgeInsets.zero,
+        children: filteredUsers.map((user) {
+          return Card(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0.0),
+            ),
+            elevation: 4,
+            margin: const EdgeInsets.only(bottom: 2.0),
+            child: ListTile(
+              leading: user.profilePic != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          'http://93.127.172.164:8080${user.profilePic!}'),
+                      radius: 30,
+                    )
+                  : const Icon(
+                      Icons.account_circle,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
+              title: Text(
+                "User: ${user.username ?? "No Name"}",
+                style: const TextStyle(
+                  color: Color(0xFF6418c3),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Email: ${user.email ?? "No Email"}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    "Mobile No: ${user.mobileNo ?? "No Mobile"}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text(
+                    "Gender: ${user.gender ?? "Not Getting Gender"}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ],
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditUser(
+                            profilepic:
+                                'http://93.127.172.164:8080${user.profilePic}',
+                            userName: user.username,
+                            email: user.email,
+                            mobileNo: user.mobileNo,
+                            gender: user.gender,
+                            user_id: user.id,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      final userId = user.id;
+                      if (userId != null) {
+                        _deleteUser(userId as String);
+                      } else {
+                        print("User ID is null");
+                      }
+                    },
+                  ),
+                ],
+              ),
+              onTap: () {
+                // Optionally, navigate to user details screen
+              },
+            ),
+          );
+        }).toList(),
+      );
+    },
+  );
+}
+
+
+ 
 }

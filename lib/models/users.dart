@@ -4,6 +4,7 @@ class Users {
   final String? username;
   final String? email;
   final String? mobileNo;
+  final String? userType;
   final String? gender;
 
   Users({
@@ -12,6 +13,7 @@ class Users {
     this.username,
     this.email,
     this.mobileNo,
+    this.userType,
     this.gender,
   });
 
@@ -22,6 +24,7 @@ class Users {
       username: json['username'],
       email: json['email'],
       mobileNo: json['mobileno'],
+      userType: json['user_type'],
       gender: json['gender'],
     );
   }

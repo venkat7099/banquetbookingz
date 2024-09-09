@@ -19,8 +19,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class DashboardWidget extends StatelessWidget {
+import '../providers/usersprovider.dart';
+
+class DashboardWidget extends ConsumerStatefulWidget {
   const DashboardWidget({super.key});
+
+  @override
+  ConsumerState<DashboardWidget> createState() => _DashboardWidgetState();
+}
+
+class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
+  }
+   Future<void> _initializeData() async {
+    await ref.read(usersProvider.notifier).getUsers(ref);
+
+    final users = ref.read(usersProvider);
+    for (final user in users) {
+      await ref
+          .read(usersProvider.notifier)
+          .getProfilePic(user.id as String, ref);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

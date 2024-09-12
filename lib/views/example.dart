@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+import '../providers/authprovider.dart';
 import '../providers/usersprovider.dart';
 
 class DashboardWidget extends ConsumerStatefulWidget {
@@ -49,10 +50,11 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final usertype = ref.watch(authProvider);
     List<Widget> _pages = [
       const DashboardWidget(),
       const Users(),
-      Subscription(),
+     if(usertype.usertype=='a') Subscription(),
       Settings()
     ];
 
@@ -707,7 +709,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
       bottomNavigationBar: Consumer(builder: (context, ref, child) {
         final _selectedIndex = ref.watch(pageIndexProvider);
         return BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items:  <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
               label: 'Dashboard',
@@ -720,6 +722,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
             //   icon: Icon(Icons.business),
             //   label: 'Vendors',
             // ),
+           if(usertype.usertype=='a')
             BottomNavigationBarItem(
               icon: Icon(Icons.subscriptions),
               label: 'Subs',

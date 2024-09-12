@@ -109,16 +109,7 @@ class Subscription extends ConsumerWidget {
                       color: Colors.black,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Edit',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF6418C3),
-                      ),
-                    ),
-                  ),
+                  
                 ],
               ),
               const SizedBox(height: 8),

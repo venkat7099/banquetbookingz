@@ -195,28 +195,96 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
         state = AdminAuth.fromJson(userDetails);
         print('State updated with token: ${userDetails['token']}');
 
-        final prefs = await SharedPreferences.getInstance();
-        print("SharedPreferences fetched successfully");
-        state = state.copyWith(token: userDetails['Token']);
-        final userData = json.encode({
-          'token': userDetails['token'],
-          'username': userDetails['username'],
-          'email': userDetails['email'],
-          'mobileno': userDetails['mobileno'],
-          'usertype': userDetails['usertype'],
-        });
-        await prefs.setString('userData', userData);
+          final prefs = await SharedPreferences.getInstance();
+          final userData = json.encode({
+            'refreshToken': userDetails['data']['refresh_token'],
+            'accessToken': userDetails['data']['access_token'],
+            'firstName': userDetails['data'][''],
+            'userRole': userDetails['data']['userRole'],
+            'password': userDetails['data']['password']
+          });
 
-        bool saveResult = await prefs.setString('userData', userData);
-        if (!saveResult) {
-          print("Failed to save user data to SharedPreferences.");
-        }
+          //autologout();
 
-        bool tokenSaveResult =
-            await prefs.setString('accessToken', userDetails['token']);
-        if (!tokenSaveResult) {
-          print("Failed to save access token to SharedPreferences.");
-        }
+          await prefs.setString('userData', userData);
+          await prefs.setBool('isLoggedIn', true);
+          break;
+        default:
+          if (statuscode != 201) {
+            loadingState.state = false;
+          }
+          // Optionally set a message to show to the user why the login failed
+          break;
+      }
+      if (statuscode == 201) {
+        // Handle successful login...
+      } else {
+        // Any other status code means something went wrong
+        // Extract error message from response
+        // Assuming 'messages' is a List of messages and we take the first one.
+        errorMessage =
+            userDetails['messages']?.first ?? 'An unknown error occurred.';
+        // Alternatively, if 'message' is a single String with the error message:
+        // errorMessage = responseJson['message'];
+      }
+    } catch (e) {
+      loadingState.state = false;
+      errorMessage = e.toString();
+      print("cathe:$errorMessage");
+    }
+    return LoginResult(responseCode, errorMessage: errorMessage);
+  }
+
+
+  Future<LoginResult> addSubscrier(
+      String subname, String annualprice,String quaterlyprice,String monthlyprice, WidgetRef ref) async {
+    final loadingState = ref.watch(loadingProvider.notifier);
+    int responseCode = 0;
+    String? errorMessage;
+    try {
+      loadingState.state = true;
+      var response = await http.post(Uri.parse(Api.subscriptions),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({'name': subname,'annualpricing': annualprice,
+          'quaterlypricing': quaterlyprice,'monthlypricing': monthlyprice,}));
+
+      var userDetails = json.decode(response.body);
+      var statuscode = response.statusCode;
+      print('$statuscode');
+      responseCode = statuscode;
+      print('server response:$userDetails');
+      switch (response.statusCode) {
+        case 201:
+          state = authState.fromJson(userDetails);
+          loadingState.state = false;
+
+          //print('this is from Auth response is:$accessToken');
+
+          // // final prefs = await SharedPreferences.getInstance();
+          // // final userData = json.encode({
+          // //   'refreshToken': userDetails['data']['refresh_token'],
+          // //   'accessToken': userDetails['data']['access_token'],
+          // //   'firstName': userDetails['data'][''],
+          // //   'userRole': userDetails['data']['userRole'],
+          // //   'password': userDetails['data']['password']
+          // });
+
+          //autologout();
+
+          // await prefs.setString('userData', userData);
+          // await prefs.setBool('isLoggedIn', true);
+          break;
+        default:
+          if (statuscode != 201) {
+            loadingState.state = false;
+          }
+          // Optionally set a message to show to the user why the login failed
+          break;
+      }
+      if (statuscode == 201) {
+        // Handle successful login...
       } else {
         loadingState.state = false;
         errorMessage =
@@ -230,27 +298,54 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
     return LoginResult(responseCode, errorMessage: errorMessage);
   }
 
-  // Function to log out the user
-  Future<void> logoutUser() async {
-     print('enter log out');
-    final prefs = await SharedPreferences.getInstance();
-   await prefs.clear();
+Future<LoginResult> addUser(XFile imageFile, String firstName, String emailId,String gender,String?password,WidgetRef ref) async {
+    var uri = Uri.parse(Api.addUser);
+    final loadingState = ref.watch(loadingProvider.notifier);
+    String generateLetters = generateRandomLetters(10);
+    int responseCode = 0;
+    String? errorMessage;
 
-    state = AdminAuth.initial(); // Clear the state after logout
-    print('log out ${state.token}');
-  }
+   final data={};
+  data["firstName"]=firstName;
+  data["emailId"]=emailId;
+  data["gender"]=gender;
+  data["userRole"]="m";
+  data["profilepic"]="profile_$generateLetters";
+  data["password"]=password;
+  // Add the encoded JSON string to your request fields.
+  try{
+    loadingState.state=true;
+var request = http.MultipartRequest('POST', uri);
+  // Add the image file to your request.
+  request.files.add(await http.MultipartFile.fromPath('imagefile[]', imageFile.path));
 
-  // Retrieve the access token from SharedPreferences
-  Future<String?> _getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('accessToken');
-    print("Retrieved token: $token");
-    return token;
+    
+      Map<String, String> obj = {"attributes": json.encode(data).toString()};
+    request.fields.addAll(obj);
+    final send = await request.send();
+    final res = await http.Response.fromStream(send);
+    var userDetails=json.decode(res.body);
+    var statuscode = res.statusCode;
+    responseCode=statuscode;
+    print("statuscode:$statuscode");
+    print("responsebody:${res.body}");
+    if (statuscode == 201) {
+      loadingState.state=false;
+    }
+     errorMessage =
+            userDetails['messages']?.first ?? 'An unknown error occurred.';
+    } catch (e) {
+      // state = AsyncValue.error('Error occurred: $e');
+      var errorMessage = e.toString();
+      print("cathe:$errorMessage");
+         loadingState.state=false;
+    }
+    return LoginResult(responseCode, errorMessage: errorMessage);
   }
+  
 }
 
-// Riverpod provider for AuthNotifier
-final authProvider = StateNotifierProvider<AuthNotifier, AdminAuth>((ref) {
+final authProvider = StateNotifierProvider<AuthNotifier, authState>((ref) {
   return AuthNotifier();
 });
 

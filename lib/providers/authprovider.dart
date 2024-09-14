@@ -196,8 +196,6 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
         print('State updated with token: ${userDetails['token']}');
 
         final prefs = await SharedPreferences.getInstance();
-        print("SharedPreferences fetched successfully");
-        state = state.copyWith(token: userDetails['Token']);
         final userData = json.encode({
           'token': userDetails['token'],
           'username': userDetails['username'],
@@ -205,6 +203,9 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
           'mobileno': userDetails['mobileno'],
           'usertype': userDetails['usertype'],
         });
+
+        //autologout();
+
         await prefs.setString('userData', userData);
 
         bool saveResult = await prefs.setString('userData', userData);
@@ -232,9 +233,9 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
 
   // Function to log out the user
   Future<void> logoutUser() async {
-     print('enter log out');
+    print('enter log out');
     final prefs = await SharedPreferences.getInstance();
-   await prefs.clear();
+    await prefs.clear();
 
     state = AdminAuth.initial(); // Clear the state after logout
     print('log out ${state.token}');

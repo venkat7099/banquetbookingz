@@ -195,42 +195,37 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
         state = AdminAuth.fromJson(userDetails);
         print('State updated with token: ${userDetails['token']}');
 
-          final prefs = await SharedPreferences.getInstance();
-          final userData = json.encode({
-            'refreshToken': userDetails['data']['refresh_token'],
-            'accessToken': userDetails['data']['access_token'],
-            'firstName': userDetails['data'][''],
-            'userRole': userDetails['data']['userRole'],
-            'password': userDetails['data']['password']
-          });
+        final prefs = await SharedPreferences.getInstance();
+        print("SharedPreferences fetched successfully");
+        state = state.copyWith(token: userDetails['Token']);
+        final userData = json.encode({
+          'token': userDetails['token'],
+          'username': userDetails['username'],
+          'email': userDetails['email'],
+          'mobileno': userDetails['mobileno'],
+          'usertype': userDetails['usertype'],
+        });
+        await prefs.setString('userData', userData);
 
-          //autologout();
+        bool saveResult = await prefs.setString('userData', userData);
+        if (!saveResult) {
+          print("Failed to save user data to SharedPreferences.");
+        }
 
-          await prefs.setString('userData', userData);
-          await prefs.setBool('isLoggedIn', true);
-          break;
-        default:
-          if (statuscode != 201) {
-            loadingState.state = false;
-          }
-          // Optionally set a message to show to the user why the login failed
-          break;
-      }
-      if (statuscode == 201) {
-        // Handle successful login...
+        bool tokenSaveResult =
+            await prefs.setString('accessToken', userDetails['token']);
+        if (!tokenSaveResult) {
+          print("Failed to save access token to SharedPreferences.");
+        }
       } else {
-        // Any other status code means something went wrong
-        // Extract error message from response
-        // Assuming 'messages' is a List of messages and we take the first one.
+        loadingState.state = false;
         errorMessage =
             userDetails['messages']?.first ?? 'An unknown error occurred.';
-        // Alternatively, if 'message' is a single String with the error message:
-        // errorMessage = responseJson['message'];
       }
     } catch (e) {
       loadingState.state = false;
       errorMessage = e.toString();
-      print("cathe:$errorMessage");
+      print("Catch: $errorMessage");
     }
     return LoginResult(responseCode, errorMessage: errorMessage);
   }

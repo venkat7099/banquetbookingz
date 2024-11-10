@@ -11,7 +11,7 @@ class MyCustomChart extends CustomPainter {
       fontSize: 15,
     );
 
-    final textSpan = TextSpan(
+    const textSpan = TextSpan(
       text: 'Pro - 54%',
       style: textStyle,
     );

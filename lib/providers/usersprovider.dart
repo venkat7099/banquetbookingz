@@ -254,7 +254,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
     try {
       loadingState.state = true;
       var request = http.MultipartRequest('POST', uri);
-
+    
       // Add the image file to your request.
       request.files.add(
           await http.MultipartFile.fromPath('profile_pic', imageFile.path));
@@ -296,12 +296,13 @@ class UserNotifier extends StateNotifier<List<Users>> {
   }
 
   Future<void> getUsers(WidgetRef ref) async {
+    print("entered getusers");
     final getaccesstoken = ref.read(authProvider).data?.accessToken;
     try {
-      final response = await http.get(Uri.parse(Api.retriveusers), 
+      final response = await http.get(Uri.parse(Api.addUser), 
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token $getaccesstoken',
+      
       }
       );
       var res = json.decode(response.body);

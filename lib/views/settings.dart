@@ -1,10 +1,7 @@
 import 'package:banquetbookingz/providers/authprovider.dart';
-import 'package:banquetbookingz/providers/usersprovider.dart';
-import 'package:banquetbookingz/views/loginpage.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
@@ -25,20 +22,20 @@ class _SettingsState extends ConsumerState<Settings> {
     return Scaffold(
         body: Column(
       children: [
-        StackWidget(text: "Settings"),
+        const StackWidget(text: "Settings"),
         Container(
-          padding: EdgeInsets.fromLTRB(30, 20, 30, 30),
-          color: Color(0xFFf5f5f5),
+          padding: const EdgeInsets.fromLTRB(30, 20, 30, 30),
+          color: const Color(0xFFf5f5f5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.white,
                 ),
-                child: Row(
+                child: const Row(
                   children: [
                     Icon(
                       Icons.account_circle,
@@ -51,29 +48,29 @@ class _SettingsState extends ConsumerState<Settings> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed("edituser");
                   },
-                  child: Text(
+                  child: const Text(
                     "EditProfile",
                     style: TextStyle(color: Color(0xff000000), fontSize: 15),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed("alltransactions");
                   },
-                  child: Text(
+                  child: const Text(
                     "Wallet",
                     style: TextStyle(color: Color(0xff000000), fontSize: 15),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextButton(
@@ -84,7 +81,7 @@ class _SettingsState extends ConsumerState<Settings> {
                     //   (Route<dynamic> route) => false,
                     // );
                   },
-                  child: Text(
+                  child: const Text(
                     "Logout",
                     style: TextStyle(color: Color(0xff000000), fontSize: 15),
                   ))

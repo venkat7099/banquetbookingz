@@ -88,9 +88,9 @@ class subscription {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = this.statusCode;
-    data['success'] = this.success;
-    data['messages'] = this.messages;
+    data['statusCode'] = statusCode;
+    data['success'] = success;
+    data['messages'] = messages;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }

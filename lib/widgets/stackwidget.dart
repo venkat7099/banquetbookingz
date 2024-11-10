@@ -30,8 +30,8 @@ class StackWidget extends StatelessWidget {
 
     return Consumer(
       builder: (context, ref, child) {
-        final _selectedIndex = ref.watch(pageIndexProvider);
-        final _usertype = ref.watch(authProvider);
+        final selectedIndex = ref.watch(pageIndexProvider);
+        final usertype = ref.watch(authProvider);
 
         return Stack(
           children: [
@@ -69,13 +69,13 @@ class StackWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _selectedIndex != 3 && _usertype.usertype=='a'
+                  selectedIndex != 3 && usertype.data?.userRole=='a'
                       ? Positioned(
                           top: 50,
                           right: 20,
                           child: InkWell(
                             onTap: onTap,
-                            child: _selectedIndex == 2
+                            child: selectedIndex == 2
                                 ? const Icon(
                                     Icons.add_circle_outline_rounded,
                                     size: 50,
@@ -123,12 +123,12 @@ class StackWidget extends StatelessWidget {
                             filled: true,
                             fillColor: Colors.white,
                             hintText: hintText,
-                            prefixIcon: Icon(Icons.search, color: Color(0xff6418c3)),
+                            prefixIcon: const Icon(Icons.search, color: Color(0xff6418c3)),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide.none,
                             ),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 16.0),
                           ),
                         ),

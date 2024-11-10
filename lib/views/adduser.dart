@@ -510,7 +510,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddUser extends ConsumerStatefulWidget {
-  AddUser({super.key});
+  const AddUser({super.key});
 
   @override
   ConsumerState<AddUser> createState() => _AddUserState();
@@ -549,7 +549,7 @@ class _AddUserState extends ConsumerState<AddUser> {
     final ScreenHeight = MediaQuery.of(context).size.height;
     final ScreenWidth = MediaQuery.of(context).size.width;
 
-    final TextEditingController _accountType =
+    final TextEditingController accountType =
         TextEditingController(text: "Manager");
     final TextEditingController mobileno = TextEditingController();
     final TextEditingController password = TextEditingController();
@@ -617,15 +617,16 @@ class _AddUserState extends ConsumerState<AddUser> {
                                 Navigator.of(context).pushNamed("uploadphoto");
                               },
                               child: pickedImage != null
-                                  ? Container(
+                                  ? SizedBox(
                                       width: 150,
                                       height: 150,
                                       child: Image.file(File(pickedImage.path)))
                                   : Container(
                                       decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color(0xFFb0b0b0),
-                                              width: 2)),
+                                        border: Border.all(
+                                            color: const Color(0xFFb0b0b0),
+                                            width: 2),
+                                      ),
                                       width: 150,
                                       height: 150,
                                       child: Icon(Icons.person,
@@ -828,7 +829,7 @@ class _AddUserState extends ConsumerState<AddUser> {
                         return CustomTextFormField(
                           width: ScreenWidth * 0.8,
                           readOnly: true,
-                          textController: _accountType,
+                          textController: accountType,
                           applyDecoration: true,
                         );
                       }),
@@ -889,7 +890,6 @@ class _AddUserState extends ConsumerState<AddUser> {
                                       pickedImage,
                                       selection.name.text,
                                       selection.email.text,
-                                      selection.gender,
                                       selection.mobile.text.trim(),
                                       selection.password.text.trim(),
                                       ref);

@@ -6,7 +6,7 @@ class MyCustomChart extends CustomPainter {
     final paint = Paint()
       ..style = PaintingStyle.fill;
 
-    final textStyle = TextStyle(
+    const textStyle = TextStyle(
       color: Colors.black,
       fontSize: 15,
     );

@@ -15,16 +15,16 @@ class getUser {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['success'] = this.success;
-    data['messages'] = this.messages;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    data['success'] = success;
+    data['messages'] = messages;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -52,7 +52,7 @@ class Data {
   int? mobileNo;
   String? gender;
   String? userrole;
-  Null? userstatus;
+  Null userstatus;
   XFile? _xfile;
 
   Data({
@@ -101,25 +101,25 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['profilepic'] = this.profilepic;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['height'] = this.height;
-    data['weight'] = this.weight;
-    data['dob'] = this.dob;
-    data['location'] = this.location;
-    data['address'] = this.address;
-    data['address2'] = this.address2;
-    data['city'] = this.city;
-    data['zip'] = this.zip;
-    data['emailId'] = this.emailId;
-    data['password'] = this.password;
-    data['mobileNo'] = this.mobileNo;
-    data['gender'] = this.gender;
-    data['userrole'] = this.userrole;
-    data['userstatus'] = this.userstatus;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['profilepic'] = profilepic;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['height'] = height;
+    data['weight'] = weight;
+    data['dob'] = dob;
+    data['location'] = location;
+    data['address'] = address;
+    data['address2'] = address2;
+    data['city'] = city;
+    data['zip'] = zip;
+    data['emailId'] = emailId;
+    data['password'] = password;
+    data['mobileNo'] = mobileNo;
+    data['gender'] = gender;
+    data['userrole'] = userrole;
+    data['userstatus'] = userstatus;
     return data;
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SubStack extends StatelessWidget {
   final String? text;
@@ -23,19 +22,19 @@ class SubStack extends StatelessWidget {
         Container(
           height: screenHeight * 0.23,
           width: screenWidth * 0.9,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           alignment: Alignment.bottomCenter,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Color(0xffeee1ff),
+            color: const Color(0xffeee1ff),
           ),
         ),
         Positioned(
           top: 0,
           child: Container(
             width: width,
-            padding: EdgeInsets.all(10),
-            margin: EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Colors.white,
@@ -48,21 +47,21 @@ class SubStack extends StatelessWidget {
                     Text(
                       text ?? "",
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     InkWell(
                         onTap: onTap,
                         child: Text(
                           editBtn ?? "",
                           style:
-                              TextStyle(fontSize: 18, color: Color(0xff6418c3)),
+                              const TextStyle(fontSize: 18, color: Color(0xff6418c3)),
                         )),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -76,7 +75,7 @@ class SubStack extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -90,7 +89,7 @@ class SubStack extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -107,7 +106,7 @@ class SubStack extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
+        const Positioned(
             bottom: 10,
             left: 120,
             child: Text(

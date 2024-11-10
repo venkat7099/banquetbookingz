@@ -1,13 +1,9 @@
-import 'package:banquetbookingz/providers/authprovider.dart';
-import 'package:banquetbookingz/providers/filtersprovider.dart';
-import 'package:banquetbookingz/providers/getsubscribers.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
 import 'package:banquetbookingz/providers/subcsribersprovider.dart';
 import 'package:banquetbookingz/widgets/button.dart';
 import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
 import 'package:banquetbookingz/widgets/customtextfield.dart';
-import 'package:banquetbookingz/widgets/substack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -74,8 +70,8 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
     final user = ref.read(subscribersProvider.notifier).getSubById(ids!);
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(15),
-        color: Color(0xFFf5f5f5),
+        padding: const EdgeInsets.all(15),
+        color: const Color(0xFFf5f5f5),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -86,25 +82,25 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back,
                         color: Color(0xff6418c3),
                       )),
-                  backgroundColor: Color(0xfff5f5f5),
-                  title: Text(
+                  backgroundColor: const Color(0xfff5f5f5),
+                  title: const Text(
                     "Edit Subcsription",
                     style: TextStyle(color: Color(0xff6418c3), fontSize: 20),
                   ),
                 );
               })),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
@@ -112,21 +108,21 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Subscription details",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                    const Text(
                       "name",
                       style: TextStyle(
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Consumer(builder: (context, ref, child) {
@@ -142,16 +138,16 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                         },
                       );
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
-                    Text(
+                    const Text(
                       "Annual pricing",
                       style: TextStyle(
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Consumer(builder: (context, ref, child) {
@@ -167,16 +163,16 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                         },
                       );
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
-                    Text(
+                    const Text(
                       "Quarterly pricing",
                       style: TextStyle(
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Consumer(builder: (context, ref, child) {
@@ -193,16 +189,16 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                       );
                     }),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
-                    Text(
+                    const Text(
                       "Monthly pricing",
                       style: TextStyle(
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Consumer(builder: (context, ref, child) {
@@ -219,7 +215,7 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                       );
                     }),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                     //    Text("Subcription tags",style: TextStyle(fontSize: 18,),),
@@ -244,7 +240,7 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Consumer(builder: (context, ref, child) {
@@ -255,7 +251,7 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                   borderRadius: 10,
                   foreGroundColor: Colors.white,
                   width: double.infinity,
-                  backGroundColor: Color(0XFF6418C3),
+                  backGroundColor: const Color(0XFF6418C3),
                   isLoading: loading,
                   onPressed: loading
                       ? null
@@ -279,9 +275,9 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   child: Container(
-                                    padding: EdgeInsets.all(20),
+                                    padding: const EdgeInsets.all(20),
                                     width: double.infinity,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(20)),
@@ -289,18 +285,18 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
-                                        Icon(Icons.check_circle,
+                                        const Icon(Icons.check_circle,
                                             size: 50, color: Color(0XFF6418C3)),
-                                        SizedBox(height: 15),
-                                        Text(
+                                        const SizedBox(height: 15),
+                                        const Text(
                                           'Subscription has been successfully added as a user.',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 16,
                                           ),
                                         ),
-                                        SizedBox(height: 15),
-                                        Text(
+                                        const SizedBox(height: 15),
+                                        const Text(
                                           'Login details have been mailed to the user.',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -308,7 +304,7 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                                             fontSize: 14,
                                           ),
                                         ),
-                                        SizedBox(height: 20),
+                                        const SizedBox(height: 20),
                                         Consumer(
                                             builder: (context, ref, child) {
                                           final addUser = ref.watch(
@@ -318,7 +314,7 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                                             borderRadius: 20,
                                             width: 100,
                                             foreGroundColor: Colors.white,
-                                            backGroundColor: Color(0XFF6418C3),
+                                            backGroundColor: const Color(0XFF6418C3),
                                             onPressed: () {
                                               addUser.toggleAddUser(false);
                                               Navigator.of(context)
@@ -338,12 +334,12 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text('Login Error'),
+                                  title: const Text('Login Error'),
                                   content: Text(result.errorMessage ??
                                       'An unknown error occurred.'),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text('OK'),
+                                      child: const Text('OK'),
                                       onPressed: () {
                                         Navigator.of(context)
                                             .pop(); // Close the dialog box
@@ -357,10 +353,10 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                         },
                 );
               }),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              CustomElevateButton(
+              const CustomElevateButton(
                   text: "Delete Plan",
                   borderRadius: 12,
                   backGroundColor: Color(0xffea5455),

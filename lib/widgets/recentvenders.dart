@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 class VendersWidget extends StatelessWidget {
   final String text1;
   final String text2;
@@ -22,13 +20,13 @@ class VendersWidget extends StatelessWidget {
                                                       color: Colors.grey[400], // Placeholder color
                                                       borderRadius: BorderRadius.circular(12), // Rounded corners for the icon placeholder
                                                     ),
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.image, // Placeholder icon
                                                       size: 30.0, // Icon size
                                                       color: Colors.white,
                                                     ),
                                                   ),
-                                                  SizedBox(width: 16.0), // Spacing between the icon and the text
+                                                  const SizedBox(width: 16.0), // Spacing between the icon and the text
                                                   Expanded(
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,22 +34,22 @@ class VendersWidget extends StatelessWidget {
                                                       children: [
                                                         Text(
                                                           text1,
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                             fontWeight: FontWeight.bold, // Bold text for the title
                                                             fontSize: 16.0, // Adjust the font size accordingly
                                                           ),
                                                         ),
-                                                        SizedBox(height: 8.0), // Spacing between title and subtitle
+                                                        const SizedBox(height: 8.0), // Spacing between title and subtitle
                                                         Text(
                                                           text2,
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                             color: Color(0xffb4b4b4),
                                                             fontSize: 14.0, // Adjust the font size accordingly
                                                           ),
                                                         ),
                                                         Text(
                                                           text3,
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                             color: Color(0xffb4b4b4), // Grey color for the date text
                                                             fontSize: 12.0, // Adjust the font size accordingly
                                                           ),
@@ -61,7 +59,7 @@ class VendersWidget extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-                                              Divider(thickness: 1,color: Color(0xffe5d0ff),)
+                                              const Divider(thickness: 1,color: Color(0xffe5d0ff),)
                                             ],
                                           );
   }

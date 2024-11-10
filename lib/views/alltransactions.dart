@@ -10,14 +10,14 @@ class AllTransactions extends StatelessWidget {
       context: context,
       builder: (BuildContext bc) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Filters',
                     style: TextStyle(
                       fontSize: 24,
@@ -28,7 +28,7 @@ class AllTransactions extends StatelessWidget {
                     onPressed: () {
                       // Action to clear all selections
                     },
-                    child: Text(
+                    child: const Text(
                       'Clear all',
                       style: TextStyle(
                         color: Colors.purple, // Your theme color here
@@ -37,7 +37,7 @@ class AllTransactions extends StatelessWidget {
                   )
                 ],
               ),
-              Divider(),
+              const Divider(),
               Consumer(builder: (context, ref, child) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,17 +63,17 @@ class AllTransactions extends StatelessWidget {
                   ],
                 );
               }),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
-                child: Text('Save'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff6418c3), // Your theme color here
-                  minimumSize: Size(double.infinity,
+                  backgroundColor: const Color(0xff6418c3), // Your theme color here
+                  minimumSize: const Size(double.infinity,
                       36), // double.infinity is the width and 36 is the height
                 ),
                 onPressed: () {
                   // Save filter selections
                 },
+                child: const Text('Save'),
               ),
             ],
           ),
@@ -92,20 +92,20 @@ class AllTransactions extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pushNamed("dashboard");
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Color(0xff6418c3),
           ),
         ),
-        title: Text(
+        title: const Text(
           "All Transactions",
           style: TextStyle(color: Color(0xff6418c3)),
         ),
-        backgroundColor: Color(0xfff5f5f5),
+        backgroundColor: const Color(0xfff5f5f5),
       ),
       body: Container(
-        padding: EdgeInsets.all(15),
-        color: Color(0xfff5f5f5),
+        padding: const EdgeInsets.all(15),
+        color: const Color(0xfff5f5f5),
         width: screenWidth,
         child: SingleChildScrollView(
           child: Column(
@@ -118,22 +118,22 @@ class AllTransactions extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.white,
                     hintText: "search",
-                    prefixIcon: Icon(Icons.search, color: Colors.purple),
+                    prefixIcon: const Icon(Icons.search, color: Colors.purple),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide.none,
                     ),
                     contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                        const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
                 width: screenWidth * 0.9,
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
@@ -146,7 +146,7 @@ class AllTransactions extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "All Transactions",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 15),
@@ -156,12 +156,12 @@ class AllTransactions extends StatelessWidget {
                               // Define the action when the button is pressed
                               _showFiltersBottomSheet(context);
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.filter_list,
                               color: Colors
                                   .black, // Use the theme's accent color or any other color
                             ),
-                            label: Text(
+                            label: const Text(
                               'Filters',
                               style: TextStyle(
                                 color: Colors.black,
@@ -170,12 +170,12 @@ class AllTransactions extends StatelessWidget {
                           )
                         ],
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       InkWell(
                         onTap: () {
                           Navigator.of(context).pushNamed("alltransactions");
                         },
-                        child: RecentTransactions(
+                        child: const RecentTransactions(
                           text1: "Paid for Pro",
                           text2: "28 feb, 2024 at 6:00am",
                           text3: "SFHB46Hc566",
@@ -203,21 +203,21 @@ Widget _buildFilterSection(String title, List<String> options) {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Wrap(
             spacing: 8.0,
             children: options
                 .map((option) => Chip(
-                      backgroundColor: Color(0xffe5d0ff),
+                      backgroundColor: const Color(0xffe5d0ff),
                       label: Text(option),
-                      deleteIcon: Icon(Icons.close),
+                      deleteIcon: const Icon(Icons.close),
                       onDeleted: () {
                         // Handle delete (removal) of the filter option
                         ref

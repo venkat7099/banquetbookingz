@@ -14,6 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadPhoto extends StatelessWidget {
+  const UploadPhoto({super.key});
+
   Future<ImageSource?> _showImageSourceSelector(BuildContext context) {
     return showModalBottomSheet<ImageSource>(
       context: context,
@@ -23,13 +25,13 @@ class UploadPhoto extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.camera),
-                title: Text('Camera'),
+                leading: const Icon(Icons.camera),
+                title: const Text('Camera'),
                 onTap: () => Navigator.of(context).pop(ImageSource.camera),
               ),
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Gallery'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Gallery'),
                 onTap: () => Navigator.of(context).pop(ImageSource.gallery),
               ),
             ],
@@ -46,10 +48,10 @@ class UploadPhoto extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0xFF330099)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF330099)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Photo Upload',
+        title: const Text('Photo Upload',
             style: TextStyle(
                 color: Color(0xFF1e1e1e),
                 fontSize: 16,
@@ -58,7 +60,7 @@ class UploadPhoto extends StatelessWidget {
         // Adjust the color to match your design
       ),
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: scrrenWidth * 0.9,
           child: SingleChildScrollView(
             child: Column(
@@ -106,7 +108,7 @@ class UploadPhoto extends StatelessWidget {
                                           borderRadius: 2,
                                           text: "Retake",
                                           width: scrrenWidth * 0.27,
-                                          backGroundColor: Color(0xFF80fd4f4f),
+                                          backGroundColor: const Color(0xff80fd4f4f),
                                           onPressed: () async {
                                             final ImageSource? source =
                                                 await _showImageSourceSelector(
@@ -123,7 +125,7 @@ class UploadPhoto extends StatelessWidget {
                                           borderRadius: 2,
                                           text: "Ok",
                                           width: scrrenWidth * 0.27,
-                                          backGroundColor: Color(0xFF8043b256),
+                                          backGroundColor: const Color(0xff8043b256),
                                           onPressed: () {
                                             Navigator.of(context)
                                                 .pop();
@@ -136,15 +138,15 @@ class UploadPhoto extends StatelessWidget {
                     ],
                   );
                 }),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "Take a picture of you with \na white or clear background",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: Color(0xFF1e1e1e)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Row(
@@ -163,8 +165,8 @@ class UploadPhoto extends StatelessWidget {
                           input: PickedImage != null ? true : false,
                           text: "Save",
                           backGroundColor: PickedImage != null
-                              ? Color(0xFF330099)
-                              : Color(0xFFb0b0b0),
+                              ? const Color(0xFF330099)
+                              : const Color(0xFFb0b0b0),
                           isLoading: false,
                           onPressed: PickedImage == null
                               ? null

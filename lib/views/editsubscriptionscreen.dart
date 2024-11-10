@@ -55,8 +55,7 @@ import 'dart:convert';
 class EditSubscriptionScreen extends StatelessWidget {
   final SubscriptionPlan plan;
 
-  const EditSubscriptionScreen({Key? key, required this.plan})
-      : super(key: key);
+  const EditSubscriptionScreen({super.key, required this.plan});
 
   @override
   Widget build(BuildContext context) {

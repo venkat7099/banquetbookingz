@@ -1,6 +1,4 @@
-import 'package:banquetbookingz/views/loginpage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -16,7 +14,7 @@ class MainPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text("Click for logout"),
+            const Text("Click for logout"),
             ElevatedButton(
               onPressed: () {
                 // await logoutUser();
@@ -25,7 +23,7 @@ class MainPage extends StatelessWidget {
                 //   (Route<dynamic> route) => false,
                 // );
               },
-              child: Text('Logout'),
+              child: const Text('Logout'),
             ),
           ],
         ),

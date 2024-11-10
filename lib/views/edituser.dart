@@ -865,15 +865,15 @@ class EditUser extends StatefulWidget {
   final String? gender;
   final String? profilepic;
 
-  EditUser({
-    Key? key,
+  const EditUser({
+    super.key,
     this.user_id,
     this.userName,
     this.email,
     this.mobileNo,
     this.gender,
     this.profilepic,
-  }) : super(key: key);
+  });
 
   @override
   _EditUserState createState() => _EditUserState();
@@ -1040,7 +1040,7 @@ class _EditUserState extends State<EditUser> {
                         alignment: Alignment.center,
                         children: [
                           _profileImage != null
-                              ? Container(
+                              ? SizedBox(
                                   width: 150,
                                   height: 150,
                                   child: Image.file(
@@ -1050,7 +1050,7 @@ class _EditUserState extends State<EditUser> {
                                 )
                               : widget.profilepic != null &&
                                       widget.profilepic!.startsWith('http')
-                                  ? Container(
+                                  ? SizedBox(
                                       width: 150,
                                       height: 150,
                                       child: Image.network(
@@ -1097,7 +1097,7 @@ class _EditUserState extends State<EditUser> {
                   "Phone Number", TextInputType.phone, _validatePhoneNumber),
               const SizedBox(height: 5),
               Container(
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
@@ -1138,7 +1138,7 @@ class _EditUserState extends State<EditUser> {
         decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
         validator: validator,
       ),

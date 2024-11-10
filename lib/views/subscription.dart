@@ -136,8 +136,7 @@ class Subscription extends ConsumerWidget {
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(height: 8),
-              
+              const SizedBox(height: 8),  
             ],
           ),
         ),

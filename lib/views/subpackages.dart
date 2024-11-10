@@ -8,11 +8,11 @@ class Subpackages extends StatelessWidget {
   final Color cardColor;
 
   const Subpackages({
-    Key? key,
+    super.key,
     required this.plans,
     required this.title,
     required this.cardColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

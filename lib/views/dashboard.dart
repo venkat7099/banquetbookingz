@@ -1,10 +1,8 @@
-import 'package:banquetbookingz/views/example.dart';
-import 'package:banquetbookingz/views/loginpage.dart';
-import 'package:banquetbookingz/views/mainpage.dart';
-import 'package:banquetbookingz/widgets/stackwidget.dart';
 import 'package:flutter/material.dart';
 
 class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -34,7 +32,7 @@ class MyWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         height: screenHeight * 0.4,
                         width: screenWidth,
-                        color: Color(0xFFf5f5f5),
+                        color: const Color(0xFFf5f5f5),
                       ),
                     ],
                   ),
@@ -43,7 +41,7 @@ class MyWidget extends StatelessWidget {
                       children: [
                         Container(
                           height: 130,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.purple,
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(15),
@@ -51,7 +49,7 @@ class MyWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                             top: 20,
                             left: 20,
                             child: Text(
@@ -66,17 +64,17 @@ class MyWidget extends StatelessWidget {
                             child: Stack(
                               alignment: Alignment.bottomRight,
                               children: <Widget>[
-                                Icon(
+                                const Icon(
                                   Icons.account_circle,
                                   color: Colors.white,
                                   size: 50.0,
                                 ),
                                 Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Colors.purple,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.verified_user,
                                     color: Colors.white,
                                     size: 20.0,
@@ -102,12 +100,12 @@ class MyWidget extends StatelessWidget {
                             fillColor: Colors.white,
                             hintText: 'hintText',
                             prefixIcon:
-                                Icon(Icons.search, color: Colors.purple),
+                                const Icon(Icons.search, color: Colors.purple),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide.none,
                             ),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20.0, vertical: 16.0),
                           ),
                         ),
@@ -117,7 +115,7 @@ class MyWidget extends StatelessWidget {
                   Positioned(
                     bottom: 0,
                     child: AppBar(
-                      bottom: TabBar(
+                      bottom: const TabBar(
                         tabs: [
                           Tab(text: 'New'), // First tab
                           Tab(text: 'Admin'), // Second tab
@@ -125,7 +123,7 @@ class MyWidget extends StatelessWidget {
                           // Add more tabs here for 'All' etc.
                         ],
                       ),
-                      title: Text('Tab Example'),
+                      title: const Text('Tab Example'),
                     ),
                   )
                 ],

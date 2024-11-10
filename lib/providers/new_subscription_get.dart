@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 final subscriptionPlansProvider =
     FutureProvider<List<SubscriptionPlan>>((ref) async {
-  final getaccesstoken = ref.read(authProvider).token;
+  final getaccesstoken = ref.read(authProvider).data?.accessToken;
   try {
     if (getaccesstoken == null) {
       print("Access token is null");

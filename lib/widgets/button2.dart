@@ -11,7 +11,7 @@ class CustomGenderButton extends StatelessWidget {
   final double? borderWidth; // Parameter for border width
 
   const CustomGenderButton({
-    Key? key,
+    super.key,
     this.borderColor, // It's nullable so it may not be passed
     this.borderWidth = 1, // Default width is 1 if not passed
     required this.text,
@@ -20,7 +20,7 @@ class CustomGenderButton extends StatelessWidget {
     required this.borderRadius,
     this.color,
     this.foreGroundColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,8 @@ class CustomGenderButton extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(text),
         style: ElevatedButton.styleFrom(
-          backgroundColor: color ?? Color(0xFF6418C3),
+          backgroundColor: color ?? const Color(0xFF6418C3),
           foregroundColor: foreGroundColor ?? Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
@@ -44,6 +43,7 @@ class CustomGenderButton extends StatelessWidget {
             ),
           ),
         ),
+        child: Text(text),
       ),
     );
   }

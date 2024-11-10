@@ -33,20 +33,20 @@ class CustomElevateButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading == true || input == false ? null : onPressed,
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-            if (states.contains(MaterialState.disabled)) {
+          backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+            if (states.contains(WidgetState.disabled)) {
               return input == false
-                  ? Color(0xFFb4B4B4)
+                  ? const Color(0xFFb4B4B4)
                   : backGroundColor == null
-                      ? Color(0xFF6418C3)
+                      ? const Color(0xFF6418C3)
                       : backGroundColor!; // Keeps the button blue even if disabled
             }
             return backGroundColor!; // Normal state color
           }),
           foregroundColor: foreGroundColor == null
-              ? MaterialStateProperty.all<Color>(Colors.white)
-              : MaterialStateProperty.all<Color>(foreGroundColor!),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              ? WidgetStateProperty.all<Color>(Colors.white)
+              : WidgetStateProperty.all<Color>(foreGroundColor!),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
               side: BorderSide(

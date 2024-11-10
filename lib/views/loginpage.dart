@@ -225,7 +225,6 @@ import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/connectivityprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
-import 'package:banquetbookingz/views/mainpage.dart';
 import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
 import 'package:banquetbookingz/widgets/customtextfield.dart';
 import 'package:flutter/material.dart';
@@ -342,7 +341,7 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(
                             height: 8,
                           ),
-                          Container(
+                          SizedBox(
                             width: screenWidth * 0.8,
                             child: Row(
                               children: [
@@ -412,7 +411,7 @@ class _LoginPageState extends State<LoginPage> {
                                           _enteredPassword.text,
                                           ref,
                                         );
-                                        if (result.statusCode == 400) {
+                                        if (result.statusCode == 401) {
                                           // If an error occurred, show a dialog box with the error message.
                                           showDialog(
                                             context: context,
@@ -422,7 +421,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     const Text('Login Error'),
                                                 content: Text(result
                                                         .errorMessage ??
-                                                    'An unknown error occurred.'),
+                                                    '${result.errorMessage}'),
                                                 actions: <Widget>[
                                                   TextButton(
                                                     child: const Text('OK'),

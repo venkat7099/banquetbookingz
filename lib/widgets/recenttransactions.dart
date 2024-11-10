@@ -9,25 +9,25 @@ class RecentTransactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(padding: EdgeInsets.all(10), decoration: BoxDecoration(
+    return Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.circular(15),
-                                                  color: Color(0xfff3f3f3),
+                                                  color: const Color(0xfff3f3f3),
                                                 ),
                                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                             Column(crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                              Text(text1,style: TextStyle(fontWeight: FontWeight.bold),
+                                              Text(text1,style: const TextStyle(fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 6,),
-                                              Text(text2,style: TextStyle(color: Color(0xffb4b4b4),fontSize: 13),
+                                              const SizedBox(height: 6,),
+                                              Text(text2,style: const TextStyle(color: Color(0xffb4b4b4),fontSize: 13),
                                               ),
-                                                SizedBox(height: 6,),
-                                              Text(text3,style: TextStyle(color: Color(0xffb4b4b4),fontSize: 13),
+                                                const SizedBox(height: 6,),
+                                              Text(text3,style: const TextStyle(color: Color(0xffb4b4b4),fontSize: 13),
                                               )
                                             ],),
                                             
-                                            Text(text4,style: TextStyle(fontWeight: FontWeight.bold),)
+                                            Text(text4,style: const TextStyle(fontWeight: FontWeight.bold),)
                                            ],),)
                                            
                                        ;

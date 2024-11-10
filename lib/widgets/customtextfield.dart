@@ -60,7 +60,7 @@ class CustomTextFormField extends StatelessWidget {
                 ? InputDecoration(
                     prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
                     filled: filled, // Don't forget to set this to true
-                    fillColor: Color(0xFFF3F3F3), // Use the shade of grey you prefer
+                    fillColor: const Color(0xFFF3F3F3), // Use the shade of grey you prefer
 
                     prefixText: prefix,
                     prefixStyle: const TextStyle(color: Color(0XFF330099)),

@@ -182,7 +182,6 @@
 import 'dart:convert';
 import 'dart:io' as platform;
 import 'dart:math';
-import 'package:banquetbookingz/models/getuser.dart';
 import 'package:banquetbookingz/models/users.dart';
 import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
@@ -243,7 +242,6 @@ class UserNotifier extends StateNotifier<List<Users>> {
       XFile imageFile,
       String firstName,
       String emailId,
-      String gender,
       String mobileNo,
       String password, // Add password parameter
       WidgetRef ref) async {
@@ -252,7 +250,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
 
     int responseCode = 0;
     String? errorMessage;
-    print("$emailId,$password,$mobileNo,$gender");
+   
     try {
       loadingState.state = true;
       var request = http.MultipartRequest('POST', uri);
@@ -264,12 +262,11 @@ class UserNotifier extends StateNotifier<List<Users>> {
       // Add the other form fields to your request.
       request.fields['username'] = firstName;
       request.fields['email'] = emailId;
-      request.fields['gender'] = gender;
       request.fields['mobileno'] = mobileNo;
-
+      request.fields['user_role']='m';
+       request.fields['user_status']='1';
       request.fields['password'] = password; // Add password to the request
-      request.headers['Authorization'] =
-          'Token ${ref.read(authProvider).token}';
+      
       final send = await request.send();
       final res = await http.Response.fromStream(send);
       var userDetails = json.decode(res.body);
@@ -299,7 +296,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
   }
 
   Future<void> getUsers(WidgetRef ref) async {
-    final getaccesstoken = ref.read(authProvider).token;
+    final getaccesstoken = ref.read(authProvider).data?.accessToken;
     try {
       final response = await http.get(Uri.parse(Api.retriveusers), 
       headers: {
@@ -331,7 +328,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
   }
 
   Future<void> getProfilePic(String userId, WidgetRef ref) async {
-    final getaccesstoken = ref.read(authProvider).token;
+    final getaccesstoken = ref.read(authProvider).data?.accessToken;
     try {
       final response =
           await http.get(Uri.parse('${Api.profilePic}/$userId'), headers: {
@@ -358,7 +355,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
 
   Users? getUserById(String username) {
     return state.firstWhere(
-      (user) => user.username == username,
+      (user) => user.data?.username == username,
     );
   }
 

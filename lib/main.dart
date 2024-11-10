@@ -1,21 +1,16 @@
-import 'dart:convert';
-import 'package:banquetbookingz/models/subscriptionmodel.dart';
 import 'package:banquetbookingz/providers/authprovider.dart';
 import 'package:banquetbookingz/views/addsubscriber.dart';
 import 'package:banquetbookingz/views/adduser.dart';
 import 'package:banquetbookingz/views/alltransactions.dart';
-import 'package:banquetbookingz/views/dashboard.dart';
 import 'package:banquetbookingz/views/editsubscriber.dart';
 import 'package:banquetbookingz/views/edituser.dart';
 import 'package:banquetbookingz/views/example.dart';
 import 'package:banquetbookingz/views/loginpage.dart';
-import 'package:banquetbookingz/views/mainpage.dart';
 import 'package:banquetbookingz/views/subscription.dart';
 import 'package:banquetbookingz/views/uploadphoto.dart';
 import 'package:banquetbookingz/views/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -65,11 +60,11 @@ class MyApp extends StatelessWidget {
       }),
       routes: {
         // "mainpage":(context) => const MainPage(),
-        "uploadphoto": (context) => UploadPhoto(),
+        "uploadphoto": (context) => const UploadPhoto(),
         "dashboard": (context) => const DashboardWidget(),
         "users": (context) => const Users(),
-        "adduser": (context) => AddUser(),
-        "edituser": (context) => EditUser(),
+        "adduser": (context) => const AddUser(),
+        "edituser": (context) => const EditUser(),
         "alltransactions": (context) => const AllTransactions(),
         "editsubscriber": (context) => const EditSubscriber(),
         "addsubscriber": (context) => const AddSubscriber(),

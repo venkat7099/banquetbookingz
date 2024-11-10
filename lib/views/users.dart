@@ -86,7 +86,7 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
       print('Users Data: $usersData'); // Debug print
       print('Search Text: $searchText'); // Debug print
 
-      if (usersData == null || usersData.isEmpty) {
+      if (usersData.isEmpty) {
         return const Center(
           child: CircularProgressIndicator(),
         );
@@ -94,9 +94,9 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
 
       // Filter users based on the user type and search text
         final filteredUsers = usersData.where((user) {
-        final matchesFilter = filter == null || user.userType == filter;
+        final matchesFilter = filter == null || user.data?.userRole == filter;
         final matchesSearch = searchText.isEmpty ||
-            (user.mobileNo?.contains(searchText) ?? false);
+            (user.data?.email?.contains(searchText) ?? false);
         return matchesFilter && matchesSearch;
       }).toList();
 
@@ -119,10 +119,10 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
             elevation: 4,
             margin: const EdgeInsets.only(bottom: 2.0),
             child: ListTile(
-              leading: user.profilePic != null
+              leading: user.data?.profilePic != null
                   ? CircleAvatar(
                       backgroundImage: NetworkImage(
-                          'http://93.127.172.164:8080${user.profilePic!}'),
+                          'http://93.127.172.164:8080${user.data?.profilePic}'),
                       radius: 30,
                     )
                   : const Icon(
@@ -131,7 +131,7 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
                       color: Colors.grey,
                     ),
               title: Text(
-                "User: ${user.username ?? "No Name"}",
+                "User: ${user.data?.username ?? "No Name"}",
                 style: const TextStyle(
                   color: Color(0xFF6418c3),
                   fontSize: 18,
@@ -142,20 +142,16 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Email: ${user.email ?? "No Email"}",
+                    "Email: ${user.data?.email ?? "No Email"}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                   Text(
-                    "Mobile No: ${user.mobileNo ?? "No Mobile"}",
+                    "Mobile No: ${user.data?.email ?? "No Mobile"}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
-                  Text(
-                    "Gender: ${user.gender ?? "Not Getting Gender"}",
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
+                 
                 ],
               ),
               trailing: Row(
@@ -168,12 +164,12 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
                         MaterialPageRoute(
                           builder: (context) => EditUser(
                             profilepic:
-                                'http://93.127.172.164:8080${user.profilePic}',
-                            userName: user.username,
-                            email: user.email,
-                            mobileNo: user.mobileNo,
-                            gender: user.gender,
-                            user_id: user.id,
+                                'http://93.127.172.164:8080${user.data?.profilePic}',
+                            userName: user.data?.username,
+                            email: user.data?.email,
+                            mobileNo: user.data?.email,
+                          
+                            user_id: user.data?.userId,
                           ),
                         ),
                       );
@@ -182,13 +178,9 @@ Widget _buildUserList(BuildContext context, {String? filter}) {
                   IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () {
-                      final userId = user.id;
-                      if (userId != null) {
-                        _deleteUser(userId as String);
-                      } else {
-                        print("User ID is null");
-                      }
-                    },
+                      final userId = user.data?.userId;
+                      _deleteUser(userId as String);
+                                        },
                   ),
                 ],
               ),

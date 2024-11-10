@@ -192,8 +192,8 @@ class AddSubscriber extends ConsumerWidget {
                                       'Please ensure all fields are filled and none of the values are zero.'),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text('OK'),
                                       onPressed: null,
+                                      child: Text('OK'),
                                     ),
                                   ],
                                 );

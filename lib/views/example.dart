@@ -42,7 +42,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
     for (final user in users) {
       await ref
           .read(usersProvider.notifier)
-          .getProfilePic(user.id as String, ref);
+          .getProfilePic(user.data?.userId as String, ref);
     }
   }
 
@@ -51,19 +51,19 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final usertype = ref.watch(authProvider);
-    List<Widget> _pages = [
+    List<Widget> pages = [
       const DashboardWidget(),
       const Users(),
-     if(usertype.usertype=='a') Subscription(),
-      Settings()
+     if(usertype.data!.userRole=='a') const Subscription(),
+      const Settings()
     ];
 
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
-        final _selectedIndex = ref.watch(pageIndexProvider);
+        final selectedIndex = ref.watch(pageIndexProvider);
         final dashboard = ref.watch(selectionModelProvider).dashboard;
         //  final get=ref.watch(getUserProvider.notifier);
-        return _selectedIndex == 0 && dashboard == true
+        return selectedIndex == 0 && dashboard == true
             ? SingleChildScrollView(
                 child: Column(
                   children: [
@@ -73,14 +73,14 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                     ),
                     Container(
                       padding: const EdgeInsets.all(40),
-                      color: Color(0xFFf5f5f5),
+                      color: const Color(0xFFf5f5f5),
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
-                                padding: EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(15),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -88,26 +88,26 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                 child: Column(
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Color(
                                             0xffdfecf2), // Container's background color
                                         shape: BoxShape
                                             .circle, // Making the container circular
                                       ),
-                                      child: Icon(
+                                      padding: const EdgeInsets.all(10),
+                                      child: const Icon(
                                         Icons.person, // The person icon
                                         color: Color(0xff5dcfff), // Icon color
                                         size: 30.0, // Icon size
                                       ),
-                                      padding: EdgeInsets.all(10),
                                     ),
-                                    Text(
+                                    const Text(
                                       "12",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20),
                                     ),
-                                    Text(
+                                    const Text(
                                       "new vendors",
                                       style: TextStyle(fontSize: 15),
                                     )
@@ -115,7 +115,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                 ),
                               ),
                               Container(
-                                padding: EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(15),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
@@ -123,27 +123,27 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                 child: Column(
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Color(
                                             0xffffcff2), // Container's background color
                                         shape: BoxShape
                                             .circle, // Making the container circular
                                       ),
-                                      child: Icon(
+                                      padding: const EdgeInsets.all(
+                                          10),
+                                      child: const Icon(
                                         Icons.person, // The person icon
                                         color: Color(0xffe328af), // Icon color
                                         size: 30.0, // Icon size
-                                      ),
-                                      padding: EdgeInsets.all(
-                                          10), // Padding to create space around the icon inside the container
+                                      ), // Padding to create space around the icon inside the container
                                     ),
-                                    Text(
+                                    const Text(
                                       "42",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20),
                                     ),
-                                    Text(
+                                    const Text(
                                       "subscribed",
                                       style: TextStyle(fontSize: 15),
                                     )
@@ -152,14 +152,14 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Container(
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
@@ -195,16 +195,16 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Container(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
                             ),
                             child: Column(
                               children: [
-                                Row(
+                                const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +223,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                         style: TextStyle(fontSize: 15))
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 15,
                                 ),
                                 SizedBox(
@@ -236,8 +236,8 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                         drawVerticalLine:
                                             true, // Enable the vertical grid lines
                                         getDrawingVerticalLine: (value) {
-                                          return FlLine(
-                                            color: const Color(
+                                          return const FlLine(
+                                            color: Color(
                                                 0xff37434d), // Color for vertical lines
                                             strokeWidth: 1,
                                           );
@@ -249,7 +249,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                         //   );
                                         // },
                                       ),
-                                      titlesData: FlTitlesData(show: false),
+                                      titlesData: const FlTitlesData(show: false),
                                       borderData: FlBorderData(show: false),
                                       minX: 0,
                                       maxX: 2,
@@ -258,16 +258,16 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                       lineBarsData: [
                                         LineChartBarData(
                                           spots: [
-                                            FlSpot(0, 1),
-                                            FlSpot(1, 3),
-                                            FlSpot(2, 10),
+                                            const FlSpot(0, 1),
+                                            const FlSpot(1, 3),
+                                            const FlSpot(2, 10),
                                             // Add other spots here
                                           ],
                                           isCurved: true,
                                           color: Colors.blue, // Line color
                                           barWidth: 4,
                                           isStrokeCapRound: true,
-                                          dotData: FlDotData(show: false),
+                                          dotData: const FlDotData(show: false),
                                           belowBarData:
                                               BarAreaData(show: false),
                                         ),
@@ -278,9 +278,9 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Container(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
@@ -293,7 +293,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Recent Vendors",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -303,7 +303,23 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                       onPressed: () {
                                         // Your action here
                                       },
-                                      child: Row(
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: const Color(
+                                            0XFF6418C3), // Background color
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          side: const BorderSide(
+                                              color: Color(0XFF6418C3),
+                                              width: 1),
+                                          // The rounded corners
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 24,
+                                            vertical:
+                                                12), // The padding inside the button
+                                      ),
+                                      child: const Row(
                                         children: [
                                           Text(
                                             "View All",
@@ -316,27 +332,11 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                           )
                                         ],
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        foregroundColor: Color(
-                                            0XFF6418C3), // Background color
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          side: BorderSide(
-                                              color: Color(0XFF6418C3),
-                                              width: 1),
-                                          // The rounded corners
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical:
-                                                12), // The padding inside the button
-                                      ),
                                     )
                                   ],
                                 ),
-                                SizedBox(height: 20),
-                                VendersWidget(
+                                const SizedBox(height: 20),
+                                const VendersWidget(
                                   text1: 'Swagat Grand Banquet Hall',
                                   text2: 'Bachupally, Hyderabad',
                                   text3: 'Registered on Aug 25, 2023',
@@ -344,11 +344,11 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Container(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
@@ -363,7 +363,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Recent Vendors",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -373,7 +373,23 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                         onPressed: () {
                                           // Your action here
                                         },
-                                        child: Row(
+                                        style: ElevatedButton.styleFrom(
+                                          foregroundColor: const Color(
+                                              0XFF6418C3), // Background color
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: const BorderSide(
+                                                color: Color(0XFF6418C3),
+                                                width: 1),
+                                            // The rounded corners
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 24,
+                                              vertical:
+                                                  12), // The padding inside the button
+                                        ),
+                                        child: const Row(
                                           children: [
                                             Text(
                                               "View All",
@@ -386,27 +402,11 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                             )
                                           ],
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor: Color(
-                                              0XFF6418C3), // Background color
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            side: BorderSide(
-                                                color: Color(0XFF6418C3),
-                                                width: 1),
-                                            // The rounded corners
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 24,
-                                              vertical:
-                                                  12), // The padding inside the button
-                                        ),
                                       )
                                     ],
                                   ),
-                                  SizedBox(height: 20),
-                                  SubscriptionsWidget(
+                                  const SizedBox(height: 20),
+                                  const SubscriptionsWidget(
                                       text1: 'Swagat Grand Banquet Hall',
                                       text2: 'Bachupally, Hyderabad',
                                       text3: 'Start:25th Feb, 2024',
@@ -415,18 +415,18 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Container(
-                              padding: EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white,
                               ),
                               child: Column(
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
@@ -440,7 +440,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                   SizedBox(
                                       height: 310,
                                       width: screenWidth * 0.8,
-                                      child: MySubscriptionRatioChart()),
+                                      child: const MySubscriptionRatioChart()),
                                   Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
@@ -454,12 +454,12 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                                 Container(
                                                   height: 20,
                                                   width: 20,
-                                                  color: Color(0xFF6418C3),
+                                                  color: const Color(0xFF6418C3),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
+                                                const Text(
                                                   "Pro-25%",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -467,7 +467,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                                 )
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 15,
                                             ),
                                             Row(
@@ -475,12 +475,12 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                                 Container(
                                                   height: 20,
                                                   width: 20,
-                                                  color: Color(0XFF5DCFFF),
+                                                  color: const Color(0XFF5DCFFF),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text("Expert-25%",
+                                                const Text("Expert-25%",
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -498,12 +498,12 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                                 Container(
                                                   height: 20,
                                                   width: 20,
-                                                  color: Color(0XFFE328AF),
+                                                  color: const Color(0XFFE328AF),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text(
+                                                const Text(
                                                   "Basic-25%",
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -511,7 +511,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                                 )
                                               ],
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 15,
                                             ),
                                             Row(
@@ -519,12 +519,12 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                                 Container(
                                                   height: 20,
                                                   width: 20,
-                                                  color: Color(0xFFC4C4C4),
+                                                  color: const Color(0xFFC4C4C4),
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text("Pro-Plus-25%",
+                                                const Text("Pro-Plus-25%",
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -536,11 +536,11 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                       ])
                                 ],
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Container(
-                            padding: EdgeInsets.all(15),
+                            padding: const EdgeInsets.all(15),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.white,
@@ -549,7 +549,7 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
@@ -560,20 +560,20 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   Center(
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(4),
-                                            color: Color(0XFFEEE1FF),
+                                            color: const Color(0XFFEEE1FF),
                                           ),
-                                          child: Row(
+                                          child: const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
@@ -589,17 +589,17 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 5,
                                         ),
                                         Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(4),
-                                            color: Color(0XFFEEE1FF),
+                                            color: const Color(0XFFEEE1FF),
                                           ),
-                                          child: Row(
+                                          child: const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
@@ -615,17 +615,17 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 5,
                                         ),
                                         Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(4),
-                                            color: Color(0XFFEEE1FF),
+                                            color: const Color(0XFFEEE1FF),
                                           ),
-                                          child: Row(
+                                          child: const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
@@ -641,17 +641,17 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 5,
                                         ),
                                         Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(4),
-                                            color: Color(0xffeee1ff),
+                                            color: const Color(0xffeee1ff),
                                           ),
-                                          child: Row(
+                                          child: const Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
@@ -674,10 +674,10 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
-                          Column(
+                          const Column(
                             children: [
                               Text(
                                 "BanquetBookz Admin Dashboard",
@@ -704,45 +704,45 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
                   ],
                 ),
               )
-            : _pages.elementAt(_selectedIndex);
+            : pages.elementAt(selectedIndex);
       }),
-      bottomNavigationBar: Consumer(builder: (context, ref, child) {
-        final _selectedIndex = ref.watch(pageIndexProvider);
-        return BottomNavigationBar(
-          items:  <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people),
-              label: 'Users',
-            ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.business),
-            //   label: 'Vendors',
-            // ),
-           if(usertype.usertype=='a')
-            BottomNavigationBarItem(
-              icon: Icon(Icons.subscriptions),
-              label: 'Subs',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
-          ],
-          onTap: (index) {
-            // This is where you update the index
+     bottomNavigationBar: Consumer(builder: (context, ref, child) {
+  final selectedIndex = ref.watch(pageIndexProvider);
+  final isAdmin = usertype.data?.userRole == 'a';
+  
+  List<BottomNavigationBarItem> items = [
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.dashboard),
+      label: 'Dashboard',
+    ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.people),
+      label: 'Users',
+    ),
+    if (isAdmin)
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.subscriptions),
+        label: 'Subs',
+      ),
+    const BottomNavigationBarItem(
+      icon: Icon(Icons.settings),
+      label: 'Settings',
+    ),
+  ];
 
-            ref.read(pageIndexProvider.notifier).setPage(index);
-          },
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color(0xff6418c3),
-          unselectedItemColor: Colors.grey,
-          type: BottomNavigationBarType.fixed,
-        );
-      }),
+  return BottomNavigationBar(
+    items: items,
+    onTap: (index) {
+      if (index >= items.length) return; // Prevents out-of-range selection
+      ref.read(pageIndexProvider.notifier).setPage(index);
+    },
+    currentIndex: selectedIndex >= items.length ? 0 : selectedIndex,
+    selectedItemColor: const Color(0xff6418c3),
+    unselectedItemColor: Colors.grey,
+    type: BottomNavigationBarType.fixed,
+  );
+}),
+
     );
   }
 }

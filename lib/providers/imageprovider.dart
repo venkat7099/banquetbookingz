@@ -25,13 +25,13 @@ class ImageStateNotifier extends StateNotifier<ImageModal> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Error'),
+              title: const Text('Error'),
               content: Text(fileSize > 2 * 1024 * 1024
                   ? 'The file is too large. Please choose a file smaller than 2MB.'
                   : "Invalid file type. Only jpg, jpeg, pdf, and png files are allowed."),
               actions: <Widget>[
                 TextButton(
-                  child: Text('OK'),
+                  child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop(); // Dismiss the dialog
                   },

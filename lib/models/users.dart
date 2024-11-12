@@ -9,15 +9,15 @@ class Users {
   Users.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     success = json['success'];
-    messages = List<String>.from(json['messages'] ?? []);
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    messages = json['messages'].cast<String>();
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = statusCode;
-    data['success'] = success;
-    data['messages'] = messages;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['statusCode'] = this.statusCode;
+    data['success'] = this.success;
+    data['messages'] = this.messages;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -31,16 +31,17 @@ class Data {
   String? email;
   String? userRole;
   bool? userStatus;
-  String? profilePic;
+  String? mobileNo;
+  Null? profilePic;
 
-  Data({
-    this.userId,
-    this.username,
-    this.email,
-    this.userRole,
-    this.userStatus,
-    this.profilePic,
-  });
+  Data(
+      {this.userId,
+      this.username,
+      this.email,
+      this.userRole,
+      this.userStatus,
+      this.mobileNo,
+      this.profilePic});
 
   Data.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
@@ -48,17 +49,19 @@ class Data {
     email = json['email'];
     userRole = json['user_role'];
     userStatus = json['user_status'];
+    mobileNo = json['mobile_no'];
     profilePic = json['profile_pic'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['user_id'] = userId;
-    data['username'] = username;
-    data['email'] = email;
-    data['user_role'] = userRole;
-    data['user_status'] = userStatus;
-    data['profile_pic'] = profilePic;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['user_id'] = this.userId;
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['user_role'] = this.userRole;
+    data['user_status'] = this.userStatus;
+    data['mobile_no'] = this.mobileNo;
+    data['profile_pic'] = this.profilePic;
     return data;
   }
 }

@@ -262,7 +262,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
       // Add the other form fields to your request.
       request.fields['username'] = firstName;
       request.fields['email'] = emailId;
-      request.fields['mobileno'] = mobileNo;
+      request.fields['mobile_no'] = mobileNo;
       request.fields['user_role']='m';
        request.fields['user_status']='1';
       request.fields['password'] = password; // Add password to the request

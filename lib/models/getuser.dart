@@ -1,30 +1,30 @@
 import 'package:image_picker/image_picker.dart';
 
-class getUser {
+class GetUser {
   int? statusCode;
   bool? success;
   List<String>? messages;
   List<Data>? data;
 
-  getUser({this.statusCode, this.success, this.messages, this.data});
+  GetUser({this.statusCode, this.success, this.messages, this.data});
 
-  getUser.fromJson(Map<String, dynamic> json) {
+  GetUser.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     success = json['success'];
     messages = json['messages'].cast<String>();
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(new Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = statusCode;
-    data['success'] = success;
-    data['messages'] = messages;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['statusCode'] = this.statusCode;
+    data['success'] = this.success;
+    data['messages'] = this.messages;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -33,93 +33,42 @@ class getUser {
 }
 
 class Data {
-  int? id;
-  String? profilepic;
+  int? userId;
   String? username;
   String? email;
-  String? firstName;
-  String? lastName;
-  String? height;
-  String? weight;
-  String? dob;
-  String? location;
-  String? address;
-  String? address2;
-  String? city;
-  String? zip;
-  String? emailId;
-  String? password;
-  int? mobileNo;
-  String? gender;
-  String? userrole;
-  Null userstatus;
-  XFile? _xfile;
+  String? userRole;
+  bool? userStatus;
+  String? mobileNo;
+  String? profilePic;
 
-  Data({
-    this.id,
-    this.profilepic,
-    this.firstName,
-    this.lastName,
-    this.height,
-    this.weight,
-    this.dob,
-    this.location,
-    this.address,
-    this.address2,
-    this.city,
-    this.zip,
-    this.emailId,
-    this.password,
-    this.mobileNo,
-    this.gender,
-    this.userrole,
-    this.userstatus,
-    XFile? xfile,
-  }) : _xfile = xfile;
+  Data(
+      {this.userId,
+      this.username,
+      this.email,
+      this.userRole,
+      this.userStatus,
+      this.mobileNo,
+      this.profilePic});
 
   Data.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    profilepic = json['profilepic'];
+    userId = json['user_id'];
     username = json['username'];
     email = json['email'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    height = json['height'];
-    weight = json['weight'];
-    dob = json['dob'];
-    location = json['location'];
-    address = json['address'];
-    address2 = json['address2'];
-    city = json['city'];
-    zip = json['zip'];
-    emailId = json['emailId'];
-    password = json['password'];
-    mobileNo = json['mobileNo'];
-    gender = json['gender'];
-    userrole = json['userrole'];
-    userstatus = json['userstatus'];
+    userRole = json['user_role'];
+    userStatus = json['user_status'];
+    mobileNo = json['mobile_no'];
+    profilePic = json['profile_pic'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['profilepic'] = profilepic;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
-    data['height'] = height;
-    data['weight'] = weight;
-    data['dob'] = dob;
-    data['location'] = location;
-    data['address'] = address;
-    data['address2'] = address2;
-    data['city'] = city;
-    data['zip'] = zip;
-    data['emailId'] = emailId;
-    data['password'] = password;
-    data['mobileNo'] = mobileNo;
-    data['gender'] = gender;
-    data['userrole'] = userrole;
-    data['userstatus'] = userstatus;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['user_id'] = this.userId;
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['user_role'] = this.userRole;
+    data['user_status'] = this.userStatus;
+    data['mobile_no'] = this.mobileNo;
+    data['profile_pic'] = this.profilePic;
     return data;
   }
 }

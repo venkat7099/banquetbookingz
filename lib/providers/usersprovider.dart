@@ -1,184 +1,3 @@
-// import 'dart:convert';
-// import 'dart:io' as platform;
-// import 'dart:math';
-// import 'package:banquetbookingz/models/getuser.dart';
-// import 'package:banquetbookingz/models/users.dart';
-// import 'package:banquetbookingz/providers/authprovider.dart';
-// import 'package:banquetbookingz/providers/loader.dart';
-// import 'package:banquetbookingz/utils/banquetbookzapi.dart';
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-
-// class UserNotifier extends StateNotifier<List<Users>> {
-//   UserNotifier() : super([]);
-//   void setImageFile(XFile? file) {}
-//   Future<platform.File?> getImageFile(BuildContext context) async {
-//     // if (state.data != null) {
-//     //   final data = state.data![0];
-//     //   if (data.xfile == null) {
-//     //     return null;
-//     //   }
-//     //   final platform.File file = platform.File(data.xfile!.path);
-//     //   return file;
-//     // }
-
-//     return null;
-//   }
-
-//   // Future<bool> tryAutoLogin() async {
-//   //   final prefs = await SharedPreferences.getInstance();
-//   //   if (!prefs.containsKey('userData')) {
-//   //     print('trylogin is false');
-//   //     return false;
-//   //   }
-
-//   //   final extractData =
-//   //       json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
-//   //   final profile = prefs.getBool('profile') ?? false;
-//   //   final expiryDate = DateTime.parse(extractData['refreshExpiry']);
-//   //   final accessExpiry = DateTime.parse(extractData['accessTokenExpiry']);
-//   String generateRandomLetters(int length) {
-//     var random = Random();
-//     var letters = List.generate(length, (_) => random.nextInt(26) + 97);
-//     return String.fromCharCodes(letters);
-//   }
-
-//   Future<String?> _getAccessToken() async {
-//     try {
-//       final prefs = await SharedPreferences.getInstance();
-//       final token = prefs.getString('accessToken');
-//       print("Retrieved token: $token"); // Debug print
-//       return token;
-//     } catch (e) {
-//       print("Error retrieving access token: $e");
-//       return null;
-//     }
-//   }
-
-//   Future<UserResult> addUser(
-//       XFile imageFile,
-//       String firstName,
-//       String emailId,
-//       String gender,
-//       String mobileNo,
-//       String password, // Add password parameter
-//       WidgetRef ref) async {
-//     var uri = Uri.parse(Api.addUser);
-//     final loadingState = ref.watch(loadingProvider.notifier);
-
-//     int responseCode = 0;
-//     String? errorMessage;
-//     print("$emailId,$password,$mobileNo,$gender");
-//     try {
-//       loadingState.state = true;
-//       var request = http.MultipartRequest('POST', uri);
-
-//       // Add the image file to your request.
-//       request.files.add(
-//           await http.MultipartFile.fromPath('profile_pic', imageFile.path));
-
-//       // Add the other form fields to your request.
-//       request.fields['username'] = firstName;
-//       request.fields['email'] = emailId;
-//       request.fields['gender'] = gender;
-//       request.fields['mobileno'] = mobileNo;
-
-//       request.fields['password'] = password; // Add password to the request
-//       request.headers['Authorization'] =
-//           'Token ${ref.read(authProvider).token}';
-//       final send = await request.send();
-//       final res = await http.Response.fromStream(send);
-//       var userDetails = json.decode(res.body);
-//       var statusCode = res.statusCode;
-//       responseCode = statusCode;
-//       print("statuscode: $statusCode");
-//       print("responsebody: ${res.body}");
-//       switch (responseCode) {
-//         case 400:
-//           if (userDetails['email'] != null) {
-//             errorMessage = 'Email already exists';
-//           } else if (userDetails['username'] != null) {
-//             errorMessage = 'username already exists';
-//           }
-//           break;
-//         default:
-//       }
-//     } catch (e) {
-//       loadingState.state = false;
-//       errorMessage = e.toString();
-//       print("catch: $errorMessage");
-//     } finally {
-//       loadingState.state = false;
-//     }
-
-//     return UserResult(responseCode, errorMessage: errorMessage);
-//   }
-
-//   Future<void> getUsers(WidgetRef ref) async {
-//     final getaccesstoken = ref.read(authProvider).token;
-//     try {
-//       final response = await http.get(Uri.parse(Api.retriveusers), headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Token $getaccesstoken',
-//       });
-//       var res = json.decode(response.body);
-//       print('response $res');
-//       if (response.statusCode == 200) {
-//         List<dynamic> res = json.decode(response.body);
-//         List<Users> userProfiles =
-//             res.map((data) => Users.fromJson(data)).toList();
-
-//         // Store the list in your provider or state management solution
-//         ref.read(usersProvider.notifier).setUserProfiles(userProfiles);
-
-//         print(userProfiles);
-//       } else {
-//         print('Failed to load user profiles');
-//       }
-
-//       print('response $res');
-//     } catch (e) {}
-//   }
-
-//   void setUserProfiles(List<Users> profiles) {
-//     state = profiles;
-//   }
-
-//   Future<void> getProfilePic(String userId) async {
-//     try {
-//       final response = await http.get(Uri.parse(Api.profilePic), headers: {
-//         'Content-Type': 'application/json',
-//         // Add other headers if needed
-//       });
-//       print(response);
-//       var res = json.decode(response.body);
-
-//       print(res);
-//     } catch (e) {}
-//     ;
-//   }
-
-//   // Data? getUserById(int id) {
-//   //   return state.data?.firstWhere(
-//   //     (user) => user.id == id,
-//   //   );
-//   // }
-// }
-
-// final usersProvider = StateNotifierProvider<UserNotifier, List<Users>>((ref) {
-//   return UserNotifier();
-// });
-
-// class UserResult {
-//   final int statusCode;
-//   final String? errorMessage;
-
-//   UserResult(this.statusCode, {this.errorMessage});
-// }
-
 import 'dart:convert';
 import 'dart:io' as platform;
 import 'dart:math';
@@ -192,34 +11,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserNotifier extends StateNotifier<List<Users>> {
+class UserNotifier extends StateNotifier<List<User>> {
   UserNotifier() : super([]);
+  
   void setImageFile(XFile? file) {}
-  Future<platform.File?> getImageFile(BuildContext context) async {
-    // if (state.data != null) {
-    //   final data = state.data![0];
-    //   if (data.xfile == null) {
-    //     return null;
-    //   }
-    //   final platform.File file = platform.File(data.xfile!.path);
-    //   return file;
-    // }
 
+  Future<platform.File?> getImageFile(BuildContext context) async {
     return null;
   }
 
-  // Future<bool> tryAutoLogin() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   if (!prefs.containsKey('userData')) {
-  //     print('trylogin is false');
-  //     return false;
-  //   }
-
-  //   final extractData =
-  //       json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
-  //   final profile = prefs.getBool('profile') ?? false;
-  //   final expiryDate = DateTime.parse(extractData['refreshExpiry']);
-  //   final accessExpiry = DateTime.parse(extractData['accessTokenExpiry']);
   String generateRandomLetters(int length) {
     var random = Random();
     var letters = List.generate(length, (_) => random.nextInt(26) + 97);
@@ -250,11 +50,11 @@ class UserNotifier extends StateNotifier<List<Users>> {
 
     int responseCode = 0;
     String? errorMessage;
-   
+
     try {
       loadingState.state = true;
       var request = http.MultipartRequest('POST', uri);
-    
+
       // Add the image file to your request.
       request.files.add(
           await http.MultipartFile.fromPath('profile_pic', imageFile.path));
@@ -263,10 +63,10 @@ class UserNotifier extends StateNotifier<List<Users>> {
       request.fields['username'] = firstName;
       request.fields['email'] = emailId;
       request.fields['mobile_no'] = mobileNo;
-      request.fields['user_role']='m';
-       request.fields['user_status']='1';
+      request.fields['user_role'] = 'm';
+      request.fields['user_status'] = '1';
       request.fields['password'] = password; // Add password to the request
-      
+
       final send = await request.send();
       final res = await http.Response.fromStream(send);
       var userDetails = json.decode(res.body);
@@ -279,7 +79,7 @@ class UserNotifier extends StateNotifier<List<Users>> {
           if (userDetails['email'] != null) {
             errorMessage = 'Email already exists';
           } else if (userDetails['username'] != null) {
-            errorMessage = 'username already exists';
+            errorMessage = 'Username already exists';
           }
           break;
         default:
@@ -296,45 +96,49 @@ class UserNotifier extends StateNotifier<List<Users>> {
   }
 
   Future<void> getUsers(WidgetRef ref) async {
-    print("entered getusers");
-    final getaccesstoken = ref.read(authProvider).data?.accessToken;
+    print("entered getUsers");
+
     try {
-      final response = await http.get(Uri.parse(Api.addUser), 
-      headers: {
-        'Content-Type': 'application/json',
-      
-      }
+      // Ensure the correct endpoint for fetching users is used.
+      final response = await http.get(
+        Uri.parse(Api.addUser), // Use the appropriate endpoint here.
+        headers: {
+          'Content-Type': 'application/json',
+        },
       );
-      var res = json.decode(response.body);
-      print('response $res');
+
       if (response.statusCode == 200) {
-        List<dynamic> res = json.decode(response.body);
-        List<Users> userProfiles =
-            res.map((data) => Users.fromJson(data)).toList();
+        var decodedResponse = json.decode(response.body);
 
-        // Store the list in your provider or state management solution
-        ref.read(usersProvider.notifier).setUserProfiles(userProfiles);
+        // Parse response using UserResponse to handle metadata and user data.
+        UserResponse userResponse = UserResponse.fromJson(decodedResponse);
 
-        print(userProfiles);
+        // Update state with the list of users
+        if (userResponse.data != null) {
+          ref.read(usersProvider.notifier).setUserProfiles(userResponse.data!);
+          print(userResponse.data);
+        } else {
+          print('No users found in response');
+        }
       } else {
         print('Failed to load user profiles');
       }
-
-      print('response $res');
-    } catch (e) {}
+    } catch (e) {
+      print("Error message: $e");
+    }
   }
 
-  void setUserProfiles(List<Users> profiles) {
+  void setUserProfiles(List<User> profiles) {
     state = profiles;
   }
 
   Future<void> getProfilePic(String userId, WidgetRef ref) async {
-    final getaccesstoken = ref.read(authProvider).data?.accessToken;
+    final accessToken = ref.read(authProvider).data?.accessToken;
     try {
       final response =
           await http.get(Uri.parse('${Api.profilePic}/$userId'), headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token $getaccesstoken',
+        'Authorization': 'Token $accessToken',
       });
 
       if (response.statusCode == 200) {
@@ -354,18 +158,30 @@ class UserNotifier extends StateNotifier<List<Users>> {
     }
   }
 
-  Users? getUserById(String username) {
+  User? getUserById(String username) {
     return state.firstWhere(
-      (user) => user.data?.username == username,
+      (user) => user.username == username,
+   // returns null if no matching user is found
     );
   }
 
-  deleteUser(String userId) {}
+  void deleteUser(String userId) {
+    // Add delete functionality here
+  }
 
-  void updateProfilePic(String userId, profilePicUrl) {}
+  void updateProfilePic(String userId, String? profilePicUrl) {
+    // Update the user's profile picture in the state
+    state = [
+      for (final user in state)
+        if (user.userId.toString() == userId)
+          user.copyWith(profilePic: profilePicUrl)
+        else
+          user,
+    ];
+  }
 }
 
-final usersProvider = StateNotifierProvider<UserNotifier, List<Users>>((ref) {
+final usersProvider = StateNotifierProvider<UserNotifier, List<User>>((ref) {
   return UserNotifier();
 });
 

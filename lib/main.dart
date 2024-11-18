@@ -38,6 +38,12 @@ class MyApp extends StatelessWidget {
       ),
       home: Consumer(builder: (context, ref, child) {
         final authState = ref.watch(authProvider);
+        final authNotifier = ref.read(authProvider.notifier);
+
+        // Fetch and log the user role
+        authNotifier.getUserRole().then((role) {
+          print('User role on restart: $role');
+        });
         return FutureBuilder(
           future: ref.watch(authProvider.notifier).isAuthenticated(),
           builder: (context, snapshot) {

@@ -8,30 +8,60 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthNotifier extends StateNotifier<AdminAuth> {
-  AuthNotifier() : super(AdminAuth.initial());
+  AuthNotifier() : super(AdminAuth.initial()) {
+    // Initialize state from SharedPreferences
+    _loadUserFromPrefs();
+  }
 
-  // Check if the user is authenticated by looking for userData in SharedPreferences
+  // Load user data from SharedPreferences on startup
+  Future<void> _loadUserFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('userData');
+    if (userData != null) {
+      final data = json.decode(userData) as Map<String, dynamic>;
+      state = AdminAuth.fromJson(data);
+      print('User loaded on app startup: ${state.data?.userRole}');
+    }
+  }
+
+  // Check if the user is authenticated
   Future<bool> isAuthenticated() async {
     final prefs = await SharedPreferences.getInstance();
+    final accessToken = prefs.getString('accessToken');
+
+    if (accessToken != null && accessToken.isNotEmpty) {
+      return true;
+    }
+
     if (prefs.containsKey('userData')) {
-      final extractData = json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
+      final extractData =
+          json.decode(prefs.getString('userData')!) as Map<String, dynamic>;
 
       if (state.data?.accessToken == null) {
-        state = state.copyWith(
-          data: state.data?.copyWith(
-            accessToken: extractData['access_token'],
-            username: extractData['username'],
-            email: extractData['email'],
-            mobileNo: extractData['mobile_no'],
-            userRole: extractData['user_role'], Token: null,
-          ), token: null, email: null, username: null, mobileno: null, usertype: null,
-        );
+        state = AdminAuth.fromJson(extractData);
       }
       return true;
     } else {
       print('User not authenticated');
       return false;
     }
+  }
+
+  // Fetch the user's role from the current state or SharedPreferences
+  Future<String> getUserRole() async {
+    if (state.data?.userRole != null) {
+      return state.data!.userRole!;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('userData');
+    if (userData != null) {
+      final data = json.decode(userData) as Map<String, dynamic>;
+      final role = data['user_role'] ?? 'Unknown';
+      return role;
+    }
+
+    return 'No Role Found';
   }
 
   // Helper function to generate random letters
@@ -42,7 +72,8 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
   }
 
   // Admin login function
-  Future<LoginResult> adminLogin(String email, String password, WidgetRef ref) async {
+  Future<LoginResult> adminLogin(
+      String email, String password, WidgetRef ref) async {
     final loadingState = ref.watch(loadingProvider.notifier);
     int responseCode = 0;
     String? errorMessage;
@@ -72,7 +103,8 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
 
         // Update the state with the returned data
         state = adminAuth;
-        print('State updated with access token: ${adminAuth.data?.accessToken}');
+        print(
+            'State updated with access token: ${adminAuth.data?.accessToken}');
 
         // Storing data in SharedPreferences
         final prefs = await SharedPreferences.getInstance();
@@ -87,13 +119,15 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
         }
 
         // Also saving the access token separately if needed
-        bool tokenSaveResult = await prefs.setString('accessToken', adminAuth.data?.accessToken ?? '');
+        bool tokenSaveResult = await prefs.setString(
+            'accessToken', adminAuth.data?.accessToken ?? '');
         if (!tokenSaveResult) {
           print("Failed to save access token to SharedPreferences.");
         }
       } else {
         loadingState.state = false;
-        errorMessage = responseBody['messages']?.first ?? 'An unknown error occurred.';
+        errorMessage =
+            responseBody['messages']?.first ?? 'An unknown error occurred.';
       }
     } catch (e) {
       loadingState.state = false;

@@ -762,59 +762,9 @@ class _AddUserState extends ConsumerState<AddUser> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "Gender",
-                        style: TextStyle(color: Colors.black, fontSize: 16),
-                      ),
-                      const SizedBox(height: 10),
-                      Consumer(
-                        builder: (context, ref, child) {
-                          var selectGender =
-                              ref.read(selectionModelProvider.notifier);
 
-                          return Row(children: [
-                            ref.watch(selectionModelProvider).gender == 'm'
-                                ? CustomGenderButton(
-                                    borderRadius: 5,
-                                    text: 'Male',
-                                    onPressed: () {
-                                      selectGender.setGender("m");
-                                    },
-                                  )
-                                : CustomGenderButton(
-                                    borderRadius: 5,
-                                    text: 'Male',
-                                    onPressed: () {
-                                      selectGender.setGender("m");
-                                    },
-                                    color: Colors.white,
-                                    foreGroundColor: const Color(0xFF6418C3),
-                                    borderColor: const Color(0xFF6418C3),
-                                  ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            ref.watch(selectionModelProvider).gender == 'f'
-                                ? CustomGenderButton(
-                                    borderRadius: 5,
-                                    text: 'Female',
-                                    onPressed: () {
-                                      selectGender.setGender("f");
-                                    },
-                                  )
-                                : CustomGenderButton(
-                                    borderRadius: 5,
-                                    text: 'Female',
-                                    onPressed: () {
-                                      selectGender.setGender("f");
-                                    },
-                                    color: Colors.white,
-                                    foreGroundColor: const Color(0xFF6418C3),
-                                    borderColor: const Color(0xFF6418C3),
-                                  ),
-                          ]);
-                        },
-                      ),
+                      const SizedBox(height: 10),
+
                       const SizedBox(
                         height: 20,
                       ),

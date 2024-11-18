@@ -13,8 +13,48 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserNotifier extends StateNotifier<List<User>> {
   UserNotifier() : super([]);
-  
+
   void setImageFile(XFile? file) {}
+
+  void deleteUser(String userId, WidgetRef ref) async {
+    final url = Uri.parse('https://www.gocodecreations.com/bbadminlogin');
+    try {
+      final response = await http.delete(
+        Uri.parse(Api.login), // Use the correct DELETE API URL
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'id': userId}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['success'] == true) {
+          // Remove the user from the state
+          state =
+              state.where((user) => user.userId.toString() != userId).toList();
+
+          // Show success message
+          ScaffoldMessenger.of(ref.context).showSnackBar(
+            const SnackBar(content: Text('User deleted successfully')),
+          );
+        } else {
+          ScaffoldMessenger.of(ref.context).showSnackBar(
+            SnackBar(
+                content: Text(responseData['messages']?.join(', ') ??
+                    'Error deleting user')),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(ref.context).showSnackBar(
+          const SnackBar(content: Text('Failed to delete user')),
+        );
+      }
+    } catch (e) {
+      print("Error deleting user: $e");
+      ScaffoldMessenger.of(ref.context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
 
   Future<platform.File?> getImageFile(BuildContext context) async {
     return null;
@@ -161,12 +201,8 @@ class UserNotifier extends StateNotifier<List<User>> {
   User? getUserById(String username) {
     return state.firstWhere(
       (user) => user.username == username,
-   // returns null if no matching user is found
+      // returns null if no matching user is found
     );
-  }
-
-  void deleteUser(String userId) {
-    // Add delete functionality here
   }
 
   void updateProfilePic(String userId, String? profilePicUrl) {

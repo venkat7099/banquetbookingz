@@ -17,44 +17,6 @@ class Users extends ConsumerStatefulWidget {
 class _UsersState extends ConsumerState<Users> {
   final TextEditingController _searchController = TextEditingController();
 
-  Future<void> _deleteUser(String userId) async {
-    final url = Uri.parse('https://www.gocodecreations.com/bbadminlogin');
-
-    try {
-      final response = await http.delete(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'id': userId}),
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        if (responseData['success'] == true) {
-          // Success: Show a success message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('User deleted successfully')),
-          );
-          ref.refresh(usersProvider); // Refresh the users list
-        } else {
-          // API responded with success=false
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(responseData['messages'].join(', '))),
-          );
-        }
-      } else {
-        // Failure: Show an error message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete user')),
-        );
-      }
-    } catch (e) {
-      // Handle network or JSON parsing errors
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,7 +160,8 @@ class _UsersState extends ConsumerState<Users> {
                     IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        _deleteUser(user.userId.toString());
+                        final notifier = ref.read(usersProvider.notifier);
+                        notifier.deleteUser(user.userId.toString(), ref);
                       },
                     ),
                   ],

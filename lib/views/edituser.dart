@@ -246,25 +246,7 @@ class _EditUserState extends State<EditUser> {
               const SizedBox(height: 5),
               _buildTextField(_controllerMobile, "Mobile Number",
                   "Phone Number", TextInputType.phone, _validatePhoneNumber),
-              const SizedBox(height: 5),
-              Container(
-                padding: const EdgeInsets.only(left: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: const Row(
-                  children: [
-                    Text("Gender",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.black)),
-                  ],
-                ),
-              ),
-              _buildGenderSelection(), // Gender Selection UI
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
               _buildSaveButton(screenWidth),
             ],
           ),
@@ -316,68 +298,68 @@ class _EditUserState extends State<EditUser> {
     return null;
   }
 
-  Widget _buildGenderSelection() {
-    return Container(
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Consumer(
-            builder: (context, ref, child) {
-              var selectGender = ref.read(selectionModelProvider.notifier);
-
-              return Row(children: [
-                ref.watch(selectionModelProvider).gender == 'm'
-                    ? CustomGenderButton(
-                        borderRadius: 5,
-                        text: 'Male',
-                        onPressed: () {
-                          selectGender.setGender("m");
-                        },
-                      )
-                    : CustomGenderButton(
-                        borderRadius: 5,
-                        text: 'Male',
-                        onPressed: () {
-                          selectGender.setGender("m");
-                        },
-                        color: Colors.white,
-                        foreGroundColor: const Color(0xFF6418C3),
-                        borderColor: const Color(0xFF6418C3),
-                      ),
-                const SizedBox(
-                  width: 20,
-                ),
-                ref.watch(selectionModelProvider).gender == 'f'
-                    ? CustomGenderButton(
-                        borderRadius: 5,
-                        text: 'Female',
-                        onPressed: () {
-                          selectGender.setGender("f");
-                        },
-                      )
-                    : CustomGenderButton(
-                        borderRadius: 5,
-                        text: 'Female',
-                        onPressed: () {
-                          selectGender.setGender("f");
-                        },
-                        color: Colors.white,
-                        foreGroundColor: const Color(0xFF6418C3),
-                        borderColor: const Color(0xFF6418C3),
-                      ),
-              ]);
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildGenderSelection() {
+  //   return Container(
+  //     padding: const EdgeInsets.all(15),
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(10),
+  //       color: Colors.white,
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Consumer(
+  //           builder: (context, ref, child) {
+  //             var selectGender = ref.read(selectionModelProvider.notifier);
+  //
+  //             return Row(children: [
+  //               ref.watch(selectionModelProvider).gender == 'm'
+  //                   ? CustomGenderButton(
+  //                       borderRadius: 5,
+  //                       text: 'Male',
+  //                       onPressed: () {
+  //                         selectGender.setGender("m");
+  //                       },
+  //                     )
+  //                   : CustomGenderButton(
+  //                       borderRadius: 5,
+  //                       text: 'Male',
+  //                       onPressed: () {
+  //                         selectGender.setGender("m");
+  //                       },
+  //                       color: Colors.white,
+  //                       foreGroundColor: const Color(0xFF6418C3),
+  //                       borderColor: const Color(0xFF6418C3),
+  //                     ),
+  //               const SizedBox(
+  //                 width: 20,
+  //               ),
+  //               ref.watch(selectionModelProvider).gender == 'f'
+  //                   ? CustomGenderButton(
+  //                       borderRadius: 5,
+  //                       text: 'Female',
+  //                       onPressed: () {
+  //                         selectGender.setGender("f");
+  //                       },
+  //                     )
+  //                   : CustomGenderButton(
+  //                       borderRadius: 5,
+  //                       text: 'Female',
+  //                       onPressed: () {
+  //                         selectGender.setGender("f");
+  //                       },
+  //                       color: Colors.white,
+  //                       foreGroundColor: const Color(0xFF6418C3),
+  //                       borderColor: const Color(0xFF6418C3),
+  //                     ),
+  //             ]);
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildSaveButton(double screenWidth) {
     return GestureDetector(

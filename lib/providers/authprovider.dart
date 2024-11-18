@@ -143,7 +143,6 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
     print('Logging out...');
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-
     state = AdminAuth.initial(); // Clear the state after logout
     print('User logged out and state cleared.');
   }

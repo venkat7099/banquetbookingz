@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'package:banquetbookingz/views/edituser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banquetbookingz/providers/usersprovider.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
-import 'package:http/http.dart' as http;
 import '../providers/searchtextnotifier.dart';
 
 class Users extends ConsumerStatefulWidget {
@@ -146,12 +144,12 @@ class _UsersState extends ConsumerState<Users> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => EditUser(
-                              profilepic:
+                              profilePic:
                                   'http://93.127.172.164:8080${user.profilePic}',
                               userName: user.username,
                               email: user.email,
                               mobileNo: user.mobileNo,
-                              user_id: user.userId,
+                              userId: user.userId,
                             ),
                           ),
                         );

@@ -502,7 +502,6 @@ import 'package:banquetbookingz/providers/imageprovider.dart';
 import 'package:banquetbookingz/providers/loader.dart';
 import 'package:banquetbookingz/providers/selectionmodal.dart';
 import 'package:banquetbookingz/providers/usersprovider.dart';
-import 'package:banquetbookingz/widgets/button2.dart';
 import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
 import 'package:banquetbookingz/widgets/customtextfield.dart';
 import 'package:flutter/material.dart';

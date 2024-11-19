@@ -1,4 +1,3 @@
-import 'package:image_picker/image_picker.dart';
 
 class GetUser {
   int? statusCode;
@@ -15,16 +14,16 @@ class GetUser {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['success'] = this.success;
-    data['messages'] = this.messages;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    data['success'] = success;
+    data['messages'] = messages;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -61,14 +60,14 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_id'] = this.userId;
-    data['username'] = this.username;
-    data['email'] = this.email;
-    data['user_role'] = this.userRole;
-    data['user_status'] = this.userStatus;
-    data['mobile_no'] = this.mobileNo;
-    data['profile_pic'] = this.profilePic;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['user_id'] = userId;
+    data['username'] = username;
+    data['email'] = email;
+    data['user_role'] = userRole;
+    data['user_status'] = userStatus;
+    data['mobile_no'] = mobileNo;
+    data['profile_pic'] = profilePic;
     return data;
   }
 }

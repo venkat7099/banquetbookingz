@@ -6,5 +6,6 @@ class Api {
   static const String subscriptions = '$baseUrl/subscription-plans/';
   static const String refreshToken = '$baseUrl/register';
   static const String retriveusers = '$baseUrl/retrieve_users/';
-  static const String updateeuser = '$baseUrl/update_user/';
+  static const String updateeuser = '$baseUrl/bbupdateuser';
 }
+

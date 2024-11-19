@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' as platform;
+import 'dart:io';
 import 'dart:math';
 import 'package:banquetbookingz/models/users.dart';
 import 'package:banquetbookingz/providers/authprovider.dart';
@@ -15,6 +16,67 @@ class UserNotifier extends StateNotifier<List<User>> {
   UserNotifier() : super([]);
 
   void setImageFile(XFile? file) {}
+
+  Future<User?> updateUser(
+      int userId,
+      String username,
+      String email,
+      String mobile,
+      File? profileImage,
+      ) async {
+    final url = Uri.parse(Api.updateeuser);
+    final token = await _getAccessToken();
+
+    if (token == null) {
+      throw Exception('Authorization token not found');
+    }
+
+    try {
+      var request = http.MultipartRequest('POST', url)
+        ..headers.addAll({
+          'Authorization': 'Token $token',
+          'Content-Type': 'multipart/form-data',
+        })
+        ..fields['id'] = userId.toString()
+        ..fields['username'] = username
+        ..fields['email'] = email
+        ..fields['mobile'] = mobile;
+
+      if (profileImage != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'profilepic',
+          profileImage.path,
+        ));
+      }
+
+      final response = await request.send();
+      final responseData = await http.Response.fromStream(response);
+      print("Update response: ${responseData.body}");
+      if (responseData.statusCode == 200) {
+        final responseJson = json.decode(responseData.body);
+        if (responseJson['data'] != null) {
+          final updatedUser = User.fromJson(
+              responseJson['data']); // Assuming the API returns updated user data
+          state = [
+            for (final user in state)
+              if (user.userId == userId) updatedUser else
+                user,
+          ];
+          return updatedUser;
+        }
+        else {
+          throw Exception('Invalid data received from server');
+        }
+      } else {
+        final error = json.decode(responseData.body)['message'] ?? 'Error updating user';
+
+        throw Exception(error);
+      }
+    } catch (e) {
+      print('Error updating user: $e');
+      rethrow;
+    }
+  }
 
   void deleteUser(String userId, WidgetRef ref) async {
     final url = Uri.parse('https://www.gocodecreations.com/bbadminlogin');

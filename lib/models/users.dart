@@ -53,7 +53,7 @@ class User {
     username = json['username'];
     email = json['email'];
     userRole = json['user_role'];
-    userStatus = json['user_status'];
+    userStatus = json['user_status'] == 1;
     mobileNo = json['mobile_no'];
     profilePic = json['profile_pic'];
   }
@@ -64,7 +64,7 @@ class User {
     data['username'] = username;
     data['email'] = email;
     data['user_role'] = userRole;
-    data['user_status'] = userStatus;
+    data['user_status'] = userStatus == true ? 1 : 0; // Convert bool to int
     data['mobile_no'] = mobileNo;
     data['profile_pic'] = profilePic;
     return data;

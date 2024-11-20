@@ -40,7 +40,7 @@ class UserNotifier extends StateNotifier<List<User>> {
         ..fields['id'] = userId.toString()
         ..fields['username'] = username
         ..fields['email'] = email
-        ..fields['mobile'] = mobile;
+        ..fields['mobile_no'] = mobile;
 
       if (profileImage != null) {
         request.files.add(await http.MultipartFile.fromPath(
@@ -54,6 +54,7 @@ class UserNotifier extends StateNotifier<List<User>> {
       print("Update response: ${responseData.body}");
       if (responseData.statusCode == 200) {
         final responseJson = json.decode(responseData.body);
+        print("respone-json-data$responseJson");
         if (responseJson['data'] != null) {
           final updatedUser = User.fromJson(
               responseJson['data']); // Assuming the API returns updated user data

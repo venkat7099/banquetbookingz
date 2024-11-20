@@ -11,6 +11,7 @@ import 'package:banquetbookingz/views/uploadphoto.dart';
 import 'package:banquetbookingz/views/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:banquetbookingz/models/users.dart";
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
         "dashboard": (context) => const DashboardWidget(),
         "users": (context) => const Users(),
         "adduser": (context) => const AddUser(),
-        "edituser": (context) => const EditUser(),
+        'editUser': (context) => const EditUser(),
         "alltransactions": (context) => const AllTransactions(),
         "editsubscriber": (context) => const EditSubscriber(),
         "addsubscriber": (context) => const AddSubscriber(),

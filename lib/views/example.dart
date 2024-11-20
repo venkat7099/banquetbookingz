@@ -27,16 +27,20 @@ class _DashboardWidgetState extends ConsumerState<DashboardWidget> {
     super.initState();
     _initializeData();
   }
-   Future<void> _initializeData() async {
-    await ref.read(usersProvider.notifier).getUsers(ref);
+  
+  Future<void> _initializeData() async {
+  await ref.read(usersProvider.notifier).getUsers(ref);
 
-    final users = ref.read(usersProvider);
-    for (final user in users) {
+  final users = ref.read(usersProvider);
+  for (final user in users) {
+    if (user.userId != null) {
       await ref
           .read(usersProvider.notifier)
-          .getProfilePic(user.data?.userId as String, ref);
+          .getProfilePic(user.userId.toString(), ref);
     }
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

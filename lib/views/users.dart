@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banquetbookingz/providers/usersprovider.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 import '../providers/searchtextnotifier.dart';
+import "package:banquetbookingz/models/users.dart";
 
 class Users extends ConsumerStatefulWidget {
   const Users({super.key});
@@ -141,19 +142,23 @@ class _UsersState extends ConsumerState<Users> {
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditUser(
-                              profilePic:
-                                  'http://93.127.172.164:8080${user.profilePic}',
-                              userName: user.username,
-                              email: user.email,
-                              mobileNo: user.mobileNo,
-                              userId: user.userId,
-                            ),
-                          ),
-                        );
-                      },
+                          // final userModel = User(
+                          //   userId: user.userId,
+                          //   username: user.username,
+                          //   email: user.email,
+                          //   userRole: user.userRole, // Optional if available
+                          //   userStatus: user.userStatus, // Optional if available
+                          //   mobileNo: user.mobileNo,
+                          //   profilePic: 'http://93.127.172.164:8080${user.profilePic}',
+                          // );
+
+                          Navigator.of(context).pushNamed
+                          (
+                            'editUser', // The named route for EditUser screen
+                            arguments: {'userid':user.userId,}, // Pass the User object as arguments
+                          );
+                        },
+
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),

@@ -63,6 +63,7 @@ class UserNotifier extends StateNotifier<List<User>> {
               if (user.userId == userId) updatedUser else
                 user,
           ];
+          print("user data :${state[userId].username}");
           return updatedUser;
         }
         else {
@@ -209,13 +210,15 @@ class UserNotifier extends StateNotifier<List<User>> {
           'Content-Type': 'application/json',
         },
       );
+     if (response.statusCode == 200) {
+          var decodedResponse = json.decode(response.body);
+          print('Decoded Response: $decodedResponse');
 
-      if (response.statusCode == 200) {
-        var decodedResponse = json.decode(response.body);
-
-        // Parse response using UserResponse to handle metadata and user data.
-        UserResponse userResponse = UserResponse.fromJson(decodedResponse);
-
+          UserResponse userResponse = UserResponse.fromJson(decodedResponse);
+          print('Parsed Users: ${userResponse.data}'); // Logs the list of users
+          userResponse.data?.forEach((user) {
+            print(user); // Prints details of each user
+          });
         // Update state with the list of users
         if (userResponse.data != null) {
           ref.read(usersProvider.notifier).setUserProfiles(userResponse.data!);
@@ -227,7 +230,7 @@ class UserNotifier extends StateNotifier<List<User>> {
         print('Failed to load user profiles');
       }
     } catch (e) {
-      print("Error message: $e");
+      print("Error message isthat: $e");
     }
   }
 

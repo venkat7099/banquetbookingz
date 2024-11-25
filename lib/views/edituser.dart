@@ -23,19 +23,26 @@ class _EditUserState extends ConsumerState<EditUser> {
   File? _profileImage;
   final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
+  late Map<String, dynamic> args; // Change to late and remove null-safety issues.
   
 
   @override
-  void initState() {
-    super.initState();
-    // Initialize the controllers with user data
-     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    if (args != null) {
-      _nameController.text = args['username'] ?? '';
-      _emailController.text = args['email'] ?? '';
-      _mobileController.text = args['mobileNo'] ?? '';
-    }
+   void didChangeDependencies() {
+    super.didChangeDependencies();
+
+     // Fetch the arguments safely
+    final receivedArgs =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+  
+
+    // Assign to args and initialize controllers
+    args = receivedArgs!;
+    _nameController.text = args['username'] ?? '';
+    _emailController.text = args['email'] ?? '';
+    _mobileController.text = args['mobileNo'] ?? '';
   }
+
 
   Future<void> _pickImage(ImageSource source) async {
     try {
@@ -50,11 +57,12 @@ class _EditUserState extends ConsumerState<EditUser> {
     }
   }
 
- Future<void> _saveUser(int userid) async {
+ Future<void> _saveUser() async {
   if (!_formKey.currentState!.validate()) {
     return;
   }
-
+   final userid = args['userid'];
+   print(userid);
   if (userid == null) { // Check the passed `userid`
     _showAlertDialog('Error', 'User ID is missing.');
     return;
@@ -110,8 +118,10 @@ class _EditUserState extends ConsumerState<EditUser> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-       final id = ModalRoute.of(context)?.settings.arguments as Map<String,dynamic> ;
-      var userid=id['userid'];
+      //  final id = ModalRoute.of(context)?.settings.arguments as Map<String,dynamic> ;
+      // var userid=id['userid'];
+       final receivedArgs =ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+       var userid=receivedArgs!['userid'].toString();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -189,24 +199,25 @@ class _EditUserState extends ConsumerState<EditUser> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              _profileImage != null
-                  ? Image.file(
-                      _profileImage!,
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    )
-                  : (profilePic != null && profilePic.isNotEmpty)
-                      ? Image.network(
-                          profilePic,
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.error, size: 120, color: Colors.red);
-                          },
-                        )
-                      : Container(
+              // _profileImage != null
+              //     ? Image.file(
+              //         _profileImage!,
+              //         width: 150,
+              //         height: 150,
+              //         fit: BoxFit.cover,
+              //       )
+              //     : (profilePic != null && profilePic.isNotEmpty)
+              //         ? Image.network(
+              //             profilePic,
+              //             width: 150,
+              //             height: 150,
+              //             fit: BoxFit.cover,
+              //             errorBuilder: (context, error, stackTrace) {
+              //               return const Icon(Icons.error, size: 120, color: Colors.red);
+              //             },
+              //           )
+              //         :
+              Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: const Color(0xFFb0b0b0), width: 2),
                             borderRadius: BorderRadius.circular(75),
@@ -258,11 +269,11 @@ class _EditUserState extends ConsumerState<EditUser> {
     return null;
   }
 
-  Widget _buildSaveButton(double screenWidth,int userid) {
+  Widget _buildSaveButton(double screenWidth ,String userId) {
    
 
     return GestureDetector(
-    onTap: () => _saveUser(userid), // Wrap the function call in a lambda
+    onTap: () => _saveUser(), // Wrap the function call in a lambda
     child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(

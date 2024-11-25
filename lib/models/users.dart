@@ -48,14 +48,15 @@ class User {
     this.profilePic,
   });
 
-  User.fromJson(Map<String, dynamic> json) {
-    userId = json['user_id'];
-    username = json['username'];
-    email = json['email'];
-    userRole = json['user_role'];
-    userStatus = json['user_status'] == 1;
-    mobileNo = json['mobile_no'];
-    profilePic = json['profile_pic'];
+   User.fromJson(Map<String, dynamic> json) {
+    // Ensure correct type assignment and type conversion where necessary
+    userId = json['user_id'] ;
+    username = json['username']?.toString();
+    email = json['email']?.toString();
+    userRole = json['user_role']?.toString();
+    userStatus = json['user_status'] == 1; // Convert 1/0 to true/false
+    mobileNo = json['mobile_no']?.toString(); // Convert to string if necessary
+    profilePic = json['profile_pic']?.toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +69,11 @@ class User {
     data['mobile_no'] = mobileNo;
     data['profile_pic'] = profilePic;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'User(userId: $userId, username: $username, email: $email, userRole: $userRole, userStatus: $userStatus, mobileNo: $mobileNo, profilePic: $profilePic)';
   }
 }
 extension UserCopyWith on User {

@@ -70,6 +70,7 @@ class _UsersState extends ConsumerState<Users> {
       builder: (context, ref, child) {
         final usersData = ref.watch(usersProvider);
         final searchText = ref.watch(searchTextProvider);
+        print("this is the data for fetching $usersData");
 
         if (usersData.isEmpty) {
           return const Center(
@@ -92,6 +93,7 @@ class _UsersState extends ConsumerState<Users> {
         }
 
         return ListView(
+         
           padding: EdgeInsets.zero,
           children: filteredUsers.map((user) {
             return Card(
@@ -142,7 +144,7 @@ class _UsersState extends ConsumerState<Users> {
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
-                          // final userModel = User(
+                          //   final userModel = User(
                           //   userId: user.userId,
                           //   username: user.username,
                           //   email: user.email,
@@ -150,15 +152,20 @@ class _UsersState extends ConsumerState<Users> {
                           //   userStatus: user.userStatus, // Optional if available
                           //   mobileNo: user.mobileNo,
                           //   profilePic: 'http://93.127.172.164:8080${user.profilePic}',
-                          // );
+                          //   );
 
-                          Navigator.of(context).pushNamed
-                          (
-                            'editUser', // The named route for EditUser screen
-                            arguments: {'userid':user.userId,}, // Pass the User object as arguments
-                          );
+                          Navigator.pushNamed(
+                                    context,
+                                    'editUser',
+                                    arguments:{'userid':user.userId,
+                                                'username':user.username,
+                                                'email':user.email,
+                                                 'mobileNo':user.mobileNo,
+                                                 }, // Pass User object as JSON
+                                  );
+
                         },
-
+                      
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),

@@ -53,8 +53,21 @@ class _SettingsState extends ConsumerState<Settings> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed("edituser");
-                  },
+                          final adminData = ref.read(authProvider).data;
+                          Navigator.pushNamed(
+                            context,
+                            'editUser',
+                            arguments: {
+                              'userId': adminData?.userId,
+                              'username': adminData?.username,
+                              'email': adminData?.email,
+                              'mobileNo': adminData?.mobileNo,
+                              'address': adminData?.address,
+                              'userRole': adminData?.userRole,
+                              'location': adminData?.location,
+                            },
+                          );
+                        },
                   child: const Text(
                     "EditProfile",
                     style: TextStyle(color: Color(0xff000000), fontSize: 15),

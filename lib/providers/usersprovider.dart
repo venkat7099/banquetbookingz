@@ -26,6 +26,7 @@ class UserNotifier extends StateNotifier<List<User>> {
       ) async {
     final url = Uri.parse(Api.updateeuser);
     final token = await _getAccessToken();
+    print("accesstokenhere$token");
 
     if (token == null) {
       throw Exception('Authorization token not found');
@@ -48,32 +49,36 @@ class UserNotifier extends StateNotifier<List<User>> {
           profileImage.path,
         ));
       }
-
+      
+      print("Request Fields: ${request.fields}");
+      print("Request Headers: ${request.headers}");
       final response = await request.send();
       final responseData = await http.Response.fromStream(response);
       print("Update response: ${responseData.body}");
-      if (responseData.statusCode == 200) {
-        final responseJson = json.decode(responseData.body);
-        print("respone-json-data$responseJson");
-        if (responseJson['data'] != null) {
-          final updatedUser = User.fromJson(
-              responseJson['data']); // Assuming the API returns updated user data
-          state = [
-            for (final user in state)
-              if (user.userId == userId) updatedUser else
-                user,
-          ];
-          print("user data :${state[userId].username}");
-          return updatedUser;
-        }
-        else {
-          throw Exception('Invalid data received from server');
-        }
-      } else {
-        final error = json.decode(responseData.body)['message'] ?? 'Error updating user';
 
-        throw Exception(error);
+      
+    if (responseData.statusCode == 200) {
+      final responseJson = json.decode(responseData.body);
+      print("Response JSON Data: $responseJson");
+
+      if (responseJson['data'] != null) {
+        final updatedUser = User.fromJson(responseJson['data']); // Parse updated user
+
+        // Update the state list by finding the user with the matching userId
+        state = [
+          for (final user in state)
+            if (user.userId == userId) updatedUser else user,
+        ];
+
+        print("Updated user data: $updatedUser");
+        return updatedUser;
+      } else {
+        throw Exception('Invalid data received from server');
       }
+    } else {
+      final error = json.decode(responseData.body)['message'] ?? 'Error updating user';
+      throw Exception(error);
+    }
     } catch (e) {
       print('Error updating user: $e');
       rethrow;

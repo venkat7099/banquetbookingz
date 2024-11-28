@@ -29,7 +29,7 @@ class AdminAuth {
     int? statusCode,
     bool? success,
     List<String>? messages,
-    Data? data, required token, required username, required email, required mobileno, required usertype,
+    Data? data,
   }) {
     return AdminAuth(
       statusCode: statusCode ?? this.statusCode,
@@ -58,7 +58,7 @@ class Data {
   String? location;
   String? userRole;
   bool? userStatus;
-  String? mobileNo;
+  String? mobileNo; // Changed to String
   String? accessToken;
   int? accessTokenExpiresAt;
   String? refreshToken;
@@ -87,7 +87,7 @@ class Data {
     location = json['location'];
     userRole = json['user_role'];
     userStatus = json['user_status'];
-    mobileNo = json['mobile_no'];
+    mobileNo = json['mobile_no']?.toString(); // Ensure mobile number is a String
     accessToken = json['access_token'];
     accessTokenExpiresAt = json['access_token_expires_at'];
     refreshToken = json['refresh_token'];
@@ -124,7 +124,7 @@ class Data {
     String? accessToken,
     int? accessTokenExpiresAt,
     String? refreshToken,
-    int? refreshTokenExpiresAt, required Token,
+    int? refreshTokenExpiresAt,
   }) {
     return Data(
       userId: userId ?? this.userId,

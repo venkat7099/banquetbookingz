@@ -53,18 +53,24 @@ class _SettingsState extends ConsumerState<Settings> {
               ),
               TextButton(
                   onPressed: () {
-                          final adminData = ref.read(authProvider).data;
+                          final adminData = ref.watch(authProvider).data;
+                          print("admi_data${usersData.data}");
+                          print("admin_id${adminData?.userId}");
+                          print("admin_name${adminData?.username}");
+                          print("admin_email${adminData?.email}");
+                          print("admin_mobileNo${adminData?.mobileNo}");
                           Navigator.pushNamed(
                             context,
                             'editUser',
                             arguments: {
-                              'userId': adminData?.userId,
+                              'userid': adminData?.userId,
                               'username': adminData?.username,
                               'email': adminData?.email,
                               'mobileNo': adminData?.mobileNo,
                               'address': adminData?.address,
                               'userRole': adminData?.userRole,
                               'location': adminData?.location,
+                              'admin':true,
                             },
                           );
                         },

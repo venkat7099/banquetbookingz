@@ -153,7 +153,10 @@ class _UsersState extends ConsumerState<Users> {
                           //   mobileNo: user.mobileNo,
                           //   profilePic: 'http://93.127.172.164:8080${user.profilePic}',
                           //   );
-
+                          print("userside:${user.userId}");
+                           print("userside:${user.username}");
+                            print("userside:${user.email}");
+                             print("userside:${user.userRole}");
                           Navigator.pushNamed(
                                     context,
                                     'editUser',
@@ -161,10 +164,12 @@ class _UsersState extends ConsumerState<Users> {
                                                 'username':user.username,
                                                 'email':user.email,
                                                  'mobileNo':user.mobileNo,
+                                                  'userRole':user.userRole,
+                                                  'admin': user.userRole == 'a'?true:false,
                                                  }, // Pass User object as JSON
-                                  );
+                                      );
 
-                        },
+                                  },
                       
                     ),
                     IconButton(

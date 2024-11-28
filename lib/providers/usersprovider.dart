@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io' as platform;
 import 'dart:io';
 import 'dart:math';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import "package:banquetbookingz/models/authstate.dart";
 
 class UserNotifier extends StateNotifier<List<User>> {
   UserNotifier() : super([]);
@@ -18,60 +20,73 @@ class UserNotifier extends StateNotifier<List<User>> {
   void setImageFile(XFile? file) {}
 
   Future<User?> updateUser(
-      int userId,
-      String username,
-      String email,
-      String mobile,
-      File? profileImage,
-      ) async {
-    final url = Uri.parse(Api.updateeuser);
-    final token = await _getAccessToken();
-    print("accesstokenhere$token");
+    int userId,
+    String username,
+    String email,
+    String mobile,
+    File? profileImage,
+    bool? admin,
+    WidgetRef ref )
+ async {
+  final url = Uri.parse(Api.updateeuser);
+  final token = await _getAccessToken();
+  print("Access token: $token");
 
-    if (token == null) {
-      throw Exception('Authorization token not found');
+  if (token == null) {
+    throw Exception('Authorization token not found');
+  }
+
+  try {
+    var request = http.MultipartRequest('POST', url)
+      ..headers.addAll({
+        'Authorization': 'Token $token',
+        'Content-Type': 'multipart/form-data',
+      })
+      ..fields['id'] = userId.toString()
+      ..fields['username'] = username
+      ..fields['email'] = email
+      ..fields['mobile_no'] = mobile;
+
+    if (profileImage != null) {
+      request.files.add(await http.MultipartFile.fromPath(
+        'profilepic',
+        profileImage.path,
+      ));
     }
 
-    try {
-      var request = http.MultipartRequest('POST', url)
-        ..headers.addAll({
-          'Authorization': 'Token $token',
-          'Content-Type': 'multipart/form-data',
-        })
-        ..fields['id'] = userId.toString()
-        ..fields['username'] = username
-        ..fields['email'] = email
-        ..fields['mobile_no'] = mobile;
+    print("Request Fields: ${request.fields}");
+    print("Request Headers: ${request.headers}");
+    final response = await request.send();
+    final responseData = await http.Response.fromStream(response);
+    print("Update response: ${responseData.body}");
 
-      if (profileImage != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'profilepic',
-          profileImage.path,
-        ));
-      }
-      
-      print("Request Fields: ${request.fields}");
-      print("Request Headers: ${request.headers}");
-      final response = await request.send();
-      final responseData = await http.Response.fromStream(response);
-      print("Update response: ${responseData.body}");
 
-      
     if (responseData.statusCode == 200) {
       final responseJson = json.decode(responseData.body);
       print("Response JSON Data: $responseJson");
 
       if (responseJson['data'] != null) {
-        final updatedUser = User.fromJson(responseJson['data']); // Parse updated user
+       if (admin == true) {
+          // Parse as AdminAuth and update admin state in AuthNotifier
+          final updatedAdminAuth = AdminAuth.fromJson(responseJson);
 
-        // Update the state list by finding the user with the matching userId
-        state = [
-          for (final user in state)
-            if (user.userId == userId) updatedUser else user,
-        ];
+          // Update AuthNotifier state
+          ref.read(authProvider.notifier).updateAdminState(updatedAdminAuth);
 
-        print("Updated user data: $updatedUser");
-        return updatedUser;
+          // Optionally save the updated data to SharedPreferences
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('userData', json.encode(updatedAdminAuth.toJson()));
+          print("Updated Admin Data: $updatedAdminAuth");
+        } else {
+          // Parse as User and update the user state
+          final updatedUser = User.fromJson(responseJson['data']);
+          state = [
+            for (final user in state)
+              if (user.userId == userId) updatedUser else user,
+          ];
+          print("Updated user data: $updatedUser");
+          return updatedUser;
+        }
       } else {
         throw Exception('Invalid data received from server');
       }
@@ -79,11 +94,11 @@ class UserNotifier extends StateNotifier<List<User>> {
       final error = json.decode(responseData.body)['message'] ?? 'Error updating user';
       throw Exception(error);
     }
-    } catch (e) {
-      print('Error updating user: $e');
-      rethrow;
-    }
+  }  catch (e) {
+    print('Error updating user: $e');
+    rethrow;
   }
+}
 
   void deleteUser(String userId, WidgetRef ref) async {
     final url = Uri.parse('https://www.gocodecreations.com/bbadminlogin');

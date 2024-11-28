@@ -22,7 +22,7 @@ class _EditUserState extends ConsumerState<EditUser> {
   bool _isLoading = false;
   late Map<String, dynamic> args;
   bool _initialized = false; // Flag to ensure initialization only happens once
-
+  bool?admin;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -34,6 +34,7 @@ class _EditUserState extends ConsumerState<EditUser> {
         _nameController.text = args['username'] ?? '';
         _emailController.text = args['email'] ?? '';
         _mobileController.text = args['mobileNo'] ?? '';
+        admin=args["admin"];
       } else {
         _showAlertDialog('Error', 'Invalid arguments passed.');
       }
@@ -77,6 +78,8 @@ class _EditUserState extends ConsumerState<EditUser> {
         _emailController.text,
         _mobileController.text,
         _profileImage,
+        admin,
+        ref,
       );
 
       _showAlertDialog('Success', 'User updated successfully!');

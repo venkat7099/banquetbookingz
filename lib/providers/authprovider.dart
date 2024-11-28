@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthNotifier extends StateNotifier<AdminAuth> {
   AuthNotifier() : super(AdminAuth.initial()) {
-    // Initialize state from SharedPreferences
     _loadUserFromPrefs();
   }
 
@@ -62,13 +61,6 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
     }
 
     return 'No Role Found';
-  }
-
-  // Helper function to generate random letters
-  String generateRandomLetters(int length) {
-    var random = Random();
-    var letters = List.generate(length, (_) => random.nextInt(26) + 97);
-    return String.fromCharCodes(letters);
   }
 
   // Admin login function
@@ -147,12 +139,23 @@ class AuthNotifier extends StateNotifier<AdminAuth> {
     print('User logged out and state cleared.');
   }
 
-  // Retrieve the access token from SharedPreferences
-  Future<String?> _getAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('accessToken');
-    print("Retrieved token: $token");
-    return token;
+  // Update admin state
+  void updateAdminState(AdminAuth updatedAdmin) {
+    state = updatedAdmin;
+
+    // Optionally save to SharedPreferences
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setString('userData', json.encode(updatedAdmin.toJson()));
+    });
+
+    print('Admin state updated with new data: ${updatedAdmin.toJson()}');
+  }
+
+  // Helper function to generate random letters (if needed elsewhere)
+  String generateRandomLetters(int length) {
+    var random = Random();
+    var letters = List.generate(length, (_) => random.nextInt(26) + 97);
+    return String.fromCharCodes(letters);
   }
 }
 

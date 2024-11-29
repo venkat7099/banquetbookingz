@@ -172,13 +172,37 @@ class _UsersState extends ConsumerState<Users> {
                                   },
                       
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        final notifier = ref.read(usersProvider.notifier);
-                        notifier.deleteUser(user.userId.toString(), ref);
-                      },
-                    ),
+                   IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Confirm Deletion"),
+                                  content: const Text("Are you sure you want to delete this user?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close the dialog
+                                      },
+                                      child: const Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        final notifier = ref.read(usersProvider.notifier);
+                                        notifier.deleteUser(user.userId.toString(), ref);
+                                        Navigator.of(context).pop(); // Close the dialog after deletion
+                                      },
+                                      child: const Text("Delete"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+
                   ],
                 ),
               ),

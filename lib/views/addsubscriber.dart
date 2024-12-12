@@ -85,7 +85,6 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final currentUser = ref.watch(authProvider);
     final userId = currentUser.data?.userId ?? '';
 

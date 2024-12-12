@@ -168,7 +168,8 @@ class UserNotifier extends StateNotifier<List<User>> {
       String emailId,
       String mobileNo,
       String password, // Add password parameter
-      WidgetRef ref) async {
+      WidgetRef ref) 
+  async {
     var uri = Uri.parse(Api.addUser);
     final loadingState = ref.watch(loadingProvider.notifier);
 
@@ -191,23 +192,37 @@ class UserNotifier extends StateNotifier<List<User>> {
       request.fields['user_status'] = '1';
       request.fields['password'] = password; // Add password to the request
 
+    //  send the request to adduserapi
       final send = await request.send();
       final res = await http.Response.fromStream(send);
       var userDetails = json.decode(res.body);
       var statusCode = res.statusCode;
       responseCode = statusCode;
-      print("statuscode: $statusCode");
-      print("responsebody: ${res.body}");
-      switch (responseCode) {
-        case 400:
-          if (userDetails['email'] != null) {
-            errorMessage = 'Email already exists';
-          } else if (userDetails['username'] != null) {
-            errorMessage = 'Username already exists';
-          }
-          break;
-        default:
+
+      print("User Add statuscode: $statusCode");
+      print("User Add responsebody: ${res.body}");
+
+      if (statusCode == 200 && userDetails['success'] == true) {
+       // Successfully added user, extract the userId
+         final userId = userDetails['data']['user_id']; // Adjust field based on your API response
+
+       // Call the separate API for profile picture upload
+        await _uploadProfilePic(userId, imageFile);
+
+        return UserResult(responseCode, errorMessage: null);
+       } 
+     else {
+      // Handle error scenarios
+      if (statusCode == 400) {
+        if (userDetails['email'] != null) {
+          errorMessage = 'Email already exists';
+        } else if (userDetails['username'] != null) {
+          errorMessage = 'Username already exists';
+        }
+      } else {
+        errorMessage = userDetails['messages']?.join(', ') ?? 'Error adding user';
       }
+    }
     } catch (e) {
       loadingState.state = false;
       errorMessage = e.toString();
@@ -218,6 +233,39 @@ class UserNotifier extends StateNotifier<List<User>> {
 
     return UserResult(responseCode, errorMessage: errorMessage);
   }
+
+ Future<void> _uploadProfilePic(int userId, XFile profilePic) async {
+  final uri = Uri.parse(Api.profilePic); // Separate API endpoint
+  final token = await _getAccessToken(); // Use the same method to fetch the access token
+
+  try {
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Token $token' // Add authorization header
+      ..fields['user_id'] = userId.toString() // Attach userId
+      ..files.add(await http.MultipartFile.fromPath(
+        'profile_pic', // Field name for the file
+        profilePic.path,
+      ));
+
+    // Send the request
+    final response = await request.send();
+
+    // Convert the response stream into a usable response
+    final responseData = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      print("Profile Picture Upload Success: ${responseData.body}");
+    } else {
+      print("Error uploading profile picture: ${responseData.body}");
+      throw Exception('Failed to upload profile picture');
+    }
+  } catch (e) {
+    print("Error in _uploadProfilePic: $e");
+    rethrow;
+  }
+}
+
 
   Future<void> getUsers(WidgetRef ref) async {
     print("entered getUsers");

@@ -44,14 +44,14 @@ class AddSubscriber extends ConsumerWidget {
                     "Subscription details",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 18),
                   const Text(
                     "Plan",
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   Consumer(builder: (context, ref, child) {
                     final controller =
                         ref.watch(selectionModelProvider.notifier);
@@ -64,65 +64,57 @@ class AddSubscriber extends ConsumerWidget {
                       },
                     );
                   }),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   const Text(
                     "Frequency",
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Consumer(builder: (context, ref, child) {
+                  const SizedBox(height: 8),
+                
+                  Consumer(builder: (context, ref, child) {
                         final controller =
                             ref.watch(selectionModelProvider.notifier);
                         return CustomTextFormField(
-                          width: screenWidth * 0.6,
+                          width: screenWidth * 0.8,
                           keyBoardType: TextInputType.number,
                           hintText: 'Frequency',
                           onChanged: (newValue) {
                             controller.updateMonthlyP(newValue);
                           },
                         );
-                      }),
-                      const SizedBox(width: 10),
-                      Consumer(builder: (context, ref, child) {
-                        final selectionState =
-                            ref.watch(selectionModelProvider);
+                  }),
+                 const SizedBox(height: 10),
+                  const Text(
+                    "Subplan",
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Consumer(builder: (context, ref, child) {
+                        
                         final controller =
                             ref.watch(selectionModelProvider.notifier);
-
-                        return DropdownButton<String>(
-                          value: selectionState.selectedFrequency,
-                          items: const <String>[
-                            'Daily',
-                            'Monthly',
-                            'Yearly',
-                          ].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            if (value != null) {
-                              controller.updateFrequency(value);
-                            }
+                        return CustomTextFormField(
+                          width: screenWidth * 0.8,
+                          keyBoardType: TextInputType.number,
+                          hintText: 'sub-plan',
+                          onChanged: (newValue) {
+                            controller.updateFrequency(newValue);
                           },
-                          icon: const Icon(Icons.arrow_drop_down_circle),
-                        );
-                      }),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                        );   
+                 }),
+                    
+                  const SizedBox(height: 10),
                   const Text(
                     "Booking",
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   Consumer(builder: (context, ref, child) {
                     final controller =
                         ref.watch(selectionModelProvider.notifier);
@@ -135,14 +127,14 @@ class AddSubscriber extends ConsumerWidget {
                       },
                     );
                   }),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   const Text(
                     "Pricing",
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   Consumer(builder: (context, ref, child) {
                     final controller =
                         ref.watch(selectionModelProvider.notifier);

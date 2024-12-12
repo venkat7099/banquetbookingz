@@ -6,7 +6,7 @@ import 'package:banquetbookingz/widgets/stackwidget.dart';
 import '../providers/searchtextnotifier.dart';
 import "package:banquetbookingz/models/users.dart";
 
-class Users extends ConsumerStatefulWidget {
+class Users extends ConsumerStatefulWidget{
   const Users({super.key});
 
   @override

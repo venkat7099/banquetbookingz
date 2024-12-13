@@ -21,6 +21,17 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
   final TextEditingController bookingsController = TextEditingController();
   final TextEditingController pricingController = TextEditingController();
 
+  String? selectedValue = "Apple";
+
+  // List of items in the dropdown
+  final List<String> items = [
+    "Apple",
+    "Banana",
+    "Orange",
+    "Grapes",
+    "Mango",
+  ];
+
   @override
   void dispose() {
     // Dispose of controllers to prevent memory leaks
@@ -47,7 +58,7 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
     // Log the details before making the request
     print('Posting subscription details:');
     print({
-      'user_id': userId,
+      'created_by': userId,
       'plan_name': planName,
       'frequency': frequency,
       'sub_plan_name': subPlanName,
@@ -59,7 +70,7 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
       final response = await http.post(
         url,
         body: json.encode({
-          'user_id': userId,
+          'created_by': userId,
           'plan_name': planName,
           'frequency': frequency,
           'sub_plan_name': subPlanName,
@@ -131,6 +142,27 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  DropdownButton<String>(
+                          value: selectedValue, // The currently selected value
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.black, fontSize: 18),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedValue = newValue; // Update the selected value
+                            });
+                          },
+                          items: items.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
                   const Text("Frequency", style: TextStyle(fontSize: 18)),
                   const SizedBox(height: 8),
                   TextFormField(

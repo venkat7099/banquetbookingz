@@ -63,6 +63,7 @@ class Data {
   int? accessTokenExpiresAt;
   String? refreshToken;
   int? refreshTokenExpiresAt;
+  String? profilePic; // Added profile_pic key
 
   Data({
     this.userId,
@@ -77,6 +78,7 @@ class Data {
     this.accessTokenExpiresAt,
     this.refreshToken,
     this.refreshTokenExpiresAt,
+    this.profilePic,
   });
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -92,6 +94,7 @@ class Data {
     accessTokenExpiresAt = json['access_token_expires_at'];
     refreshToken = json['refresh_token'];
     refreshTokenExpiresAt = json['refresh_token_expires_at'];
+    profilePic = json['profile_pic']; // Parse profile_pic from JSON
   }
 
   Map<String, dynamic> toJson() {
@@ -108,6 +111,7 @@ class Data {
     data['access_token_expires_at'] = accessTokenExpiresAt;
     data['refresh_token'] = refreshToken;
     data['refresh_token_expires_at'] = refreshTokenExpiresAt;
+    data['profile_pic'] = profilePic; // Add profile_pic to JSON
     return data;
   }
 
@@ -125,6 +129,7 @@ class Data {
     int? accessTokenExpiresAt,
     String? refreshToken,
     int? refreshTokenExpiresAt,
+    String? profilePic,
   }) {
     return Data(
       userId: userId ?? this.userId,
@@ -139,6 +144,7 @@ class Data {
       accessTokenExpiresAt: accessTokenExpiresAt ?? this.accessTokenExpiresAt,
       refreshToken: refreshToken ?? this.refreshToken,
       refreshTokenExpiresAt: refreshTokenExpiresAt ?? this.refreshTokenExpiresAt,
+      profilePic: profilePic ?? this.profilePic, // Add profilePic to copyWith
     );
   }
 
@@ -157,6 +163,7 @@ class Data {
       accessTokenExpiresAt: 0,
       refreshToken: '',
       refreshTokenExpiresAt: 0,
+      profilePic: '', // Initialize profilePic with an empty string
     );
   }
 }

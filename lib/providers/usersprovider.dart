@@ -75,21 +75,22 @@ class UserNotifier extends StateNotifier<List<User>> {
 
       if (responseJson['data'] != null) {
         if (admin == true) {
-          final updatedAdminAuth = AdminAuth.fromJson(responseJson);
-          ref.read(authProvider.notifier).updateAdminState(updatedAdminAuth);
+            final updatedAdminAuth = AdminAuth.fromJson(responseJson);
+            ref.read(authProvider.notifier).updateAdminState(updatedAdminAuth);
 
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString('userData', json.encode(updatedAdminAuth.toJson()));
-          print("Updated Admin Data: $updatedAdminAuth");
-        } else {
-          final updatedUser = User.fromJson(responseJson['data']);
-          state = [
-            for (final user in state)
-              if (user.userId == userId) updatedUser else user,
-          ];
-          print("Updated User Data: $updatedUser");
-          return updatedUser;
-        }
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setString('userData', json.encode(updatedAdminAuth.toJson()));
+
+            print("Updated Admin Data: $updatedAdminAuth");
+          } else {
+            final updatedUser = User.fromJson(responseJson['data']);
+            state = [
+              for (final user in state)
+                if (user.userId == userId) updatedUser else user,
+            ];
+            print("Updated User Data: $updatedUser");
+            return updatedUser;
+          }
       } else {
         throw Exception('Invalid data received from server');
       }

@@ -58,10 +58,10 @@ class _SettingsState extends ConsumerState<Settings> {
                   //   Icons.account_circle,
                   //   size: 50.0,
                   // ),
-                   adminData?.username != null
-                    ? const CircleAvatar(
+                   adminData?.profilePic != null
+                    ?  CircleAvatar(
                         backgroundImage: NetworkImage(
-                            '${Api.profilePic}/${25}'),
+                            '${Api.profilePic}/${adminData?.userId}'),
                         radius: 30,
                       )
                     : const Icon(

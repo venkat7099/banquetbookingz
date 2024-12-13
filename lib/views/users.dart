@@ -105,17 +105,25 @@ class _UsersState extends ConsumerState<Users> {
               elevation: 4,
               margin: const EdgeInsets.only(bottom: 2.0),
               child: ListTile(
-                leading: user.profilePic != null
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            '${Api.profilePic}/${user.userId.toString()}'),
-                        radius: 30,
-                      )
-                    : const Icon(
-                        Icons.account_circle,
-                        size: 50,
-                        color: Colors.grey,
-                      ),
+                leading:Consumer(
+                builder: (context, ref, child) {
+                  final userNotifier = ref.watch(usersProvider);
+                  final currentUser = userNotifier.firstWhere((u) => u.userId == user.userId, orElse: () => user);
+
+                  return currentUser.profilePic != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            '${Api.profilePic}/${currentUser.userId}?timestamp=${DateTime.now().millisecondsSinceEpoch}',
+                          ),
+                          radius: 30,
+                        )
+                      : const Icon(
+                          Icons.account_circle,
+                          size: 50,
+                          color: Colors.grey,
+                        );
+                 },
+               ),
                 title: Text(
                   "User: ${user.username ?? "No Name"}",
                   style: const TextStyle(
@@ -161,8 +169,7 @@ class _UsersState extends ConsumerState<Users> {
                           Navigator.pushNamed(
                                     context,
                                     'editUser',
-                                    arguments:{
-                                               'userid':user.userId,
+                                    arguments:{'userid':user.userId,
                                                 'username':user.username,
                                                 'email':user.email,
                                                  'mobileNo':user.mobileNo,

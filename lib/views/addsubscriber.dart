@@ -6,11 +6,27 @@ import 'package:banquetbookingz/widgets/customtextfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddSubscriber extends ConsumerWidget {
+class AddSubscriber extends ConsumerStatefulWidget {
   const AddSubscriber({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AddSubscriber> createState() => _AddSubscriberState();
+}
+
+class _AddSubscriberState extends ConsumerState<AddSubscriber> {
+  String? selectedValue = "Apple";
+
+  // List of items in the dropdown
+  final List<String> items = [
+    "Apple",
+    "Banana",
+    "Orange",
+    "Grapes",
+    "Mango",
+  ];
+
+  @override
+  Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -65,6 +81,27 @@ class AddSubscriber extends ConsumerWidget {
                     );
                   }),
                   const SizedBox(height: 10),
+                  DropdownButton<String>(
+                    value: selectedValue, // The currently selected value
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedValue = newValue; // Update the selected value
+                      });
+                    },
+                    items: items.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                   const Text(
                     "Frequency",
                     style: TextStyle(
@@ -72,20 +109,19 @@ class AddSubscriber extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                
                   Consumer(builder: (context, ref, child) {
-                        final controller =
-                            ref.watch(selectionModelProvider.notifier);
-                        return CustomTextFormField(
-                          width: screenWidth * 0.8,
-                          keyBoardType: TextInputType.number,
-                          hintText: 'Frequency',
-                          onChanged: (newValue) {
-                            controller.updateMonthlyP(newValue);
-                          },
-                        );
+                    final controller =
+                        ref.watch(selectionModelProvider.notifier);
+                    return CustomTextFormField(
+                      width: screenWidth * 0.8,
+                      keyBoardType: TextInputType.number,
+                      hintText: 'Frequency',
+                      onChanged: (newValue) {
+                        controller.updateMonthlyP(newValue);
+                      },
+                    );
                   }),
-                 const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   const Text(
                     "Subplan",
                     style: TextStyle(
@@ -94,19 +130,17 @@ class AddSubscriber extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   Consumer(builder: (context, ref, child) {
-                        
-                        final controller =
-                            ref.watch(selectionModelProvider.notifier);
-                        return CustomTextFormField(
-                          width: screenWidth * 0.8,
-                          keyBoardType: TextInputType.number,
-                          hintText: 'sub-plan',
-                          onChanged: (newValue) {
-                            controller.updateFrequency(newValue);
-                          },
-                        );   
-                 }),
-                    
+                    final controller =
+                        ref.watch(selectionModelProvider.notifier);
+                    return CustomTextFormField(
+                      width: screenWidth * 0.8,
+                      keyBoardType: TextInputType.number,
+                      hintText: 'sub-plan',
+                      onChanged: (newValue) {
+                        controller.updateFrequency(newValue);
+                      },
+                    );
+                  }),
                   const SizedBox(height: 10),
                   const Text(
                     "Booking",
@@ -164,11 +198,8 @@ class AddSubscriber extends ConsumerWidget {
                   onPressed: loading
                       ? null
                       : () async {
-                          // Combine the frequency text and dropdown value
                           String combinedFrequency = selection.monthlyP.text +
                               selection.selectedFrequency;
-
-                          // Validation check to prevent zero values
                           if (selection.subName.text.isEmpty ||
                               selection.annualP.text == '0' ||
                               selection.quaterlyP.text == '0' ||

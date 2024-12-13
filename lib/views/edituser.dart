@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../providers/usersprovider.dart';
+import "../utils/banquetbookzapi.dart";
 
 class EditUser extends ConsumerStatefulWidget {
   const EditUser({Key? key}) : super(key: key);
@@ -17,12 +18,13 @@ class _EditUserState extends ConsumerState<EditUser> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
 
-  File? _profileImage;
-  final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
   late Map<String, dynamic> args;
-  bool _initialized = false; // Flag to ensure initialization only happens once
-  bool?admin;
+  bool _initialized = false;
+  String? _profilePicUrl; // Store the URL of the current profile picture
+  File? _profileImage; // For locally picked images
+  bool? admin;
+ 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -31,10 +33,18 @@ class _EditUserState extends ConsumerState<EditUser> {
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       if (receivedArgs != null) {
         args = receivedArgs;
+
+        // Set initial values from arguments
         _nameController.text = args['username'] ?? '';
         _emailController.text = args['email'] ?? '';
         _mobileController.text = args['mobileNo'] ?? '';
         admin=args["admin"];
+
+        // Construct the profile picture URL from the userId
+        final userId = args['userid'];
+        if (userId != null) {
+          _profilePicUrl = '${Api.profilePic}/$userId';
+          }
       } else {
         _showAlertDialog('Error', 'Invalid arguments passed.');
       }
@@ -44,10 +54,11 @@ class _EditUserState extends ConsumerState<EditUser> {
 
   Future<void> _pickImage(ImageSource source) async {
     try {
-      final pickedFile = await _picker.pickImage(source: source);
+      final pickedFile = await ImagePicker().pickImage(source: source);
       if (pickedFile != null) {
         setState(() {
-          _profileImage = File(pickedFile.path);
+          _profileImage = File(pickedFile.path);// Update the locally picked image
+          _profilePicUrl = null; // Clear the URL to prioritize the local file
         });
       }
     } catch (e) {
@@ -77,7 +88,7 @@ class _EditUserState extends ConsumerState<EditUser> {
         _nameController.text,
         _emailController.text,
         _mobileController.text,
-        _profileImage,
+        _profileImage,// Pass the picked image file (if available)
         admin,
         ref,
       );
@@ -117,6 +128,7 @@ class _EditUserState extends ConsumerState<EditUser> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final profilePic = args['profilePic'];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -134,7 +146,9 @@ class _EditUserState extends ConsumerState<EditUser> {
         child: Form(
           key: _formKey,
           child: Column(
+             
             children: [
+              // Profile Picture Section
               Container(
                 padding: const EdgeInsets.all(15),
                 child: Column(
@@ -161,8 +175,11 @@ class _EditUserState extends ConsumerState<EditUser> {
                             height: 150,
                             child: _profileImage != null
                                 ? Image.file(_profileImage!, fit: BoxFit.cover)
-                                : (profilePic != null
-                                    ? Image.network(profilePic, fit: BoxFit.cover)
+                                : (_profilePicUrl != null
+                                    ? CircleAvatar(
+                                        backgroundImage: NetworkImage(_profilePicUrl!),
+                                        radius: 75,
+                                      )
                                     : const Icon(Icons.person, size: 120)),
                           ),
                           if (_isLoading) const CircularProgressIndicator(),

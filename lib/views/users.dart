@@ -1,3 +1,4 @@
+import 'package:banquetbookingz/utils/banquetbookzapi.dart';
 import 'package:banquetbookingz/views/edituser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -107,7 +108,7 @@ class _UsersState extends ConsumerState<Users> {
                 leading: user.profilePic != null
                     ? CircleAvatar(
                         backgroundImage: NetworkImage(
-                            'http://93.127.172.164:8080${user.profilePic}'),
+                            '${Api.profilePic}/${user.userId.toString()}'),
                         radius: 30,
                       )
                     : const Icon(
@@ -160,7 +161,8 @@ class _UsersState extends ConsumerState<Users> {
                           Navigator.pushNamed(
                                     context,
                                     'editUser',
-                                    arguments:{'userid':user.userId,
+                                    arguments:{
+                                               'userid':user.userId,
                                                 'username':user.username,
                                                 'email':user.email,
                                                  'mobileNo':user.mobileNo,

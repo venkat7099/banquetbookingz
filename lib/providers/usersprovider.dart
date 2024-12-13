@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "package:banquetbookingz/models/authstate.dart";
+import 'package:banquetbookingz/providers/imageprovider.dart';
 
 class UserNotifier extends StateNotifier<List<User>> {
   UserNotifier() : super([]);
@@ -20,14 +21,14 @@ class UserNotifier extends StateNotifier<List<User>> {
   void setImageFile(XFile? file) {}
 
   Future<User?> updateUser(
-    int userId,
-    String username,
-    String email,
-    String mobile,
-    File? profileImage,
-    bool? admin,
-    WidgetRef ref )
- async {
+  int userId,
+  String username,
+  String email,
+  String mobile,
+  File? profileImage,
+  bool? admin,
+  WidgetRef ref,
+) async {
   final url = Uri.parse(Api.updateeuser);
   final token = await _getAccessToken();
   print("Access token: $token");
@@ -48,53 +49,56 @@ class UserNotifier extends StateNotifier<List<User>> {
       ..fields['mobile_no'] = mobile;
 
     if (profileImage != null) {
-      request.files.add(await http.MultipartFile.fromPath(
-        'profilepic',
-        profileImage.path,
-      ));
+      if (await profileImage.exists()) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'profile_pic',
+          profileImage.path,
+        ));
+      } else {
+        print("Profile image file does not exist: ${profileImage.path}");
+        throw Exception("Profile image file not found");
+      }
     }
 
+    print("Request URL: ${request.url}");
     print("Request Fields: ${request.fields}");
     print("Request Headers: ${request.headers}");
+
     final response = await request.send();
     final responseData = await http.Response.fromStream(response);
-    print("Update response: ${responseData.body}");
-
+    print("Update Response Body: ${responseData.body}");
+    print("Response Status Code: ${responseData.statusCode}");
 
     if (responseData.statusCode == 200) {
       final responseJson = json.decode(responseData.body);
-      print("Response JSON Data: $responseJson");
+      print("Response nowwwwww--JSON: $responseJson");
 
       if (responseJson['data'] != null) {
-       if (admin == true) {
-          // Parse as AdminAuth and update admin state in AuthNotifier
+        if (admin == true) {
           final updatedAdminAuth = AdminAuth.fromJson(responseJson);
-
-          // Update AuthNotifier state
           ref.read(authProvider.notifier).updateAdminState(updatedAdminAuth);
 
-          // Optionally save the updated data to SharedPreferences
           final prefs = await SharedPreferences.getInstance();
           prefs.setString('userData', json.encode(updatedAdminAuth.toJson()));
           print("Updated Admin Data: $updatedAdminAuth");
         } else {
-          // Parse as User and update the user state
           final updatedUser = User.fromJson(responseJson['data']);
           state = [
             for (final user in state)
               if (user.userId == userId) updatedUser else user,
           ];
-          print("Updated user data: $updatedUser");
+          print("Updated User Data: $updatedUser");
           return updatedUser;
         }
       } else {
         throw Exception('Invalid data received from server');
       }
     } else {
-      final error = json.decode(responseData.body)['message'] ?? 'Error updating user';
+      final error =
+          json.decode(responseData.body)['message'] ?? 'Error updating user';
       throw Exception(error);
     }
-  }  catch (e) {
+  } catch (e) {
     print('Error updating user: $e');
     rethrow;
   }
@@ -201,28 +205,17 @@ class UserNotifier extends StateNotifier<List<User>> {
 
       print("User Add statuscode: $statusCode");
       print("User Add responsebody: ${res.body}");
-
-      if (statusCode == 200 && userDetails['success'] == true) {
-       // Successfully added user, extract the userId
-         final userId = userDetails['data']['user_id']; // Adjust field based on your API response
-
-       // Call the separate API for profile picture upload
-        await _uploadProfilePic(userId, imageFile);
-
-        return UserResult(responseCode, errorMessage: null);
-       } 
-     else {
-      // Handle error scenarios
-      if (statusCode == 400) {
-        if (userDetails['email'] != null) {
-          errorMessage = 'Email already exists';
-        } else if (userDetails['username'] != null) {
-          errorMessage = 'Username already exists';
-        }
-      } else {
-        errorMessage = userDetails['messages']?.join(', ') ?? 'Error adding user';
+      
+      switch (responseCode) {
+        case 400:
+          if (userDetails['email'] != null) {
+            errorMessage = 'Email already exists';
+          } else if (userDetails['username'] != null) {
+            errorMessage = 'Username already exists';
+          }
+          break;
+        default:
       }
-    }
     } catch (e) {
       loadingState.state = false;
       errorMessage = e.toString();
@@ -233,39 +226,6 @@ class UserNotifier extends StateNotifier<List<User>> {
 
     return UserResult(responseCode, errorMessage: errorMessage);
   }
-
- Future<void> _uploadProfilePic(int userId, XFile profilePic) async {
-  final uri = Uri.parse(Api.profilePic); // Separate API endpoint
-  final token = await _getAccessToken(); // Use the same method to fetch the access token
-
-  try {
-    // Create a multipart request
-    var request = http.MultipartRequest('POST', uri)
-      ..headers['Authorization'] = 'Token $token' // Add authorization header
-      ..fields['user_id'] = userId.toString() // Attach userId
-      ..files.add(await http.MultipartFile.fromPath(
-        'profile_pic', // Field name for the file
-        profilePic.path,
-      ));
-
-    // Send the request
-    final response = await request.send();
-
-    // Convert the response stream into a usable response
-    final responseData = await http.Response.fromStream(response);
-
-    if (response.statusCode == 200) {
-      print("Profile Picture Upload Success: ${responseData.body}");
-    } else {
-      print("Error uploading profile picture: ${responseData.body}");
-      throw Exception('Failed to upload profile picture');
-    }
-  } catch (e) {
-    print("Error in _uploadProfilePic: $e");
-    rethrow;
-  }
-}
-
 
   Future<void> getUsers(WidgetRef ref) async {
     print("entered getUsers");
@@ -307,30 +267,40 @@ class UserNotifier extends StateNotifier<List<User>> {
   }
 
   Future<void> getProfilePic(String userId, WidgetRef ref) async {
-    final accessToken = ref.read(authProvider).data?.accessToken;
-    try {
-      final response =
-          await http.get(Uri.parse('${Api.profilePic}/$userId'), headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token $accessToken',
-      });
+  final accessToken = ref.read(authProvider).data?.accessToken;
+  print("Fetching profile picture for user ID: $userId");
 
-      if (response.statusCode == 200) {
-        final res = json.decode(response.body);
-        // Assuming the API response contains a URL of the profile picture
-        final profilePicUrl = res['profilePicUrl'];
+  try {
+    // Make the GET request to fetch the image
+    final response =
+        await http.get(Uri.parse('${Api.profilePic}/$userId'), headers: {
+      'Authorization': 'Token $accessToken',
+    });
 
-        // Update the user profile picture in the state
-        ref
-            .read(usersProvider.notifier)
-            .updateProfilePic(userId, profilePicUrl);
-      } else {
-        print("Failed to load profile picture");
-      }
-    } catch (e) {
-      print("Error fetching profile picture: $e");
+    if (response.statusCode == 200) {
+      // Since the API returns an image, handle it as binary data
+      final imageBytes = response.bodyBytes;
+
+      // Optionally encode the image as a Base64 string to store in state
+      final base64Image = base64Encode(imageBytes);
+
+      // Update the profile picture in your state using the Base64 string
+      ref
+          .read(usersProvider.notifier)
+          .updateProfilePic(userId, base64Image);
+
+      print("Profile picture fetched successfully.");
+      // Update ImageProvider with the new profile picture
+      // final imageFile = XFile.fromData(imageBytes, name: 'profile_pic.jpg');
+      // ref.read(imageProvider.notifier).setProfilePic(imageFile);
+    } else {
+      print("Failed to load profile picture. Status code: ${response.statusCode}");
     }
+  } catch (e) {
+    print("Error fetching profile picture: $e");
   }
+}
+
 
   User? getUserById(String username) {
     return state.firstWhere(

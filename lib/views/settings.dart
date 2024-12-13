@@ -1,6 +1,8 @@
 import 'package:banquetbookingz/providers/authprovider.dart';
+import 'package:banquetbookingz/providers/usersprovider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:banquetbookingz/utils/banquetbookzapi.dart";
 
 class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
@@ -16,6 +18,8 @@ class _SettingsState extends ConsumerState<Settings> {
     final screenHeight = MediaQuery.of(context).size.height;
     final logout = ref.watch(authProvider.notifier);
     final usersData = ref.watch(authProvider);
+  
+    
 
     final adminData = usersData.data;
 
@@ -31,11 +35,11 @@ class _SettingsState extends ConsumerState<Settings> {
        title: const Text(
         "Settings",
         style: TextStyle(color: Colors.white,fontSize: 25),
+       ),
+       backgroundColor: const Color(0xFF6418C3),
+       ),
+       ),
       ),
-      backgroundColor: const Color(0xFF6418C3),
-    ),
-  ),
-),
       body: Container(
         padding: const EdgeInsets.fromLTRB(30, 20, 30, 30),
         color: const Color(0xFFf5f5f5),
@@ -50,10 +54,21 @@ class _SettingsState extends ConsumerState<Settings> {
               ),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.account_circle,
-                    size: 50.0,
-                  ),
+                  // const Icon(
+                  //   Icons.account_circle,
+                  //   size: 50.0,
+                  // ),
+                   adminData?.username != null
+                    ? const CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            '${Api.profilePic}/${25}'),
+                        radius: 30,
+                      )
+                    : const Icon(
+                        Icons.account_circle,
+                        size: 50,
+                        color: Colors.grey,
+                      ),
                   const SizedBox(
                     width: 15,
                   ),

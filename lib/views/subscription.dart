@@ -56,11 +56,19 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                           horizontal: isMobile ? 8.0 : 16.0,
                           vertical: isMobile ? 4.0 : 8.0,
                         ),
-                        child: Card(
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                        child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4), // Shadow color and opacity
+                                    spreadRadius: 8, // How much the shadow spreads
+                                    blurRadius: 16, // How blurry the shadow appears
+                                    offset: const Offset(0, 0), // Shadow position (x, y)
+                                  ),
+                                ],
+                              ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
@@ -69,17 +77,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // // Adjust image container size for responsiveness
-                                    // Center(
-                                    //   child: Container(
-                                    //     width: isMobile ? 60 : 80,
-                                    //     height: isMobile ? 60 : 80,
-                                    //     color: const Color.fromARGB(255, 224, 224, 224),
-                                    //     child: const Icon(Icons.image, size: 40),
-                                    //   ),
-                                    // ),
-                                    // Centering planName and planId
-                                    // const SizedBox(height: 16),
+                               
                                       Center(
                                         child: Column(
                                           children: [
@@ -243,7 +241,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
 
                                  ElevatedButton(
                                                   onPressed: () {
-                                                    // Handle Delete Sub-plan
+                                                    
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -255,7 +253,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                             borderRadius: BorderRadius.circular(5), // Rounded corners
                                                             side: const BorderSide(color: Color(0xff6418c3)), // Border color
                                                           ),
-                                                    fixedSize: const Size(305, 20),   
+                                                    fixedSize: const Size(305, 40),   
                                                     textStyle: const TextStyle(
                                                         fontSize: 16, // Font size
                                                         // fontWeight: FontWeight.bold, // Font weight

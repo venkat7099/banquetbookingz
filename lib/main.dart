@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
         // "editsubscriber": (context) => const EditSubscriber(),
         "addsubscriber": (context) => const AddSubscriber(),
         "getsubscriptions": (context) => const Subscription(),
+        "addsubplans":(context) => const Addsubplans(),
       },
     );
   }

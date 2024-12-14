@@ -29,71 +29,73 @@ class SubscriptionNotifier extends StateNotifier<Subscription> {
   }
 
   Future<void> postSubscriptionDetails({
-    required String planName,
-    required String userId,
-    required String frequency,
-    required String subPlanName,
-    required String numBookings,
-    required String price,
-  }) async {
-    final uri = Uri.parse(Api.subscriptions);
+  required String planName,
+  required String userId,
+  required String frequency,
+  required String subPlanName,
+  required String numBookings,
+  required String price,
+}) async {
+  final uri = Uri.parse(Api.subscriptions);
 
-    // Validate fields
-    if (planName.isEmpty ||
-        userId.isEmpty ||
-        frequency.isEmpty ||
-        subPlanName.isEmpty ||
-        numBookings.isEmpty ||
-        price.isEmpty) {
-      print('Validation Error: All fields must be provided.');
-      return;
-    }
-
-    // Convert fields to appropriate types
-    final parsedFrequency = int.tryParse(frequency);
-    final parsedNumBookings = int.tryParse(numBookings);
-    final parsedPrice = int.tryParse(price);
-
-    // Ensure numeric fields are valid
-    if (parsedFrequency == null || parsedNumBookings == null || parsedPrice == null) {
-      print('Validation Error: Numeric fields must contain valid numbers.');
-      return;
-    }
-
-    ref.read(loadingProvider.notifier).state = true; // Set loading to true
-    try {
-      // Prepare the multipart request
-      var request = http.MultipartRequest('POST', uri);
-
-      // Add form fields
-      request.fields['plan_name'] = planName.trim();
-      request.fields['created_by'] = userId.trim();
-      request.fields['frequency'] = parsedFrequency.toString();
-      request.fields['sub_plan_name'] = subPlanName.trim();
-      request.fields['num_bookings'] = parsedNumBookings.toString();
-      request.fields['price'] = parsedPrice.toString();
-
-      // Send the request
-      final send = await request.send();
-      final res = await http.Response.fromStream(send);
-
-      // Parse the response
-      var subscribePlanDetails = json.decode(res.body);
-
-      print('Response status: ${res.statusCode}');
-      print('Response body: $subscribePlanDetails');
-
-      if (res.statusCode == 200 || res.statusCode == 201) {
-        print('Subscription added successfully.');
-      } else {
-        print('Error in request: ${res.statusCode}, ${res.body}');
-      }
-    } catch (e) {
-      print('Error occurred: $e');
-    } finally {
-      ref.read(loadingProvider.notifier).state = false; // Reset loading
-    }
+  // Validate fields
+  if (planName.isEmpty ||
+      userId.isEmpty ||
+      frequency.isEmpty ||
+      subPlanName.isEmpty ||
+      numBookings.isEmpty ||
+      price.isEmpty) {
+    print('Validation Error: All fields must be provided.');
+    return;
   }
+
+  // Convert fields to appropriate types
+  final parsedFrequency = int.tryParse(frequency);
+  final parsedNumBookings = int.tryParse(numBookings);
+  final parsedPrice = int.tryParse(price);
+
+  // Ensure numeric fields are valid
+  if (parsedFrequency == null || parsedNumBookings == null || parsedPrice == null) {
+    print('Validation Error: Numeric fields must contain valid numbers.');
+    return;
+  }
+
+  ref.read(loadingProvider.notifier).state = true; // Set loading to true
+  try {
+    // Prepare the multipart request
+    var request = http.MultipartRequest('POST', uri);
+
+    // Add form fields
+    request.fields['plan_name'] = planName.trim();
+    request.fields['created_by'] = userId.trim();
+    request.fields['frequency'] = parsedFrequency.toString();
+    request.fields['sub_plan_name'] = subPlanName.trim();
+    request.fields['num_bookings'] = parsedNumBookings.toString();
+    request.fields['price'] = parsedPrice.toString();
+
+    // Send the request
+    final send = await request.send();
+    final res = await http.Response.fromStream(send);
+
+    // Parse the response
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final responseJson = json.decode(res.body);
+      print('Subscription added successfully: $responseJson');
+
+      // Add the new item to the existing data
+      final newData = Data.fromJson(responseJson['data']);
+      state = state.copyWith(
+        data: [...?state.data, newData], // Append the new data
+      );
+    } else {
+      print('Error in request: ${res.statusCode}, ${res.body}');
+    }
+  } catch (e) {
+    print('Error occurred: $e');
+  } finally {
+    ref.read(loadingProvider.notifier).state = false; // Reset loading
+  }
+}
 
 
 Future<void> getSubscribers() async {
@@ -131,6 +133,8 @@ Future<void> getSubscribers() async {
     }
   }
 }
+
+
 
 
 // Provider to manage loading state and API call

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/authprovider.dart';
 import '../providers/subscriptionprovider_0.dart';
+import 'package:banquetbookingz/providers/loader.dart';
 
 class AddSubscriber extends ConsumerStatefulWidget {
   const AddSubscriber({super.key});
@@ -43,7 +44,7 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
   Widget build(BuildContext context) {
     final currentUser = ref.watch(authProvider);
     final userId = currentUser.data?.userId ?? '';
-    final isLoading = ref.watch(subscriptionProvider);
+    final isLoading = ref.watch(loadingProvider);
 
     return Scaffold(
       body: Container(

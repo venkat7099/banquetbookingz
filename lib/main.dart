@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
         "adduser": (context) => const AddUser(),
         'editUser': (context) => const EditUser(),
         "alltransactions": (context) => const AllTransactions(),
-        "editsubscriber": (context) => const EditSubscriber(),
+        // "editsubscriber": (context) => const EditSubscriber(),
         "addsubscriber": (context) => const AddSubscriber(),
         "getsubscriptions": (context) => const Subscription(),
       },

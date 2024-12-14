@@ -1,78 +1,156 @@
-class subscription {
-  int? statusCode;
-  bool? success;
-  List<String>? messages;
-  List<Data>? data;
+class Subscription {
+  final int? statusCode;
+  final bool? success;
+  final List<String>? messages;
+  final List<Data>? data;
 
-  subscription({this.statusCode, this.success, this.messages, this.data});
+  Subscription({
+    this.statusCode,
+    this.success,
+    this.messages,
+    this.data,
+  });
 
-  subscription.fromJson(Map<String, dynamic> json) {
-    statusCode = json['statusCode'];
-    success = json['success'];
-    // Ensure 'messages' is not null before casting
-    if (json['messages'] != null) {
-      messages = List<String>.from(json['messages']);
-    }
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
-      });
-    }
+  factory Subscription.initial() {
+    return Subscription(
+      statusCode: 0,
+      success: false,
+      messages: [],
+      data: [],
+    );
+  }
+
+  factory Subscription.fromJson(Map<String, dynamic> json) {
+    return Subscription(
+      statusCode: json['statusCode'],
+      success: json['success'],
+      messages: json['messages']?.cast<String>(),
+      data: (json['data'] as List<dynamic>?)
+          ?.map((item) => Data.fromJson(item))
+          .toList(),
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['statusCode'] = statusCode;
-    data['success'] = success;
-    data['messages'] = messages;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      'statusCode': statusCode,
+      'success': success,
+      'messages': messages,
+      'data': data?.map((item) => item.toJson()).toList(),
+    };
+  }
+
+  Subscription copyWith({
+    int? statusCode,
+    bool? success,
+    List<String>? messages,
+    List<Data>? data,
+  }) {
+    return Subscription(
+      statusCode: statusCode ?? this.statusCode,
+      success: success ?? this.success,
+      messages: messages ?? this.messages,
+      data: data ?? this.data,
+    );
   }
 }
 
 class Data {
-  int? id;
-  String? name;
-  int? annualPricing;
-  int? quaterlyPricing;
-  int? monthlyPricing;
+  final int? planId;
+  final String? planName;
+  final int? createdBy;
+  final List<SubPlans>? subPlans;
 
   Data({
-    this.id,
-    this.name,
-    this.annualPricing,
-    this.quaterlyPricing,
-    this.monthlyPricing,
+    this.planId,
+    this.planName,
+    this.createdBy,
+    this.subPlans,
   });
 
-  // Factory constructor to create a Data instance from a JSON map
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      id: json['id'],
-      name: json['name'], // Adjusted the JSON key to lowercase 'name'
-      annualPricing: json[
-          'annualPricing'], // Adjusted the JSON key to lowercase 'annualPricing'
-      quaterlyPricing: json[
-          'quaterlyPricing'], // Adjusted the JSON key to lowercase 'quaterlyPricing'
-      monthlyPricing: json[
-          'monthlyPricing'], // Adjusted the JSON key to lowercase 'monthlyPricing'
+      planId: json['plan_id'],
+      planName: json['plan_name'],
+      createdBy: json['created_by'],
+      subPlans: (json['sub_plans'] as List<dynamic>?)
+          ?.map((item) => SubPlans.fromJson(item))
+          .toList(),
     );
   }
 
-  // Method to convert a Data instance to a JSON map
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name, // Adjusted the JSON key to lowercase 'name'
-      'annualPricing':
-          annualPricing, // Adjusted the JSON key to lowercase 'annualPricing'
-      'quaterlyPricing':
-          quaterlyPricing, // Adjusted the JSON key to lowercase 'quaterlyPricing'
-      'monthlyPricing':
-          monthlyPricing, // Adjusted the JSON key to lowercase 'monthlyPricing'
+      'plan_id': planId,
+      'plan_name': planName,
+      'created_by': createdBy,
+      'sub_plans': subPlans?.map((item) => item.toJson()).toList(),
     };
+  }
+
+  Data copyWith({
+    int? planId,
+    String? planName,
+    int? createdBy,
+    List<SubPlans>? subPlans,
+  }) {
+    return Data(
+      planId: planId ?? this.planId,
+      planName: planName ?? this.planName,
+      createdBy: createdBy ?? this.createdBy,
+      subPlans: subPlans ?? this.subPlans,
+    );
+  }
+}
+
+class SubPlans {
+  final int? subPlanId;
+  final String? subPlanName;
+  final String? frequency;
+  final int? numBookings;
+  final String? price;
+
+  SubPlans({
+    this.subPlanId,
+    this.subPlanName,
+    this.frequency,
+    this.numBookings,
+    this.price,
+  });
+
+  factory SubPlans.fromJson(Map<String, dynamic> json) {
+    return SubPlans(
+      subPlanId: json['sub_plan_id'],
+      subPlanName: json['sub_plan_name'],
+      frequency: json['frequency'],
+      numBookings: json['num_bookings'],
+      price: json['price'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'sub_plan_id': subPlanId,
+      'sub_plan_name': subPlanName,
+      'frequency': frequency,
+      'num_bookings': numBookings,
+      'price': price,
+    };
+  }
+
+  SubPlans copyWith({
+    int? subPlanId,
+    String? subPlanName,
+    String? frequency,
+    int? numBookings,
+    String? price,
+  }) {
+    return SubPlans(
+      subPlanId: subPlanId ?? this.subPlanId,
+      subPlanName: subPlanName ?? this.subPlanName,
+      frequency: frequency ?? this.frequency,
+      numBookings: numBookings ?? this.numBookings,
+      price: price ?? this.price,
+    );
   }
 }

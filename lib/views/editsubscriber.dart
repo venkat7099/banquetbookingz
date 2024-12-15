@@ -1,370 +1,236 @@
-// import 'package:banquetbookingz/providers/loader.dart';
-// import 'package:banquetbookingz/providers/selectionmodal.dart';
-// import 'package:banquetbookingz/providers/subcsribersprovider.dart';
-// import 'package:banquetbookingz/widgets/button.dart';
-// import 'package:banquetbookingz/widgets/customelevatedbutton.dart';
-// import 'package:banquetbookingz/widgets/customtextfield.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/authprovider.dart';
+import '../providers/subscriptionprovider_0.dart';
+import 'package:banquetbookingz/providers/loader.dart';
 
-// class EditSubscriber extends ConsumerStatefulWidget {
-//   const EditSubscriber({super.key});
+class EditSubscriber extends ConsumerStatefulWidget {
+  const EditSubscriber({super.key});
 
-//   @override
-//   ConsumerState<EditSubscriber> createState() => _EditSubscriberState();
-// }
+  @override
+  ConsumerState<EditSubscriber> createState() => _EditSubscriberState();
+}
 
-// class _EditSubscriberState extends ConsumerState<EditSubscriber> {
-//   @override
-//   void initState() {
-//     super.initState();
+class _EditSubscriberState extends ConsumerState<EditSubscriber> {
+  final TextEditingController planControllers = TextEditingController();
+  final TextEditingController frequencyControllers = TextEditingController();
+  final TextEditingController subPlanControllers = TextEditingController();
+  final TextEditingController bookingsControllers = TextEditingController();
+  final TextEditingController pricingControllers = TextEditingController();
 
-//     Future.microtask(() {
-//       // Get the ID passed via arguments
+  bool isDeleting = false;
 
-//       final id = ModalRoute.of(context)?.settings.arguments as int?;
-//       print(id);
-//       final ids = ref.read(selectionModelProvider).subscriberIndex;
-//       print(ids);
-//       // Get user details from your state notifier
-//       final user = ref.read(subscribersProvider.notifier).getSubById(ids!);
+  @override
+  void dispose() {
+    planControllers.dispose();
+    frequencyControllers.dispose();
+    subPlanControllers.dispose();
+    bookingsControllers.dispose();
+    pricingControllers.dispose();
+    super.dispose();
+  }
 
-//       if (user != null) {
-//         final selection = ref.watch(selectionModelProvider);
-//         // Update the controllers with the user's data
-//         ref
-//             .read(selectionModelProvider.notifier)
-//             .updateSubname(user.name ?? '');
-//         ref
-//             .read(selectionModelProvider.notifier)
-//             .updateAnnualP(user.annualPricing.toString() ?? '');
-//         ref
-//             .read(selectionModelProvider.notifier)
-//             .updateQuaterlyP(user.quaterlyPricing.toString() ?? '');
-//         ref
-//             .read(selectionModelProvider.notifier)
-//             .updateMonthlyP(user.monthlyPricing.toString() ?? '');
-//         //    if (user.profilepic != null) {
-//         //   ref.read(imageProvider.notifier).setProfilePic(XFile(user.profilepic!));
-//         // }
-//         // ... do the same for other fields
-//       }
-//     });
-//   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Fetch subscription data to populate fields
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    if (args != null) {
+      planControllers.text = args['planName'] ?? '';
+      frequencyControllers.text = args['frequency'] ?? '';
+      subPlanControllers.text = args['subPlanName'] ?? '';
+      bookingsControllers.text = args['bookings'] ?? '';
+      pricingControllers.text = args['pricing'] ?? '';
+    }
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final screenWidth = MediaQuery.of(context).size.width;
-//     final screenHeight = MediaQuery.of(context).size.height;
-//     final subNameController =
-//         ref.watch(selectionModelProvider.select((model) => model.subName));
-//     final annualController =
-//         ref.watch(selectionModelProvider.select((model) => model.annualP));
-//     final quaterlyController =
-//         ref.watch(selectionModelProvider.select((model) => model.quaterlyP));
-//     final monthlyController =
-//         ref.watch(selectionModelProvider.select((model) => model.monthlyP));
-//     final ids = ref.read(selectionModelProvider).subscriberIndex;
-//     print(ids);
-//     // Get user details from your state notifier
-//     final user = ref.read(subscribersProvider.notifier).getSubById(ids!);
-//     return Scaffold(
-//       body: Container(
-//         padding: const EdgeInsets.all(15),
-//         color: const Color(0xFFf5f5f5),
-//         child: SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               Container(child: Consumer(builder: (context, ref, child) {
-//                 final addSub = ref.watch(selectionModelProvider.notifier);
-//                 return AppBar(
-//                   leading: IconButton(
-//                       onPressed: () {
-//                         Navigator.of(context).pop();
-//                       },
-//                       icon: const Icon(
-//                         Icons.arrow_back,
-//                         color: Color(0xff6418c3),
-//                       )),
-//                   backgroundColor: const Color(0xfff5f5f5),
-//                   title: const Text(
-//                     "Edit Subcsription",
-//                     style: TextStyle(color: Color(0xff6418c3), fontSize: 20),
-//                   ),
-//                 );
-//               })),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               Container(
-//                 padding: const EdgeInsets.all(15),
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(10),
-//                   color: Colors.white,
-//                 ),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     const Text(
-//                       "Subscription details",
-//                       style:
-//                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//                     ),
-//                     const SizedBox(
-//                       height: 20,
-//                     ),
-//                     const Text(
-//                       "name",
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     Consumer(builder: (context, ref, child) {
-//                       final controller =
-//                           ref.watch(selectionModelProvider.notifier);
-//                       return CustomTextFormField(
-//                         width: screenWidth * 0.8,
-//                         keyBoardType: TextInputType.text,
-//                         textController: subNameController,
-//                         hintText: 'name',
-//                         onChanged: (newValue) {
-//                           controller.updateSubname(newValue);
-//                         },
-//                       );
-//                     }),
-//                     const SizedBox(
-//                       height: 12,
-//                     ),
-//                     const Text(
-//                       "Annual pricing",
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     Consumer(builder: (context, ref, child) {
-//                       final controller =
-//                           ref.watch(selectionModelProvider.notifier);
-//                       return CustomTextFormField(
-//                         width: screenWidth * 0.8,
-//                         textController: annualController,
-//                         keyBoardType: TextInputType.number,
-//                         hintText: 'Annual pricing',
-//                         onChanged: (newValue) {
-//                           controller.updateAnnualP(newValue);
-//                         },
-//                       );
-//                     }),
-//                     const SizedBox(
-//                       height: 12,
-//                     ),
-//                     const Text(
-//                       "Quarterly pricing",
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     Consumer(builder: (context, ref, child) {
-//                       final controller =
-//                           ref.watch(selectionModelProvider.notifier);
-//                       return CustomTextFormField(
-//                         width: screenWidth * 0.8,
-//                         textController: quaterlyController,
-//                         keyBoardType: TextInputType.number,
-//                         hintText: 'Queterly picing',
-//                         onChanged: (newValue) {
-//                           controller.updateQuaterlyP(newValue);
-//                         },
-//                       );
-//                     }),
+  @override
+  Widget build(BuildContext context) {
+    final currentUser = ref.watch(authProvider);
+    final userId = currentUser.data?.userId ?? '';
+    final isLoading = ref.watch(loadingProvider);
 
-//                     const SizedBox(
-//                       height: 12,
-//                     ),
-//                     const Text(
-//                       "Monthly pricing",
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     Consumer(builder: (context, ref, child) {
-//                       final controller =
-//                           ref.watch(selectionModelProvider.notifier);
-//                       return CustomTextFormField(
-//                         width: screenWidth * 0.8,
-//                         textController: monthlyController,
-//                         keyBoardType: TextInputType.number,
-//                         hintText: 'monthly pricing',
-//                         onChanged: (newValue) {
-//                           controller.updateMonthlyP(newValue);
-//                         },
-//                       );
-//                     }),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Edit Subscription"),
+        backgroundColor: const Color(0xff6418c3),
+        foregroundColor: Colors.white,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(15),
+        color: const Color(0xFFf5f5f5),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: Text(
+                  "Edit Subscription Details",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 18),
+              _buildTextField("Plan", planControllers),
+              const SizedBox(height: 10),
+              _buildTextField("Frequency", frequencyControllers, keyboardType: TextInputType.number),
+              const SizedBox(height: 10),
+              _buildTextField("Sub-plan", subPlanControllers),
+              const SizedBox(height: 10),
+              _buildTextField("Bookings", bookingsControllers, keyboardType: TextInputType.number),
+              const SizedBox(height: 10),
+              _buildTextField("Pricing", pricingControllers, keyboardType: TextInputType.number),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () async {
 
-//                     const SizedBox(
-//                       height: 12,
-//                     ),
-//                     //    Text("Subcription tags",style: TextStyle(fontSize: 18,),),
-//                     // SizedBox(height: 10,),
-//                     // CustomTextFormField(width: screenWidth*0.8,
-//                     // hintText: 'Subcription tags',),
-//                     //  SizedBox(height: 8,),
-//                     //           Consumer(builder: (context, ref, child) {
-//                     //   final options= ref.watch(filterOptionsProvider).options['Subscription Type'] ?? [];
-//                     //             return Wrap(
-//                     //               spacing: 8.0,
-//                     //               children: options.map((option) => Chip(backgroundColor: Color(0xffeee1ff),
-//                     //                 label: Text(option),
-//                     //                 deleteIcon: Icon(Icons.close),
-//                     //                 onDeleted: () {
-//                     //                   // Handle delete (removal) of the filter option
-//                     //                   ref.read(filterOptionsProvider.notifier).removeOption('Subscription Type', option);
-//                     //                 },
-//                     //               )).toList(),
-//                     //             );}
-//                     //           ),
-//                   ],
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               Consumer(builder: (context, ref, child) {
-//                 final selection = ref.watch(selectionModelProvider);
-//                 final loading = ref.watch(loadingProvider);
-//                 return CustomElevatedButton(
-//                   text: "Save",
-//                   borderRadius: 10,
-//                   foreGroundColor: Colors.white,
-//                   width: double.infinity,
-//                   backGroundColor: const Color(0XFF6418C3),
-//                   isLoading: loading,
-//                   onPressed: loading
-//                       ? null
-//                       : () async {
-//                           // If the form is valid, proceed with the login process
+                            if(type=="plan"){
+                                await ref.read(subscriptionProvider.notifier).editSubscriptionDetails(
 
-//                           final SubscriberResult result = await ref
-//                               .read(subscribersProvider.notifier)
-//                               .updateSubscriber(
-//                                   subNameController.text,
-//                                   annualController.text,
-//                                   quaterlyController.text,
-//                                   monthlyController.text,
-//                                   ref);
-//                           if (result.statusCode == 201) {
-//                             showDialog(
-//                               context: context,
-//                               builder: (BuildContext context) {
-//                                 return Dialog(
-//                                   shape: RoundedRectangleBorder(
-//                                     borderRadius: BorderRadius.circular(20.0),
-//                                   ),
-//                                   child: Container(
-//                                     padding: const EdgeInsets.all(20),
-//                                     width: double.infinity,
-//                                     decoration: const BoxDecoration(
-//                                       shape: BoxShape.rectangle,
-//                                       borderRadius:
-//                                           BorderRadius.all(Radius.circular(20)),
-//                                     ),
-//                                     child: Column(
-//                                       mainAxisSize: MainAxisSize.min,
-//                                       children: <Widget>[
-//                                         const Icon(Icons.check_circle,
-//                                             size: 50, color: Color(0XFF6418C3)),
-//                                         const SizedBox(height: 15),
-//                                         const Text(
-//                                           'Subscription has been successfully added as a user.',
-//                                           textAlign: TextAlign.center,
-//                                           style: TextStyle(
-//                                             fontSize: 16,
-//                                           ),
-//                                         ),
-//                                         const SizedBox(height: 15),
-//                                         const Text(
-//                                           'Login details have been mailed to the user.',
-//                                           textAlign: TextAlign.center,
-//                                           style: TextStyle(
-//                                             color: Colors.grey,
-//                                             fontSize: 14,
-//                                           ),
-//                                         ),
-//                                         const SizedBox(height: 20),
-//                                         Consumer(
-//                                             builder: (context, ref, child) {
-//                                           final addUser = ref.watch(
-//                                               selectionModelProvider.notifier);
-//                                           return CustomElevatedButton(
-//                                             text: "OK",
-//                                             borderRadius: 20,
-//                                             width: 100,
-//                                             foreGroundColor: Colors.white,
-//                                             backGroundColor: const Color(0XFF6418C3),
-//                                             onPressed: () {
-//                                               addUser.toggleAddUser(false);
-//                                               Navigator.of(context)
-//                                                   .pushNamed("users");
-//                                             },
-//                                           );
-//                                         })
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 );
-//                               },
-//                             );
-//                           } else if (result.statusCode == 400) {
-//                             // If an error occurred, show a dialog box with the error message.
-//                             showDialog(
-//                               context: context,
-//                               builder: (context) {
-//                                 return AlertDialog(
-//                                   title: const Text('Login Error'),
-//                                   content: Text(result.errorMessage ??
-//                                       'An unknown error occurred.'),
-//                                   actions: <Widget>[
-//                                     TextButton(
-//                                       child: const Text('OK'),
-//                                       onPressed: () {
-//                                         Navigator.of(context)
-//                                             .pop(); // Close the dialog box
-//                                       },
-//                                     ),
-//                                   ],
-//                                 );
-//                               },
-//                             );
-//                           }
-//                         },
-//                 );
-//               }),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               const CustomElevateButton(
-//                   text: "Delete Plan",
-//                   borderRadius: 12,
-//                   backGroundColor: Color(0xffea5455),
-//                   width: double.infinity)
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+                                    type:"plan",
+                                    planId: "7",
+                                    
+                                    planName: "bronze",
+                                    createdby: "33",
+                               
+                            
+                                  );
+                            }
+                            else{
+                                   await ref.read(subscriptionProvider.notifier).editSubscriptionDetails(
+
+                                    type:"sub_plan",
+                                    planId: "7",
+                                    planName: subPlanControllers.text,
+                                  
+                                    frequency: frequencyControllers.text,
+                                   
+                                    numBookings: bookingsControllers.text,
+                                    price: pricingControllers.text,
+                                  );
+                            }
+                             
+                              _showSnackBar(context, "Subscription updated successfully!");
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0XFF6418C3),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text("Save"),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  
+                  ElevatedButton(
+                      onPressed: (){
+                       
+                       
+                      },
+                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                         ),
+                       child:const Text("Delete")
+                      // isDeleting
+                      //     ? null
+                      //     : () async {
+                      //         setState(() => isDeleting = true);
+                      //         await ref.read(subscriptionProvider.notifier).deleteSubscription();
+                      //         setState(() => isDeleting = false);
+                      //         Navigator.of(context).pop();
+                      //         _showSnackBar(context, "Subscription deleted successfully!");
+                      //       },
+                      // style: ElevatedButton.styleFrom(
+                      //   backgroundColor: Colors.red,
+                      //   padding: const EdgeInsets.symmetric(vertical: 15),
+                      // ),
+                      // child: isDeleting
+                      //     ? const CircularProgressIndicator(color: Colors.white)
+                      //     : const Text("Delete"),
+                    ),
+                
+                ],
+              ),
+
+              // Row(
+              //   children: [
+              //       ElevatedButton(
+              //         onPressed: () {
+                        
+              //           print("Button Pressed!");
+              //         },
+              //         style: ElevatedButton.styleFrom(
+              //           backgroundColor: const Color(0xFF6418C3), // Button color
+              //           foregroundColor: Colors.white, // Text color
+              //           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+              //           shape: RoundedRectangleBorder(
+              //             borderRadius: BorderRadius.circular(8), // Rounded corners
+              //           ),
+              //           elevation: 5, // Shadow elevation
+              //         ),
+              //         child: const Text(
+              //           "Save",
+              //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              //         ),
+              //       ),
+              //       const SizedBox(width: 10,),
+              //       ElevatedButton(
+              //           onPressed: () {
+              //             // Action to perform when button is pressed
+              //             print("Button Pressed!");
+              //           },
+              //           style: ElevatedButton.styleFrom(
+              //             backgroundColor: const Color(0xFF6418C3), // Button color
+              //             foregroundColor: Colors.white, // Text color
+              //             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+              //             shape: RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.circular(8), // Rounded corners
+              //             ),
+              //             elevation: 5, // Shadow elevation
+              //           ),
+              //           child: const Text(
+              //             "Delete",
+              //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              //           ),
+              //         ),
+
+               
+              // ],)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller,
+      {TextInputType keyboardType = TextInputType.text}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 18)),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            hintText: label,
+            border: const OutlineInputBorder(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+}

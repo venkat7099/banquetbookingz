@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:banquetbookingz/widgets/stackwidget.dart';
 import 'package:banquetbookingz/providers/subscriptionprovider_0.dart';
+import "package:banquetbookingz/providers/authprovider.dart";
 
 class Subscription extends ConsumerStatefulWidget {
   const Subscription({super.key});
@@ -12,13 +13,11 @@ class Subscription extends ConsumerStatefulWidget {
 
 class _SubscriptionState extends ConsumerState<Subscription> {
   @override
-  void initState() {
-    super.initState();
-    // Fetch subscribers when the widget is first initialized
-    Future.microtask(() {
-      ref.read(subscriptionProvider.notifier).getSubscribers();
-    });
-  }
+  void didChangeDependencies() {
+  super.didChangeDependencies();
+  // Fetch subscribers when the widget is loaded
+  ref.read(subscriptionProvider.notifier).getSubscribers();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +35,10 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                 Navigator.of(context).pushNamed("addsubscriber");
               },
             ),
-            const SizedBox(height:5),
+            const SizedBox(height: 5),
             subscriptionState.data == null || subscriptionState.data!.isEmpty
                 ? const Center(
-                    child: CircularProgressIndicator(),
+                    child: Text("No data found"),
                   )
                 : ListView.builder(
                     shrinkWrap: true,
@@ -57,18 +56,20 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                           vertical: isMobile ? 4.0 : 8.0,
                         ),
                         child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.4), // Shadow color and opacity
-                                    spreadRadius: 8, // How much the shadow spreads
-                                    blurRadius: 16, // How blurry the shadow appears
-                                    offset: const Offset(0, 0), // Shadow position (x, y)
-                                  ),
-                                ],
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(
+                                    0.4), // Shadow color and opacity
+                                spreadRadius: 8, // How much the shadow spreads
+                                blurRadius: 16, // How blurry the shadow appears
+                                offset: const Offset(
+                                    0, 0), // Shadow position (x, y)
                               ),
+                            ],
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
@@ -77,45 +78,62 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                               
-                                      Center(
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              plan.planName ?? "No Plan Name",
-                                              style: TextStyle(
-                                                fontSize: isMobile ? 26 : 28,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                    Center(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            plan.planName ?? "No Plan Name",
+                                            style: TextStyle(
+                                              fontSize: isMobile ? 26 : 28,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              "Plan ID: ${plan.planId}",
-                                              style: TextStyle(
-                                                fontSize: isMobile ? 14 : 16,
-                                                color: const Color.fromARGB(255, 83, 81, 81),
-                                              ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            "Plan ID: ${plan.planId}",
+                                            style: TextStyle(
+                                              fontSize: isMobile ? 14 : 16,
+                                              color: const Color.fromARGB(
+                                                  255, 83, 81, 81),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(height: 16),
+                                    ),
+                                    const SizedBox(height: 16),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         OutlinedButton(
                                           onPressed: () {
-                                            // Handle Edit Plan
+                                               final adminData = ref.watch(authProvider).data;
+                                                     Navigator.pushNamed(
+                                                      context,
+                                                      'editsubscriber',
+                                                      arguments: {
+                                                        'type' :"plan",
+                                                        'planId': plan.planId,
+                                                        'planName':plan.planName,
+                                                        'Createdby':adminData?.userId,
+                                                       
+                                                      },
+                                                    );
                                           },
-                                           style: OutlinedButton.styleFrom(
-                                            foregroundColor: const Color(0xff6418c3),
+                                          style: OutlinedButton.styleFrom(
+                                            foregroundColor:
+                                                const Color(0xff6418c3),
                                             side: const BorderSide(
                                               color: const Color(0xff6418c3),
                                             ),
                                             shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(5), // Rounded corners
-                                                            side: const BorderSide(color: Color(0xff6418c3)), // Border color
-                                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5), // Rounded corners
+                                              side: const BorderSide(
+                                                  color: Color(
+                                                      0xff6418c3)), // Border color
+                                            ),
                                           ),
                                           child: const Text("Edit"),
                                         ),
@@ -125,14 +143,19 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                             // Handle Delete Plan
                                           },
                                           style: OutlinedButton.styleFrom(
-                                            foregroundColor: const Color(0xff6418c3),
+                                            foregroundColor:
+                                                const Color(0xff6418c3),
                                             side: const BorderSide(
-                                              color:  Color(0xff6418c3),
+                                              color: Color(0xff6418c3),
                                             ),
                                             shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(5), // Rounded corners
-                                                            side: const BorderSide(color: Color(0xff6418c3)), // Border color
-                                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5), // Rounded corners
+                                              side: const BorderSide(
+                                                  color: Color(
+                                                      0xff6418c3)), // Border color
+                                            ),
                                           ),
                                           child: const Text("Delete"),
                                         ),
@@ -168,7 +191,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                         isMobile ? 12 : 14,
                                                     fontWeight: FontWeight.bold,
                                                     fontFamily: 'Roboto',
-                                                     color: Colors.white,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                                 Text(
@@ -185,24 +208,47 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                               children: [
                                                 ElevatedButton(
                                                   onPressed: () {
-                                                    // Handle Edit Sub-plan
+                                                      final adminData = ref.watch(authProvider).data;
+                                                     Navigator.pushNamed(
+                                                      context,
+                                                      'editsubscriber',
+                                                      arguments: {
+                                                        'type' :"sub_plan",
+                                                        'planId': plan.planId,
+                                                        'planName':plan.planName,
+                                                        'subPlanName':subPlan.subPlanName,
+                                                        'Createdby':adminData?.userId,
+                                                        'numOfBookings':subPlan.numBookings,
+                                                        'price':subPlan.price,
+                                                        
+                                                      },
+                                                    );
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
-                                                     backgroundColor:
+                                                    backgroundColor:
                                                         Colors.white,
                                                     foregroundColor:
                                                         const Color(0xff6418c3),
-                                                    padding:const EdgeInsets.symmetric(vertical: 6, horizontal: 3),   
-                                                    shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(5), // Rounded corners
-                                                            side: const BorderSide(color: Color(0xff6418c3)), // Border color
-                                                          ),
-                                                    fixedSize: const Size(30, 20),   
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 6,
+                                                        horizontal: 3),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5), // Rounded corners
+                                                      side: const BorderSide(
+                                                          color: Color(
+                                                              0xff6418c3)), // Border color
+                                                    ),
+                                                    fixedSize:
+                                                        const Size(30, 20),
                                                     textStyle: const TextStyle(
-                                                        fontSize: 16, // Font size
-                                                        // fontWeight: FontWeight.bold, // Font weight
-                                                      ), 
+                                                      fontSize: 16, // Font size
+                                                      // fontWeight: FontWeight.bold, // Font weight
+                                                    ),
                                                   ),
                                                   child: const Text("Edit"),
                                                 ),
@@ -211,56 +257,75 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                   onPressed: () {
                                                     // Handle Delete Sub-plan
                                                   },
-                                                  style: ElevatedButton.styleFrom(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         Colors.white,
                                                     foregroundColor:
                                                         const Color(0xff6418c3),
-                                                    padding:const EdgeInsets.symmetric(vertical: 6, horizontal: 3),   
-                                                    shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(5), // Rounded corners
-                                                            side: const BorderSide(color: Color(0xff6418c3)), // Border color
-                                                          ),
-                                                    fixedSize: const Size(30, 20),   
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 6,
+                                                        horizontal: 3),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5), // Rounded corners
+                                                      side: const BorderSide(
+                                                          color: Color(
+                                                              0xff6418c3)), // Border color
+                                                    ),
+                                                    fixedSize:
+                                                        const Size(30, 20),
                                                     textStyle: const TextStyle(
-                                                        fontSize: 16, // Font size
-                                                        // fontWeight: FontWeight.bold, // Font weight
-                                                      ),    
-                                                   ),
+                                                      fontSize: 16, // Font size
+                                                      // fontWeight: FontWeight.bold, // Font weight
+                                                    ),
+                                                  ),
                                                   child: const Text("Delete"),
                                                 ),
                                               ],
                                             ),
                                           ],
                                         ),
-                                        
                                       ),
                                     ),
                                   );
                                 }).toList(),
-
-                                 ElevatedButton(
-                                                  onPressed: () {
-                                                    
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color(0xff6418c3),
-                                                    foregroundColor:
-                                                        Colors.white,
-                                                    padding:const EdgeInsets.symmetric(vertical: 6, horizontal: 3),   
-                                                    shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(5), // Rounded corners
-                                                            side: const BorderSide(color: Color(0xff6418c3)), // Border color
-                                                          ),
-                                                    fixedSize: const Size(305, 40),   
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 16, // Font size
-                                                        // fontWeight: FontWeight.bold, // Font weight
-                                                      ),    
-                                                   ),
-                                                  child: const Text("Add subplan"),
-                                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    final subscriptionState = ref.watch(subscriptionProvider).data;
+                                     Navigator.pushNamed(
+                                          context,
+                                          'addsubplans',
+                                          arguments: {
+                                            'planId': plan.planId,
+                                            'planName':plan.planName,
+                                            
+                                          },
+                                        );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xff6418c3),
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 6, horizontal: 3),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          5), // Rounded corners
+                                      side: const BorderSide(
+                                          color: Color(
+                                              0xff6418c3)), // Border color
+                                    ),
+                                    fixedSize: const Size(305, 40),
+                                    textStyle: const TextStyle(
+                                      fontSize: 16, // Font size
+                                      // fontWeight: FontWeight.bold, // Font weight
+                                    ),
+                                  ),
+                                  child: const Text("Add subplan"),
+                                ),
                               ],
                             ),
                           ),

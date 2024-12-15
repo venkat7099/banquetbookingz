@@ -12,6 +12,7 @@ import 'package:banquetbookingz/views/users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:banquetbookingz/models/users.dart";
+import "package:banquetbookingz/views/addsubplan.dart";
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -73,10 +74,10 @@ class MyApp extends StatelessWidget {
         "adduser": (context) => const AddUser(),
         'editUser': (context) => const EditUser(),
         "alltransactions": (context) => const AllTransactions(),
-        // "editsubscriber": (context) => const EditSubscriber(),
+        "editsubscriber": (context) => const EditSubscriber(),
         "addsubscriber": (context) => const AddSubscriber(),
         "getsubscriptions": (context) => const Subscription(),
-        "addsubplans":(context) => const Addsubplans(),
+        "addsubplans":(context) => const AddSubPlans(),
       },
     );
   }

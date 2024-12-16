@@ -153,95 +153,93 @@ class SubscriptionNotifier extends StateNotifier<Subscription> {
 
   
 Future<void> editSubscriptionDetails({
-     String? type,
-     String? planId,
-     String? planName,
-     String? userId,
-     String? frequency,
-     String? numBookings,
-     String? price,
-  }) async {
-   
-   
-    ref.read(loadingProvider.notifier).state = true; // Set loading to true
-    try {
-    var response = await http.post(
-        Uri.parse(Api.subscriptions),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(
-          {
-            'type': type,
-             'plan_id':planId!.trim(),
-             'plan_name':planName!.trim(),
-             'created_by':userId.toString(),
-             'frequency':frequency.toString(),
-             'num_bookings':numBookings.toString(),
-             'price':price.toString()
-           }),
-      );
-   
-      var responseCode = response.statusCode;
-      var responseBody = json.decode(response.body);
-      print('Response Code: $responseCode');
-      print('Server Response: $responseBody');
+  String? type,
+  int? planId,
+  String? planName,
+  int? userId,
+  String? frequency,
+  String? numBookings,
+  String? price,
+}) async {
+  try {
+    final response = await http.patch(
+      Uri.parse(Api.subscriptions),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'type': type,
+        'plan_id': planId.toString().trim() ,
+        'plan_name': planName.toString().trim(),
+        'created_by': userId.toString().trim(),
+        'frequency': frequency.toString().trim(),
+        'num_bookings': numBookings.toString().trim(),
+        'price': price.toString().trim(),
+      }),
+    );
 
-   if ( responseCode == 200 ||  responseCode == 201) {
+    final responseCode = response.statusCode;
+    final responseBody = json.decode(response.body);
 
-        print('Subscription added successfully: $responseBody');
+    print('Response Code: $responseCode');
+    print('Server Response: $responseBody');
 
-        // Refresh data after successfully adding a subscription
-        await getSubscribers();
-      } else {
-        print('Error in request: $responseCode, $responseBody');
-      }
-    } catch (e) {
-      print('Error occurred: $e');
-    } finally {
-      ref.read(loadingProvider.notifier).state = false; // Reset loading
+    if (responseCode == 200 || responseCode == 201) {
+      print('Subscription updated successfully: $responseBody');
+      await getSubscribers(); // Refresh state
+    } else {
+      throw Exception(responseBody['messages'] ?? 'Unknown error occurred');
     }
+  } catch (e) {
+    print('Error updating subscription: $e');
+    rethrow; // Pass the error back
   }
+}
+
+
 
    Future<void> deletesubscriber(String type, String planId, WidgetRef ref) async {
-    // final url = Uri.parse('https://www.gocodecreations.com/bbadminlogin');
-    try {
-      final response = await http.delete(
-        Uri.parse(Api.subscriptions), // Use the correct DELETE API URL
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(
-          {
-            'type': type,
-            'plan_id':planId,
-          }),
-      );
+  try {
+    final response = await http.delete(
+      Uri.parse(Api.subscriptions), // Use the correct DELETE API URL
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'type': type,
+        'plan_id': planId,
+      }),
+    );
 
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        if (responseData['success'] == true) {
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
 
-          ScaffoldMessenger.of(ref.context).showSnackBar(
-            const SnackBar(content: Text('User deleted successfully')),
-          );
-        } else {
-          ScaffoldMessenger.of(ref.context).showSnackBar(
-            SnackBar(
-                content: Text(responseData['messages']?.join(', ') ??
-                    'Error deleting user')),
-          );
-        }
+      if (responseData['success'] == true) {
+        // Successfully deleted
+        ScaffoldMessenger.of(ref.context).showSnackBar(
+          const SnackBar(content: Text('Subscription deleted successfully')),
+        );
+
+        // Call getSubscribers to refresh the state
+        await getSubscribers();
       } else {
         ScaffoldMessenger.of(ref.context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete user')),
+          SnackBar(
+            content: Text(
+              responseData['messages']?.join(', ') ?? 'Error deleting subscription',
+            ),
+          ),
         );
       }
-    } catch (e) {
-      print("Error deleting user: $e");
+    } else {
       ScaffoldMessenger.of(ref.context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        const SnackBar(content: Text('Failed to delete subscription')),
       );
     }
+  } catch (e) {
+    print("Error deleting subscription: $e");
+    ScaffoldMessenger.of(ref.context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
   }
+}
+
 
   /// Fetch subscribers and update the state
   Future<void> getSubscribers() async {

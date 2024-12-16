@@ -203,7 +203,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "${subPlan.frequency}-months",
+                                                  "${subPlan.frequency}-${subPlan.subPlanName}",
                                                   style: TextStyle(
                                                     fontSize:
                                                         isMobile ? 12 : 14,
@@ -213,7 +213,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "Price: \$${subPlan.price}",
+                                                  "Price: \₹${subPlan.price}",
                                                   style: TextStyle(
                                                     fontSize:
                                                         isMobile ? 10 : 12,
@@ -232,15 +232,17 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                       'editsubscriber',
                                                       arguments: {
                                                         'type' :"sub_plan",
-                                                        'planId': plan.planId,
+                                                        'planId':subPlan.subPlanId,
                                                         'planName':plan.planName,
                                                         'subPlanName':subPlan.subPlanName,
+                                                        'frequency':subPlan.frequency,
                                                         'Createdby':adminData?.userId,
-                                                        'numOfBookings':subPlan.numBookings,
+                                                        'numOfBookings':subPlan.numBookings.toString(),
                                                         'price':subPlan.price,
-                                                        
+                                                       
                                                       },
                                                     );
+                                                  
                                                   },
                                                   style:
                                                       ElevatedButton.styleFrom(
@@ -294,7 +296,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                     if (confirmed == true) {
                                                        await ref
                                                        .read(subscriptionProvider.notifier)
-                                                       .deletesubscriber("sub_plan", plan.planId.toString(), ref);
+                                                       .deletesubscriber("sub_plan", subPlan.subPlanId.toString(), ref);
 
                                                        await ref..read(subscriptionProvider.notifier).getSubscribers();
                                                     }
@@ -345,7 +347,7 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                           color: Color(
                                               0xff6418c3)), // Border color
                                     ),
-                                    fixedSize: const Size(305, 40),
+                                    minimumSize: const Size(double.infinity, 50),
                                     textStyle: const TextStyle(
                                       fontSize: 16, // Font size
                                       // fontWeight: FontWeight.bold, // Font weight

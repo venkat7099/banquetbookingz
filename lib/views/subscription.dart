@@ -138,27 +138,45 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                           child: const Text("Edit"),
                                         ),
                                         const SizedBox(width: 8),
-                                        OutlinedButton(
-                                          onPressed: () {
-                                            // Handle Delete Plan
+                                       OutlinedButton(
+                                          onPressed: () async {
+                                            final confirmed = await showDialog<bool>(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                title: const Text("Confirm Deletion"),
+                                                content: const Text("Are you sure you want to delete this plan?"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () => Navigator.pop(context, false),
+                                                    child: const Text("Cancel"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () => Navigator.pop(context, true),
+                                                    child: const Text("Delete"),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+
+                                            if (confirmed == true) {
+                                              await ref
+                                                  .read(subscriptionProvider.notifier)
+                                                  .deletesubscriber("plan", plan.planId.toString(), ref);
+
+                                              
+                                              await ref..read(subscriptionProvider.notifier).getSubscribers();    
+                                            }
                                           },
                                           style: OutlinedButton.styleFrom(
-                                            foregroundColor:
-                                                const Color(0xff6418c3),
-                                            side: const BorderSide(
-                                              color: Color(0xff6418c3),
-                                            ),
+                                            foregroundColor: const Color(0xff6418c3),
+                                            side: const BorderSide(color: Color(0xff6418c3)),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      5), // Rounded corners
-                                              side: const BorderSide(
-                                                  color: Color(
-                                                      0xff6418c3)), // Border color
+                                              borderRadius: BorderRadius.circular(5),
                                             ),
                                           ),
                                           child: const Text("Delete"),
                                         ),
+
                                       ],
                                     ),
                                   ],
@@ -253,39 +271,48 @@ class _SubscriptionState extends ConsumerState<Subscription> {
                                                   child: const Text("Edit"),
                                                 ),
                                                 const SizedBox(width: 16),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    // Handle Delete Sub-plan
+                                               ElevatedButton(
+                                                  onPressed: () async {
+                                                    final confirmed = await showDialog<bool>(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        title: const Text("Confirm Deletion"),
+                                                        content: const Text("Are you sure you want to delete this sub-plan?"),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () => Navigator.pop(context, false),
+                                                            child: const Text("Cancel"),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () => Navigator.pop(context, true),
+                                                            child: const Text("Delete"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+
+                                                    if (confirmed == true) {
+                                                       await ref
+                                                       .read(subscriptionProvider.notifier)
+                                                       .deletesubscriber("sub_plan", plan.planId.toString(), ref);
+
+                                                       await ref..read(subscriptionProvider.notifier).getSubscribers();
+                                                    }
                                                   },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.white,
-                                                    foregroundColor:
-                                                        const Color(0xff6418c3),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 6,
-                                                        horizontal: 3),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5), // Rounded corners
-                                                      side: const BorderSide(
-                                                          color: Color(
-                                                              0xff6418c3)), // Border color
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.white,
+                                                    foregroundColor: const Color(0xff6418c3),
+                                                    padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 3),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(5), // Rounded corners
+                                                      side: const BorderSide(color: Color(0xff6418c3)), // Border color
                                                     ),
-                                                    fixedSize:
-                                                        const Size(30, 20),
-                                                    textStyle: const TextStyle(
-                                                      fontSize: 16, // Font size
-                                                      // fontWeight: FontWeight.bold, // Font weight
-                                                    ),
+                                                    fixedSize: const Size(30, 20),
+                                                    textStyle: const TextStyle(fontSize: 16), // Font size
                                                   ),
                                                   child: const Text("Delete"),
                                                 ),
-                                              ],
+                                                    ],
                                             ),
                                           ],
                                         ),

@@ -80,63 +80,63 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
               const SizedBox(height: 10),
               _buildTextField("Pricing", pricingControllers, keyboardType: TextInputType.number),
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () async {
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: ElevatedButton(
+              //         onPressed: isLoading
+              //             ? null
+              //             : () async {
 
-                            if(type=="plan"){
-                                await ref.read(subscriptionProvider.notifier).editSubscriptionDetails(
+              //               if(type=="plan"){
+              //                   await ref.read(subscriptionProvider.notifier).editSubscriptionDetails(
 
-                                    type:"plan",
-                                    planId: "7",
+              //                       type:"plan",
+              //                       planId: "7",
                                     
-                                    planName: "bronze",
-                                    createdby: "33",
+              //                       planName: "bronze",
+              //                       createdby: "33",
                                
                             
-                                  );
-                            }
-                            else{
-                                   await ref.read(subscriptionProvider.notifier).editSubscriptionDetails(
+              //                     );
+              //               }
+              //               else{
+              //                      await ref.read(subscriptionProvider.notifier).editSubscriptionDetails(
 
-                                    type:"sub_plan",
-                                    planId: "7",
-                                    planName: subPlanControllers.text,
+              //                       type:"sub_plan",
+              //                       planId: "7",
+              //                       planName: subPlanControllers.text,
                                   
-                                    frequency: frequencyControllers.text,
+              //                       frequency: frequencyControllers.text,
                                    
-                                    numBookings: bookingsControllers.text,
-                                    price: pricingControllers.text,
-                                  );
-                            }
+              //                       numBookings: bookingsControllers.text,
+              //                       price: pricingControllers.text,
+              //                     );
+              //               }
                              
-                              _showSnackBar(context, "Subscription updated successfully!");
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0XFF6418C3),
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text("Save"),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
+              //                 _showSnackBar(context, "Subscription updated successfully!");
+              //               },
+              //         style: ElevatedButton.styleFrom(
+              //           backgroundColor: const Color(0XFF6418C3),
+              //           padding: const EdgeInsets.symmetric(vertical: 15),
+              //         ),
+              //         child: isLoading
+              //             ? const CircularProgressIndicator(color: Colors.white)
+              //             : const Text("Save"),
+              //       ),
+              //     ),
+              //     const SizedBox(width: 10),
                   
-                  ElevatedButton(
-                      onPressed: (){
+              //     ElevatedButton(
+              //         onPressed: (){
                        
                        
-                      },
-                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                         ),
-                       child:const Text("Delete")
+              //         },
+              //          style: ElevatedButton.styleFrom(
+              //           backgroundColor: Colors.red,
+              //           padding: const EdgeInsets.symmetric(vertical: 15),
+              //            ),
+              //          child:const Text("Delete")
                       // isDeleting
                       //     ? null
                       //     : () async {
@@ -153,55 +153,55 @@ class _EditSubscriberState extends ConsumerState<EditSubscriber> {
                       // child: isDeleting
                       //     ? const CircularProgressIndicator(color: Colors.white)
                       //     : const Text("Delete"),
-                    ),
-                
-                ],
-              ),
-
-              // Row(
-              //   children: [
-              //       ElevatedButton(
-              //         onPressed: () {
-                        
-              //           print("Button Pressed!");
-              //         },
-              //         style: ElevatedButton.styleFrom(
-              //           backgroundColor: const Color(0xFF6418C3), // Button color
-              //           foregroundColor: Colors.white, // Text color
-              //           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
-              //           shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(8), // Rounded corners
-              //           ),
-              //           elevation: 5, // Shadow elevation
-              //         ),
-              //         child: const Text(
-              //           "Save",
-              //           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              //         ),
               //       ),
-              //       const SizedBox(width: 10,),
-              //       ElevatedButton(
-              //           onPressed: () {
-              //             // Action to perform when button is pressed
-              //             print("Button Pressed!");
-              //           },
-              //           style: ElevatedButton.styleFrom(
-              //             backgroundColor: const Color(0xFF6418C3), // Button color
-              //             foregroundColor: Colors.white, // Text color
-              //             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
-              //             shape: RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.circular(8), // Rounded corners
-              //             ),
-              //             elevation: 5, // Shadow elevation
-              //           ),
-              //           child: const Text(
-              //             "Delete",
-              //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              //           ),
-              //         ),
+                
+              //   ],
+              // ),
+
+              Row(
+                children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        
+                        print("Button Pressed!");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF6418C3), // Button color
+                        foregroundColor: Colors.white, // Text color
+                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8), // Rounded corners
+                        ),
+                        elevation: 5, // Shadow elevation
+                      ),
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(width: 10,),
+                    ElevatedButton(
+                        onPressed: () {
+                          // Action to perform when button is pressed
+                          print("Button Pressed!");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF6418C3), // Button color
+                          foregroundColor: Colors.white, // Text color
+                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Padding
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8), // Rounded corners
+                          ),
+                          elevation: 5, // Shadow elevation
+                        ),
+                        child: const Text(
+                          "Delete",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
 
                
-              // ],)
+              ],)
             ],
           ),
         ),

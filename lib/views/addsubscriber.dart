@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../providers/authprovider.dart';
 import '../providers/subscriptionprovider_0.dart';
 import 'package:banquetbookingz/providers/loader.dart';
@@ -119,7 +118,7 @@ class _AddSubscriberState extends ConsumerState<AddSubscriber> {
                   backgroundColor: const Color(0XFF6418C3),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                 ),
                 child: isLoading
                     ? const CircularProgressIndicator(color: Colors.white)

@@ -19,6 +19,16 @@ class _AddSubPlansState extends ConsumerState<AddSubPlans> {
   String? planName;
   int? planId;
 
+   @override
+  void dispose() {
+ 
+    frequencyControllers.dispose();
+    subPlanControllers.dispose();
+    bookingsControllers.dispose();
+    pricingControllers.dispose();
+    super.dispose();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -137,19 +147,37 @@ class _AddSubPlansState extends ConsumerState<AddSubPlans> {
                 _buildTextField("Pricing", pricingControllers,
                     keyboardType: TextInputType.number),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    print("Plan ID: $planId");
-                    print("Plan Name: $planName");
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0XFF6418C3),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text("Add Subplan"),
+                 ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        await ref
+                            .read(subscriptionProvider.notifier)
+                            .addSubSubscriptionDetails(
+                              planId: planId!,
+                              subPlanName: subPlanControllers.text,
+                              frequency: frequencyControllers.text,
+                              numBookings: bookingsControllers.text,
+                              price: pricingControllers.text,
+                            );
+
+                        // Clear text fields after submission
+                       
+                        frequencyControllers.clear();
+                        subPlanControllers.clear();
+                        bookingsControllers.clear();
+                        pricingControllers.clear();
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0XFF6418C3),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  minimumSize: const Size(double.infinity, 50),
                 ),
+                child: isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text("Add Subscriber"),
+              ),
               ],
             ),
           ),
